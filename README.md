@@ -7,4 +7,4 @@ All the detailed instructions are uploaded in this folder as well.
 
 The application will be developped in a team of 5 people including myself.
 
-Assignment 1 is due Oct 9^th @ 11:59 PM.
+Assignment 1 is due Oct 9th @ 11:59 PM and is worth 10% of the total grade.
