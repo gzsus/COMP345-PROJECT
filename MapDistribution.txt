@@ -1,5 +1,5 @@
-	#list of continents and the corresponding
-	
+# list of continents and the corresponding
+============================================
 	NA (North America) 
 		Alaska
 		Alberta
