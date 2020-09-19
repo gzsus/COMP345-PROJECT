@@ -8,3 +8,11 @@ All the detailed instructions are uploaded in this folder as well.
 The application will be developped in a team of 5 people including myself.
 
 Assignment 1 is due Oct 9th @ 11:59 PM and is worth 10% of the total grade.
+
+Parts:
+==================================================================================
+1 Map----------------
+2 Map Loader---------
+3 Player-------------
+4 Orders List--------
+5 Cards Deck/ Hamd---
