@@ -1,5 +1,5 @@
-# COMP345-RISK
-Game made for C++ Programming Class
+# COMP345-A1
+RISK Game made for C++ Programming Class
 
 This is a graded assignment for the COMP345 course at Concordia University.
 The Repository will contain a medium sized application simulating a game of RISK.
