@@ -1,4 +1,5 @@
 # **COMP345-A1**
+-------------------------------------------
 RISK Game made for C++ Programming Class
 
 This is a graded assignment for the COMP345 course at Concordia University.
@@ -9,7 +10,6 @@ The application will be developped in a team of 5 people.
 
 Assignment 1 is due Oct 9th @ 11:59 PM and is worth 10% of the total grade.
 
--------------------------------------------
 
 ### Parts:
 
