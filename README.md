@@ -9,9 +9,10 @@ The application will be developped in a team of 5 people.
 
 Assignment 1 is due Oct 9th @ 11:59 PM and is worth 10% of the total grade.
 
+-------------------------------------------
 
 ### Parts:
--------------------------------------------
+
 >1. Map (Adrian)
 
 >2. Map Loader
