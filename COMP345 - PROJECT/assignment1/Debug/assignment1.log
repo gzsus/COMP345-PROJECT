@@ -1,7 +1,5 @@
-﻿  Map.cpp
-C:\Users\adria\OneDrive\Desktop\C++ Projects\COMP345-Assignment1\COMP345 - PROJECT\assignment1\Map.cpp(63,22): warning C4200: nonstandard extension used: zero-sized array in struct/union
-C:\Users\adria\OneDrive\Desktop\C++ Projects\COMP345-Assignment1\COMP345 - PROJECT\assignment1\Map.cpp(63,22): message : This member will be ignored by a defaulted constructor or copy/move assignment operator
-  MapDriver.cpp
+﻿  MapDriver.cpp
+C:\Users\adria\OneDrive\Desktop\C++ Projects\COMP345-Assignment1\COMP345 - PROJECT\assignment1\MapDriver.cpp(23,13): warning C4326: return type of 'main' should be 'int' instead of 'void'
+  Territory.cpp
   Generating Code...
-MSVCRTD.lib(exe_main.obj) : error LNK2019: unresolved external symbol _main referenced in function "int __cdecl invoke_main(void)" (?invoke_main@@YAHXZ)
-C:\Users\adria\OneDrive\Desktop\C++ Projects\COMP345-Assignment1\COMP345 - PROJECT\Debug\assignment1.exe : fatal error LNK1120: 1 unresolved externals
+  assignment1.vcxproj -> C:\Users\adria\OneDrive\Desktop\C++ Projects\COMP345-Assignment1\COMP345 - PROJECT\Debug\assignment1.exe

@@ -8,7 +8,7 @@
 //
 //	-Edges between nodes represent adjacency between territories.
 //
-//	-Each territory can have any number of territories.
+//	-Each Territory can have any number of territories.
 //
 //	-Continents must also be connected subgraphs, where each territory belongs to oneand only
 //		one continent.
@@ -30,44 +30,3 @@
 //
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
-#include "map.h"
-
-class Map {
-
-	class Continent {
-
-		class Country {
-			//	Country definition
-
-			std::string name;
-			int armies;
-			//Player owner;
-
-			Country() {
-				name = "unnamed";
-				armies = 0;
-			};
-
-			/*Country(const std::string name, int& armies) {
-				this.name = name;
-				this.armies = 0;
-			};*/
-		};
-
-
-		//	Continent Definition
-
-		std::string name;
-		int bonus_armies;
-		Country countries[];
-		// Card bonus_card;
-	};
-
-
-	//	Map definition
-
-	std::string name;
-	//Continent continents[];
-
-};

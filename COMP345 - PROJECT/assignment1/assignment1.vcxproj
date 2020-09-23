@@ -19,11 +19,15 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Continent.cpp" />
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="MapDriver.cpp" />
+    <ClCompile Include="Territory.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Continent.h" />
     <ClInclude Include="Map.h" />
+    <ClInclude Include="Territory.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
