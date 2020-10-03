@@ -13,25 +13,26 @@
 #include "MapLoader.h"
 #include <string>
 #include <fstream>
+#include<iostream>
 
 int main() 
 {
-	std::string mapfiles[5] = { "a.map","b.map", "c.map", "d.map", "e.map" };
+	std::string mapfiles[1] = { "C:\\Users\\samue\\Downloads\\comp345\\maps\\canada.map" };
+	std::cout << "started";
 
-
-	for (int i = 0; i < 5; i++)
+	for (int i = 0; i < 1; i++)
 	{
+		std::cout << "loop"<<i<<"\n";
 		try {
-			std::ifstream input(mapfiles[i]);
 			MapLoader* loader = new MapLoader(mapfiles[i]); //create a pointer that points to the maploader object
-
+			std::cout << "\n"<<loader;
 
 			delete(loader); //take care of memory leak
 			loader = NULL;
 			}
 		catch (int e)
 		{
-
+			std::cout << "error";
 		}
 	}
 
