@@ -4,28 +4,51 @@
 //
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 
+
 #pragma once
 
 
 #include "Territory.h"
 
-class Continent{
+/////////////////// Necessary classes
+class Player;
+class Bonus;
+
+class Continent
+{
 
 private:
-	Territory territories;
+	/////////////////////////////////// Member atributes /////////////////////////////////////
+	std::vector<Territory*> territories;
 	std::string continent_name;
-	std::string continent_owner;
-	// Bonus continent_bonus;
+	Player* owner;
+	Bonus* bonus;
+
 
 public:
+	/////////////////////////////////// Constructors/Destructor /////////////////////////////////////
 	Continent();
 	Continent(std::string given_name);
-	std::string get_name();
-	std::string get_owner();
-
-	void log();
+	Continent(std::string given_name,  Bonus *given_bonus);
 	~Continent();
 
+
+	/////////////////////////////////// Sets and gets /////////////////////////////////////
+	void set_name(std::string given_name);
+	std::string get_name();
+	void set_owner(Player* given_owner);
+	Player* get_owner();
+	void set_bonus(Bonus* given_bonus);
+	Bonus* get_bonus();
+
+
+	/////////////////////////////////// Territories manipulation /////////////////////////////////////
+	int has_territory(Territory* given_territory);
+	bool add_territory(Territory* given_territory);
+	bool remove_territory(Territory* given_territory);
+
+
+	/////////////////////////////////// Other methods /////////////////////////////////////
 
 };
 

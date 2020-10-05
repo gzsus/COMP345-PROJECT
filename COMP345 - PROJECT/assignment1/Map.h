@@ -8,15 +8,14 @@
 //#pragma once
 //
 //
-//#include "Territory.h"
+//#include "Continent.h"
 //
 //class map {
 //
-//
 //private:
 //	std::string name;
-//	int armies;
-//
+//	std::vector<Territory*> territories;
+//	std::vector<Continents*> continents;
 //
 //public:
 //

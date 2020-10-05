@@ -17,24 +17,37 @@
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-#include "Map.h"
-#include "Continent.h"
+//#include "Map.h"
+//#include "Continent.h"
 #include "Territory.h"
 
+int main() {
 
-void main() {
+	Territory can("Canada",0);
+	Territory usa("USA", 0);
+	Territory mex("Mexico", 0);
+	Territory cub("Cuba", 0);
+	Territory chi("China", 0);
 
-	Territory t0;
-	Territory t1;
-	Territory t2("Canada");
-	Territory t3("US");
-	Territory t4("Mexico");
-	Territory t5("China");
+	usa.show_neighbours();
 
-	Territory m1[] = { t0,t1,t2,t3,t4,t5 };
+	std::cout << "add return value = " << usa.connet_to(&can) << std::endl;
+	std::cout << "add return value = " << usa.connet_to(&mex) << std::endl;
+	std::cout << "add return value = " << usa.connet_to(&cub) << std::endl << std::endl;
+
+	usa.show_neighbours();
+
+	std::cout << "del return value = " << usa.disconnect(&cub) << std::endl << std::endl;
+
+	usa.show_neighbours();
 	
+	can.~Territory();
+	usa.~Territory();
+	mex.~Territory();
+	cub.~Territory();
+	chi.~Territory();
 
-	std::cout << "\n\nPress any key to close the screen..." << std::endl;
+	std::cout << "\nPress any key to close the screen...\n";
 	std::cin.get();
-
+	return 0;
 }
