@@ -6,6 +6,7 @@
 
 #pragma once
 #include<string>
+#include<vector>
 
 class MapLoader
 {
@@ -20,6 +21,10 @@ class MapLoader
 	private:
 		friend std::ostream& operator<<(std::ostream&, const MapLoader&); //stream insertion operator
 		std::string file;
+		//lists used to store informaion taken from .map files
+		std::vector<std::vector<std::string>> continent_list;
+		std::vector<std::vector<std::string>> country_list;
+		std::vector<std::vector<std::string>> border_list;
 
 
 };

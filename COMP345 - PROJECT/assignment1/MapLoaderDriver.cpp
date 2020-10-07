@@ -18,14 +18,13 @@
 int main() 
 {
 	std::string mapfiles[1] = { "C:\\Users\\samue\\Downloads\\comp345\\maps\\canada.map" };
-	std::cout << "started";
 
 	for (int i = 0; i < 1; i++)
 	{
 		std::cout << "loop"<<i<<"\n";
 		try {
 			MapLoader* loader = new MapLoader(mapfiles[i]); //create a pointer that points to the maploader object
-			std::cout << "\n"<<loader;
+			std::cout << "\n"<<*loader;
 
 			delete(loader); //take care of memory leak
 			loader = NULL;

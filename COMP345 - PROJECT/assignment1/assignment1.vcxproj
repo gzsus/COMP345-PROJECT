@@ -21,8 +21,8 @@
   <ItemGroup>
     <ClCompile Include="Continent.cpp" />
     <ClCompile Include="Map.cpp" />
-    <ClCompile Include="MapDriver.cpp" />
     <ClCompile Include="MapLoader.cpp" />
+    <ClCompile Include="MapLoaderDriver.cpp" />
     <ClCompile Include="Territory.cpp" />
   </ItemGroup>
   <ItemGroup>
