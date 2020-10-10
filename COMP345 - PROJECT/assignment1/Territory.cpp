@@ -10,6 +10,7 @@
 
 #include "Territory.h"
 
+
 using namespace std;
 
 ///////////////////////////////////	Constructors/Destructors /////////////////////////////////////
@@ -21,8 +22,7 @@ Territory::Territory()
 	continent = NULL;
 	owner = NULL;
 	armies = 0;
-	cout << "[CREATED] " ;
-	this->log();
+	cout << "[CREATED] " << *this;
 };
 
 /////////////////// Overloaded constructor
@@ -32,28 +32,42 @@ Territory::Territory(string given_name, int num_armies)
 	continent = NULL;
 	owner = NULL;
 	armies = num_armies;
-	cout << "[CREATED]  ";
-	this->log();
+	cout << "[CREATED]  " << *this;
 };
 
 /////////////////// Another overloaded constructor
-Territory::Territory(string given_name, int num_armies, Continent* continent)
+Territory::Territory(string given_name, int num_armies, Continent* given_continent)
 {
 	territory_name = given_name;
-	continent = continent;
+	continent = given_continent;
 	owner = NULL;
 	armies = num_armies;
-	cout << "[CREATED]  ";
-	this->log();
-};
+	cout << "[CREATED]  " << *this;
+}
+
+/////////////////// Copy constructor
+Territory::Territory(const Territory& t)
+{
+	territory_name = t.territory_name;
+	neighbours = t.neighbours;
+	/*for (Territory* t : t.neighbours)
+		neighbours.push_back(t);*/
+	continent = t.continent;
+	owner = t.owner;
+	armies = t.armies;
+	cout << "[COPIED] " << *this;
+}
+;
 
 /////////////////// Destructor
 Territory::~Territory() 
 {
+	owner = NULL;
+	continent = NULL;
 	territory_name.erase();
+	for (Territory* n : neighbours)
+		delete n;
 	neighbours.clear();
-	delete continent;
-	delete owner;
 };
 
 
@@ -93,24 +107,6 @@ void Territory::decrement_armies(int num_armies)
 
 ///////////////////////////////////	Neighbours Manipulation /////////////////////////////////////
 
-/////////////////// has neighbour
-//	Find if neighbour is in the neighbours vector or not
-bool Territory::has_neighbour(Territory* given_territory)
-{ 
-	// Return false if vector is empty
-	if (neighbours.empty())
-		return false;
-	else{
-		// Iterate through vector of Territory pointers until found given_territory or end
-		for (Territory* neighbour : neighbours)
-			if (neighbour == given_territory)
-				// Return true if found
-				return true;
-		// If not found:
-		return false;
-	}
-};
-
 /////////////////// Index of neighbour
 //	Find index of neighbour if it's in the neighbours vector else -1
 int Territory::index_neighbour(Territory* given_territory)
@@ -119,7 +115,7 @@ int Territory::index_neighbour(Territory* given_territory)
 	if (neighbours.empty())
 		return -1;
 
-	for (int i = 0; i < neighbours.size(); i++)
+	for (unsigned int i = 0; i < neighbours.size(); i++)
 		if (neighbours[i] == given_territory)
 			//	Return index of found element
 			return i;	// [0,length) = (true)
@@ -132,14 +128,8 @@ int Territory::index_neighbour(Territory* given_territory)
 //	Connect neighbour territories by adding the pointers to each respective neighbours vector
 bool Territory::connet_to(Territory* given_territory)
 { 
-	// If vector is empty connect both and return true
-	if (neighbours.empty()){
-		neighbours.push_back(given_territory);
-		given_territory->neighbours.push_back(this);
-		return true;
-	}
 	// Check if it is already connected
-	if ( !(this->index_neighbour(given_territory)+1) ) {
+	if ( this->index_neighbour(given_territory) == -1 ) {
 		//	Add on both sides the connection if its not already in it
 		neighbours.push_back(given_territory);
 		given_territory->neighbours.push_back(this);
@@ -156,7 +146,7 @@ bool Territory::disconnect(Territory* given_t)
 	if (neighbours.empty())
 		return false;
 	// Search on vector the given territory
-	int index = this->has_neighbour(given_t);
+	int index = this->index_neighbour(given_t);
 	// If found
 	if ( index >= 0 ) {
 		//	Delete on this vector
@@ -170,6 +160,19 @@ bool Territory::disconnect(Territory* given_t)
 	return false;
 };
 
+/////////////////// Disconnect all neighbours
+// Remove neighbour territory from neighbours vector
+void Territory::disconnect_all()
+{
+	// loop through neighbours
+	for (Territory* t : neighbours ) {
+		//	Delete on other end
+		t->neighbours.erase(remove(t->neighbours.begin(),t->neighbours.end(), this), t->neighbours.end());
+		//	Delete on this vector
+		neighbours.erase(remove(neighbours.begin(), neighbours.end(), t), neighbours.end());
+	}
+};
+
 
 
 ///////////////////////////////////	Other methods /////////////////////////////////////
@@ -180,22 +183,32 @@ void Territory::show_neighbours() {
 		cout << "This Territory has no neighbours";
 	else 
 		for (Territory* t : neighbours)
-			cout << t->get_name() << " ";
+			cout << t->get_name() << ", ";
 
 	cout << "\n\n";
 	return;
 }
 
-/////////////////// Show information of this Territory
-void Territory::log()
+/////////////////// Stream insertion operator
+std::ostream& operator<<(std::ostream& ostream, const Territory& given_territory)
 {
-	std::cout << territory_name << ": " << armies;
-	if (!neighbours.empty()) {
-		cout << ",\tNeighbour territories:";
-		for (Territory* t : neighbours) {
-			cout << " " << t->get_name();
-		}
-	}
-	cout << "\n\n";
-	return;
-};
+	string neighb = "\n\tNeighbours: ";
+
+	for (Territory* t : given_territory.neighbours)
+		neighb.append("  " + t->get_name());
+
+	if (neighb == "\n\tNeighbours: ")
+		neighb = ", 0 neighbours";
+
+	return ostream << "[Territory] " << given_territory.territory_name << ", " << given_territory.armies << neighb << std::endl;
+}
+
+
+/////////////////// Assignment operator
+void Territory::operator=(Territory* t) {
+	neighbours = t->neighbours;
+	territory_name = t->get_name();
+	continent = t->continent;
+	owner = t->owner;
+	armies = t->armies;
+}

@@ -17,35 +17,56 @@
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-//#include "Map.h"
-//#include "Continent.h"
+#include "Map.h"
+#include "Continent.h"
 #include "Territory.h"
 
-int main() {
+int main()
+{
+	// Pointers to new territories (Name,armies)
+	Territory* can = new Territory("Canada",0);
+	Territory* usa = new Territory("USA", 0);
+	Territory* mex = new Territory("Mexico", 0);
 
-	Territory can("Canada",0);
-	Territory usa("USA", 0);
-	Territory mex("Mexico", 0);
-	Territory cub("Cuba", 0);
-	Territory chi("China", 0);
+	Continent* na = new Continent("NorthAmerica");
+	Continent* ca = new Continent("CentralAmerica");
 
-	usa.show_neighbours();
+	Territory* gua = new Territory("Guatemala", 0);
+	Territory* sal = new Territory("ElSalvador", 0);
+	Territory* hon = new Territory("Honduras", 0);
 
-	std::cout << "add return value = " << usa.connet_to(&can) << std::endl;
-	std::cout << "add return value = " << usa.connet_to(&mex) << std::endl;
-	std::cout << "add return value = " << usa.connet_to(&cub) << std::endl << std::endl;
+	usa->connet_to(can);
+	usa->connet_to(mex);
+	mex->connet_to(gua);
+	gua->connet_to(sal);
+	gua->connet_to(hon);
 
-	usa.show_neighbours();
+	Territory* nortA[] = {can,usa,mex};
+	Territory* centA[] = {gua,sal,hon};
 
-	std::cout << "del return value = " << usa.disconnect(&cub) << std::endl << std::endl;
 
-	usa.show_neighbours();
-	
-	can.~Territory();
-	usa.~Territory();
-	mex.~Territory();
-	cub.~Territory();
-	chi.~Territory();
+	na->add_territory(nortA,3);
+	ca->add_territory(centA,3);
+
+	Map* America = new Map("America");
+
+	America->add_continent(na);
+	America->add_continent(ca);
+
+	std::cout << "\n" << *America;
+
+
+	std::cout << *usa << "\n";
+	std::cout << *mex << "\n";
+	std::cout << *gua << "\n";
+
+	//Territory* chi = new Territory(*usa); // Copy constructor use
+	//Territory* chi = new Territory();
+	//*chi = *usa;							// Assignment Operator use
+	//chi->set_name("Japan");
+	//std::cout << *usa << std::endl;
+	//std::cout << *chi;
+
 
 	std::cout << "\nPress any key to close the screen...\n";
 	std::cin.get();

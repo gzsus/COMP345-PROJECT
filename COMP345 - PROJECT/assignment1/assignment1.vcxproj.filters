@@ -24,10 +24,7 @@
     <ClCompile Include="Continent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="MapLoader.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="MapLoaderDriver.cpp">
+    <ClCompile Include="MapDriver.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -39,9 +36,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Continent.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="MapLoader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
