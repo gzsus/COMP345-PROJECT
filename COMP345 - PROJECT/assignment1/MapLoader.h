@@ -10,10 +10,13 @@
 
 class MapLoader
 {
+
 	public:
 		MapLoader();
 		MapLoader(const MapLoader& a); //copy constructor
 		MapLoader(std::string mapfile);
+		//fix this
+		MapLoader& operator =(const MapLoader& oldloader);
 		void setfile(std::string newfile); // assignment operator
 		std::string getfile();
 		void LoadMap();
@@ -28,5 +31,4 @@ class MapLoader
 
 
 };
-
 

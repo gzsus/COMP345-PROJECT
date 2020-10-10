@@ -32,11 +32,11 @@ MapLoader::MapLoader(std::string mapfile)
 	{
 		//these are temporary
 		std::string temp; //used to store each line from the file
-		int index; //used to get size of data or variable to store in vector
+		int index = 0; //used to get size of data or variable to store in vector
 		int counter = 0; //keeps the count of the number of countries to determine number of borders
 
 		getline(input, temp, '\n');
-		std::cout << temp<<"\n";
+		std::cout << temp << "\n";
 		if (temp.find("[continents]") != -1) //store all the continents
 		{
 			counter = 0;  //will allow storage location management for 2d-vector
@@ -44,27 +44,35 @@ MapLoader::MapLoader(std::string mapfile)
 			{
 				continent_list.push_back(std::vector<std::string>()); //allocate new space in top vector
 				getline(input, temp, '\n');
-				index = temp.find(" "); // store the length of the name of the continent in index
-				if (index == -1) { break; } // no more continents to store
-				continent_list[counter].push_back(temp.substr(0, index));
+				for (int i = 0; i < 3; i++)
+				{
+					if (index == -1 && i != 0) //missing values
+					{
+						index = -3;
+						break;
+					}
+					index = temp.find(" "); // store the length of the name of the continent in index
+					continent_list[counter].push_back(temp.substr(0, index));
+					temp.erase(0, index + 1);
+					if (index == -1 && i != 0) { continue; } //no color for continent
+					if (index == -1) // no more continents to store
+					{
+						index = -2;
+						break;
+					}
 
-				temp.erase(0, index+1);
-				index = temp.find(" ") ;
-				continent_list[counter].push_back(temp.substr(0, index));
+				}
+				if (index == -2 || index == -3)
+				{
+					continent_list.erase(continent_list.begin() + (continent_list.size() - 1)); //gets rid of extra country added
+					break;
+				}
+				std::cout << "VECTOR continent #" << counter << " :" << continent_list[counter][0] << " " << continent_list[counter][1] << " " << continent_list[counter][2] << "\n";
+				counter++;
 
-				if (index == -1) { break; } //no color for continent
-				temp.erase(0, index+1);
-				index = temp.find(" ");
-				continent_list[counter].push_back(temp.substr(0, index));
-
-				std::cout <<"VECTOR continent #"<<counter<<" :"<< continent_list[counter][0] << continent_list[counter][1] << continent_list[counter][2] <<"\n";
-				counter++;  //switch to next continent storage place
 			}
-			
+
 		}
-
-		//check continent count and parameters with a method
-
 		counter = 0; //reset for use in other file reading code
 
 		if (temp.find("[countries]") != -1)
@@ -72,30 +80,71 @@ MapLoader::MapLoader(std::string mapfile)
 			while (temp.find("[borders]") == -1)
 			{
 				getline(input, temp, '\n');
-				if (temp.find(';')!= -1) { continue; }//found a map that has comments after the countries declaration...
+				if (temp.find(';') != -1) { continue; }//found a map that has comments after the countries declaration...
 				country_list.push_back(std::vector<std::string>()); //allocate vector space for top vector
 				for (int i = 0; i < 5; i++)
 				{
+					if (index == -1 && i != 0) //one of the inputs is missing! 
+					{
+						index = -3; //use the index as a error indicator -3 means country formatting was problematic
+						break;
+					}
 					index = temp.find(" "); // store the index of the current variable to be stored
-					if (i == 0 && index == -1) { break; }//this is an empty line and we are done with this section
-					country_list[counter/5].push_back(temp.substr(0, index));
+					//std::cout <<"find"<< (temp.find(" ")==-1)<<" index:"<<i<<"\n";
+					if (i == 0 && index == -1) //this is an empty line and we are done with this section
+					{
+						index = -2; //needed a way to break out the other loop too 
+						break;
+					}
+					country_list[counter / 5].push_back(temp.substr(0, index));
 					temp.erase(0, index + 1);
 					counter++;
 				}
-				std::cout << "VECTOR country #" << (counter/5)-1 << " :" << country_list[(counter / 5) - 1][0] << country_list[(counter / 5) - 1][1] << country_list[(counter/5)-1][2] << country_list[(counter / 5) - 1][3] << country_list[(counter / 5) - 1][4]<< "\n";
+				if (index == -2 || index == -3) {
+					country_list.erase(country_list.begin() + (country_list.size() - 1)); //gets rid of extra country added
+					break;
+				} //we are done so break out of this too
+				std::cout << "VECTOR country #" << (counter / 5) - 1 << " :" << country_list[(counter / 5) - 1][0] << country_list[(counter / 5) - 1][1] << country_list[(counter / 5) - 1][2] << country_list[(counter / 5) - 1][3] << country_list[(counter / 5) - 1][4] << "\n";
 			}
 
 		}
-		//check country count and parameters with a method
 
-		
+		//check continent count and parameters ERROR CHECKING
+		//to check continents you need to read all countries and make sure that the 3rd element in the index, the contninent to which the country belongs
+		//adds up properly to the number of continents read
+		if (index == -3)
+		{
+			std::cout << " error in .map file";
+			break;
+		}
+		if (continent_list.size() == 0 && country_list.size() != 0 || continent_list.size() != 0 && country_list.size() == 0)
+		{
+			if (continent_list.size() == 0)
+			{
+				std::cout << "no continents stored, error in .map file";
+				break;
+			}
+		}
+		if (continent_list.size() != 0 && country_list.size() != 0 && border_list.size() == 0)
+		{
+			if (continent_list.size() == (stoi(country_list[country_list.size() - 1][2])))
+			{
+				std::cout << "contninent number has been confirmed with countries at:" << continent_list.size() << " continents" << "\n";
+			}
+			else
+			{
+				std::cout << "number of continents and countries do not match !";
+			}
+		}
+
+
 		if (temp.find("[borders]") != -1)
 		{
-			for (int j = 0; j < (counter/5); j++) //go through the "j" number of countries and document border info
+			for (int j = 0; j < (country_list.size()); j++) //go through the "j" number of countries and document border info
 			{
 				getline(input, temp, '\n');
 				if (temp.at(0) == ';') //found a map that has comments after the continent declaration...
-				{ 
+				{
 					j = j - 1;
 					continue;
 				}
@@ -105,15 +154,26 @@ MapLoader::MapLoader(std::string mapfile)
 					index = temp.find(" "); // store the index of the current variable to be stored
 					border_list[j].push_back(temp.substr(0, index)); //store into border item list
 					temp.erase(0, index + 1);
-				} 
-				while (index != -1);
-				std::cout <<"VECTOR Border #"<<j<<" :"<< border_list[j][0]<<" "<< border_list[j][1]<< "... \n" ;
+				} while (index != -1);
+				for (int k = 0; k < border_list[j].size(); k++)
+				{
+					std::cout << border_list[j][k] << " ";
+				}
+				std::cout << "\n";
+				//std::cout <<"VECTOR Border #"<<j<<" :"<< border_list[j][0]<<" "<< border_list[j][1]<< "... \n" ;
 			}
+			getline(input, temp, '\n');
 		}
-		//check country count and parameters with a method
 
+		if (temp.empty() == false) {std::cout << "error in reading file more borders than countries given";}
+		//FINAL ERRROR FIX MAKE SURE THERE ARE ENOUGH BORDERS FOR ALL COUNTRIES
+		/*
+		*
+		*
+		*/
+		
 	}
-
+	
 	//now build the map using the extracted information
 
 
@@ -141,7 +201,15 @@ MapLoader::MapLoader(std::string mapfile)
 	 }
 }
 
-//set the file for the maploader object
+//assinment operator
+
+ MapLoader& MapLoader::operator=(const MapLoader& oldloader)
+ {
+	 file = oldloader.file;
+	 return *this;
+ }
+
+ //set the file for the maploader object
 void MapLoader::setfile(std::string newfile) {file = newfile;}
 //get the file for this object
 std::string MapLoader::getfile(){return file;}

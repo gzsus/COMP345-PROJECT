@@ -1,4 +1,6 @@
 ﻿  MapLoader.cpp
+C:\Users\samue\source\repos\gzsus\COMP345-Assignment1\COMP345 - PROJECT\assignment1\MapLoader.cpp(143,22): warning C4018: '<': signed/unsigned mismatch
+C:\Users\samue\source\repos\gzsus\COMP345-Assignment1\COMP345 - PROJECT\assignment1\MapLoader.cpp(158,23): warning C4018: '<': signed/unsigned mismatch
   MapLoaderDriver.cpp
 C:\Users\samue\source\repos\gzsus\COMP345-Assignment1\COMP345 - PROJECT\assignment1\MapLoaderDriver.cpp(32,14): warning C4101: 'e': unreferenced local variable
   Generating Code...
