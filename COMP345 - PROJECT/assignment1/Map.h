@@ -6,9 +6,14 @@
 
 
 #pragma once
+#include <string>
+#include <vector>
+#include <iostream>
 
 
-#include "Continent.h"
+/////////////////// Necessary classes
+class Territory;
+class Continent;
 
 class Map {
 
@@ -29,6 +34,10 @@ public:
 	bool add_continent(Continent* given_continent);
 	bool remove_continent(Continent* given_continent);
 
+
+	int index_territory(Territory* given_territory);
+	bool add_territory(Territory* given_territory);
+
 	std::string get_name();
 	void set_name(std::string given_name);
 	std::vector<Territory*> get_territories();
@@ -36,7 +45,8 @@ public:
 	std::vector<Continent*> get_continents();
 	void set_continents(std::vector<Continent*> neighbours);
 
-	bool validate(Map* given_map);
+	//bool update();
+	bool validate();
 
 	friend std::ostream& operator<<(std::ostream&, const Map& given_map);
 	

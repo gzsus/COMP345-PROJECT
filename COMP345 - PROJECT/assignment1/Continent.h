@@ -6,12 +6,16 @@
 
 
 #pragma once
+#include <string>
+#include <vector>
+#include <iostream>
 
-#include "Territory.h"
 
 /////////////////// Necessary classes
+class Territory;
 class Player;
 class Bonus;
+class Map;
 
 class Continent
 {
@@ -22,6 +26,7 @@ private:
 	std::string continent_name;
 	Player* owner;
 	Bonus* bonus;
+	Map* container;
 
 
 public:
@@ -43,13 +48,16 @@ public:
 	void set_bonus(Bonus* given_bonus);
 	Bonus* get_bonus();
 
+	void set_map(Map* given_map);
+	Map* get_map();
+
 
 	/////////////////////////////////// Territories manipulation /////////////////////////////////////
 	int index_territory(Territory* given_territory);
 	bool add_territory(Territory* given_territory);
 	void add_territory(Territory* given_territories[], int arr_size);
 	bool remove_territory(Territory* given_territory);
-	void show_territories();
+	bool is_connected();
 
 
 	/////////////////////////////////// Other methods /////////////////////////////////////

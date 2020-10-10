@@ -6,17 +6,13 @@
 
 
 #pragma once
-
 #include <string>
 #include <vector>
 #include <iostream>
-#include <iterator>
 
-//#include "Continent.h"
 
 /////////////////// Necessary classes
 class Player;
-
 class Continent;
 
 class Territory

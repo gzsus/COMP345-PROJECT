@@ -9,9 +9,16 @@
 
 
 #include "Territory.h"
+#include "Continent.h"
 
 
 using namespace std;
+
+/////////////////// Necessary classes
+class Player;
+class Bonus;
+
+
 
 ///////////////////////////////////	Constructors/Destructors /////////////////////////////////////
 
@@ -40,6 +47,7 @@ Territory::Territory(string given_name, int num_armies, Continent* given_contine
 {
 	territory_name = given_name;
 	continent = given_continent;
+	given_continent->add_territory(this);
 	owner = NULL;
 	armies = num_armies;
 	cout << "[CREATED]  " << *this;
@@ -129,12 +137,14 @@ int Territory::index_neighbour(Territory* given_territory)
 bool Territory::connet_to(Territory* given_territory)
 { 
 	// Check if it is already connected
-	if ( this->index_neighbour(given_territory) == -1 ) {
+	if (this->index_neighbour(given_territory) == -1) {
 		//	Add on both sides the connection if its not already in it
 		neighbours.push_back(given_territory);
 		given_territory->neighbours.push_back(this);
 		return true;
 	}
+	
+	cout << "[info] This connection already exists  " << territory_name+" - "+ given_territory->territory_name << endl;
 	return false;
 };
 
@@ -158,20 +168,24 @@ bool Territory::disconnect(Territory* given_t)
 	}
 	// If not found
 	return false;
-};
+}
+void Territory::disconnect_all()
+{
+}
+;
 
 /////////////////// Disconnect all neighbours
 // Remove neighbour territory from neighbours vector
-void Territory::disconnect_all()
-{
-	// loop through neighbours
-	for (Territory* t : neighbours ) {
-		//	Delete on other end
-		t->neighbours.erase(remove(t->neighbours.begin(),t->neighbours.end(), this), t->neighbours.end());
-		//	Delete on this vector
-		neighbours.erase(remove(neighbours.begin(), neighbours.end(), t), neighbours.end());
-	}
-};
+//void Territory::disconnect_all()
+//{
+//	// loop through neighbours
+//	for (Territory* t : neighbours ) {
+//		//	Delete on other end
+//		t->neighbours.erase(remove(t->neighbours.begin(),t->neighbours.end(), this), t->neighbours.end());
+//		//	Delete on this vector
+//		neighbours.erase(remove(neighbours.begin(), neighbours.end(), t), neighbours.end());
+//	}
+//}
 
 
 
@@ -192,15 +206,18 @@ void Territory::show_neighbours() {
 /////////////////// Stream insertion operator
 std::ostream& operator<<(std::ostream& ostream, const Territory& given_territory)
 {
-	string neighb = "\n\tNeighbours: ";
+	string cont = " belongs to NULL, ";
+	if (given_territory.continent != NULL)
+		cont = "belongs to " + given_territory.continent->get_name()+", ";
 
+	string neighb = "\n\tNeighbours: ";
 	for (Territory* t : given_territory.neighbours)
 		neighb.append("  " + t->get_name());
 
 	if (neighb == "\n\tNeighbours: ")
-		neighb = ", 0 neighbours";
+		neighb = "0 neighbours";
 
-	return ostream << "[Territory] " << given_territory.territory_name << ", " << given_territory.armies << neighb << std::endl;
+	return ostream << "[Territory] " + given_territory.territory_name + ", " << given_territory.armies << " Armies, " + cont + neighb << std::endl;
 }
 
 
