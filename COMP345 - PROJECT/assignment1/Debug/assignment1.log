@@ -1,7 +1,7 @@
-﻿  MapLoader.cpp
-C:\Users\samue\source\repos\gzsus\COMP345-Assignment1\COMP345 - PROJECT\assignment1\MapLoader.cpp(143,22): warning C4018: '<': signed/unsigned mismatch
-C:\Users\samue\source\repos\gzsus\COMP345-Assignment1\COMP345 - PROJECT\assignment1\MapLoader.cpp(158,23): warning C4018: '<': signed/unsigned mismatch
-  MapLoaderDriver.cpp
-C:\Users\samue\source\repos\gzsus\COMP345-Assignment1\COMP345 - PROJECT\assignment1\MapLoaderDriver.cpp(32,14): warning C4101: 'e': unreferenced local variable
+﻿  Continent.cpp
+C:\Users\adria\OneDrive\Desktop\COMP 345\COMP345-Assignment1\COMP345 - PROJECT\assignment1\Continent.cpp(93,29): warning C4018: '<': signed/unsigned mismatch
+  Map.cpp
+  MapDriver.cpp
+  Territory.cpp
   Generating Code...
-  assignment1.vcxproj -> C:\Users\samue\Source\Repos\gzsus\COMP345-Assignment1\COMP345 - PROJECT\Debug\assignment1.exe
+  assignment1.vcxproj -> C:\Users\adria\OneDrive\Desktop\COMP 345\COMP345-Assignment1\COMP345 - PROJECT\Debug\assignment1.exe

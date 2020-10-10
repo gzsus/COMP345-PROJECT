@@ -12,11 +12,14 @@
 #include <iostream>
 #include <iterator>
 
+//#include "Continent.h"
+
 /////////////////// Necessary classes
 class Player;
+
 class Continent;
 
-class Territory 
+class Territory
 {
 
 private:
@@ -33,7 +36,7 @@ public:
 	Territory();
 	Territory(std::string given_name, int num_armies);
 	Territory(std::string given_name, int num_armies, Continent* continent);
-	
+	Territory(const Territory& t);
 	~Territory();
 
 
@@ -60,15 +63,13 @@ public:
 
 
 	/////////////////////////////////// Neighbours manipulation /////////////////////////////////////
-	bool has_neighbour(Territory* given_territory);
 	int index_neighbour(Territory* given_territory);
 	bool connet_to(Territory* given_territory);
 	bool disconnect(Territory* given_t);
-
+	void disconnect_all();
 
 	///////////////////////////////////	Other methods /////////////////////////////////////
 	void show_neighbours();
-	//void copy();
-	void log();
-
+	friend std::ostream& operator<<(std::ostream&, const Territory&);
+	void operator=(Territory* t);
 };
