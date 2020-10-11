@@ -128,6 +128,9 @@ void run(Player *pPlayer) {
     //sends a desired orders to the issueOrder() function
     pPlayer -> issueOrder(desiredOrders);
 
+    //outputs the player's hand
+    pPlayer -> displayHand();
+
     //asks the user whether they want to continue to trial or terminate the program
     while (true) {
         char stop = '.';

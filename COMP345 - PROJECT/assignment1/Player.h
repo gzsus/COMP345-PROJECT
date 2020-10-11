@@ -25,7 +25,7 @@ class Player {
         //temporary function prototypes
         void createTerritories();
         void possibleOrders();
-        void displayDeck();
+        void displayHand();
 
     private:
         int numberOfPlayers;

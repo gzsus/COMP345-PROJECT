@@ -126,10 +126,19 @@ void Player::issueOrder(vector<int> desiredOrders) {
 	}
 }
 
-//displays player's deck
-void Player::displayDeck() {
+//displays player's hand
+void Player::displayHand() {
     Deck* pDeck = new Deck();
-	cout << "\n" << *pDeck << endl;
+	Hand* pHand = new Hand();
+
+	while (pDeck->getPile()->empty() == false) {
+		pHand->add(pDeck->draw());
+	}
+
+    cout << "\n" << *pHand << endl;
+
 	delete pDeck;
 	pDeck = NULL;
+	delete pHand;
+	pHand = NULL;
 }
