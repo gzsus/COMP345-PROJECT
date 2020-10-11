@@ -1,3 +1,8 @@
+/////////////////////////////////////
+//
+// Cards - Donovan Upsdell
+//
+/////////////////////////////////////
 #include "Cards.h"
 #include<vector>
 #include<cstdlib>
@@ -38,6 +43,17 @@ void Hand::add(std::string t)
 	hand->emplace_back(t); //creates a card in the back of the vector with the type provided
 }
 
+Hand & Hand::operator=(const Hand & right)
+{
+	if (this == &right)
+		return *this;
+	else {
+		delete hand;
+		hand = right.hand;
+		return *this;
+	}
+}
+
 Card::Card()
 {
 	type = { "undefined" };
@@ -46,6 +62,23 @@ Card::Card()
 Card::Card(std::string t)
 {
 	type = { t };
+}
+
+/*
+In order to make the play method not rely on the player class, it can't do the heavy lifting itself.
+
+The play function takes 3 arguments, a hand pointer (the hand it belongs to), the deck pointer to add itself to after being played,
+and an integer position for its position in the hand vector.
+
+When played, it adds itself back to the deck, removes the card at the integer position from the vector (Make sure this is the right position!!)
+then returns its type so an order can be issued.
+*/
+std::string Card::play(Hand*hand, Deck*deck, int pos)
+{
+	std::string t = type;
+	deck->add(type);
+	hand->getHand()->erase(hand->getHand()->begin() + pos);
+	return t;
 }
 
 Card::Card(const Card & card)
@@ -110,18 +143,38 @@ std::vector<Card> * Deck::getPile()
 	return pile;
 }
 
+//Adds a card of type "type" to a random position in the deck.
+void Deck::add(std::string type)
+{
+	int random = (rand() % (pile->size() + 1));
+	pile->emplace(pile->begin() + random, type);
+}
+
 void Deck::setPile(std::vector<Card>* toSet)
 {
 	pile = toSet;
 }
 
-// TODO MUST HAVE PLAYER 
-//
-//void Card::play(Player* p)
-//{
-//	Player::issueOrder(type);
-// Create card in deck
-//}
+Deck & Deck::operator=(const Deck & right)
+{
+	if (this == &right)
+		return *this;
+	else {
+		delete pile;
+		pile = right.pile;
+		return *this;
+	}
+}
+
+Card & Card::operator=(const Card & right)
+{
+	if (this == &right)
+		return *this;
+	else {
+		type = right.type;
+		return *this;
+	}
+}
 
 std::string Card::getType()
 {
