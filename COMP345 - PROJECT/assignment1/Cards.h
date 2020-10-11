@@ -1,18 +1,26 @@
+/////////////////////////////////////
+//
+// Cards - Donovan Upsdell
+//
+/////////////////////////////////////
 #pragma once
 #include<string>
 #include<vector>
+class Deck;
+class Hand;
 
 class Card {
 public:
 	Card();
 	Card(const Card& card);
 	Card(std::string t);
-	//play(Player p); Cannot be implemented until player is implemented
+	std::string play(Hand*hand, Deck*deck, int pos);
 	std::string getType();
 	void setType(std::string toSet);
+	friend std::ostream& operator<<(std::ostream&, const Card&);
+	Card & operator=(const Card & right);
 private:
 	std::string type;
-	friend std::ostream& operator<<(std::ostream&, const Card&);
 };
 
 class Deck {
@@ -22,10 +30,12 @@ public:
 	~Deck();
 	std::string draw();
 	std::vector<Card>* getPile();
+	void add(std::string type);
 	void setPile(std::vector<Card>* toSet);
+	Deck & operator=(const Deck & right);
+	friend std::ostream& operator<<(std::ostream&, const Deck&);
 private:
 	std::vector<Card>* pile;
-	friend std::ostream& operator<<(std::ostream&, const Deck&);
 };
 
 class Hand {
@@ -36,9 +46,9 @@ public:
 	std::vector<Card>* getHand();
 	void setHand(std::vector<Card>* toSet);
 	void add(std::string t);
-private:
-	//Player owner; Cannot be implemented until player is implemented
-	std::vector<Card>* hand;
+	Hand & operator=(const Hand & right);
 	friend std::ostream& operator<<(std::ostream&, const Hand&);
+private:
+	std::vector<Card>* hand;
 };
 
