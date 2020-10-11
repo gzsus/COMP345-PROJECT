@@ -27,9 +27,19 @@ Player::Player(const Player& other) {
 
 //Destructor
 Player::~Player() {
+    //prevents memory leaks from arrays
+    delete[] allOrders;
+    delete[] territoriesToDefend;
+    delete[] territoriesToAttack;
 
+    //prevents memory leaks from pointers
+    delete pDeck;
+    delete pHand;
+    pDeck = NULL;
+    pHand = NULL;
 }
 
+//initialization of static data members
 int Player::counter = 0;
 
 //sets the number of players
@@ -44,8 +54,8 @@ int Player::getNumberOfPlayers() {
 
 //displays the arbitrary territories to defend
 void Player::toDefend() {
-    int defending = numberOfStartTerritories;
-    string territoriesToDefend[defending];
+    //calculates the number of territories to defend
+    int defending = (sizeof(territoriesToDefend)/sizeof(*territoriesToDefend));
 
     for (int i=0; i<defending; i++) {
         territoriesToDefend[i] = allTerritories[counter];
@@ -57,13 +67,12 @@ void Player::toDefend() {
 
 //displays the arbitrary territories to attack
 void Player::toAttack() {
-    //calculates the length of the territories array
-    int territoriesArrayLength = (sizeof(allTerritories)/sizeof(*allTerritories));
-    int defendingStart = counter-numberOfStartTerritories;
-    int defendingEnd = counter-1;
+    //calculates the number of territories to attack
+    int defending = (sizeof(territoriesToDefend)/sizeof(*territoriesToDefend));
+    int attacking = (sizeof(allTerritories)/sizeof(*allTerritories)) - defending;
 
-    int attacking = territoriesArrayLength - numberOfStartTerritories;
-    string territoriesToAttack[attacking];
+    int defendingStart = counter-defending;
+    int defendingEnd = counter-1;
 
     int j=0;
     for (int i=0; i<attacking; i++) {
@@ -86,59 +95,19 @@ void Player::possibleOrders() {
 }
 
 //displays the orders to be executed
-void Player::issueOrder(vector<int> desiredOrders) {
-    cout << "\nThe orders that will be executed are:" << endl;
-    string currentOrder;
-    vector <Order> orders;
-    OrdersList orderList;
-
-    for (int i=0; i<5; i++) {
-        currentOrder = allOrders[desiredOrders[i]];
-        if (currentOrder == "deploy") {
-            Deploy *deploy = new Deploy();
-            orders.push_back(*deploy);
-        }
-        else if (currentOrder == "advance") {
-            Advance *advance = new Advance();
-            orders.push_back(*advance);
-        }
-        else if (currentOrder == "bomb") {
-            Bomb *bomb = new Bomb();
-            orders.push_back(*bomb);
-        }
-        else if (currentOrder == "blockade") {
-            Blockade *blockade = new Blockade();
-            orders.push_back(*blockade);
-        }
-        else if (currentOrder == "airlift") {
-            Airlift *airlift = new Airlift();
-            orders.push_back(*airlift);
-        }
-        else if (currentOrder == "negotiate") {
-            Negotiate *negotiate = new Negotiate();
-            orders.push_back(*negotiate);
-        }
-    }
-
-    orderList.setList(orders);
-    for (int i=0; i<orderList.getList().size(); i++) {
-		cout << orderList.getList()[i] << endl;
+void Player::displayOrders() {
+    cout << "\nThe orders to be executed are:" << endl;
+    for (int i=0; i<(orderList.getList().size()); i++) {
+		cout << (orderList.getList()[i]) << endl;
 	}
 }
 
 //displays player's hand
 void Player::displayHand() {
-    Deck* pDeck = new Deck();
-	Hand* pHand = new Hand();
-
+    //draws hand
 	while (pDeck->getPile()->empty() == false) {
 		pHand->add(pDeck->draw());
 	}
-
+	//displays hand
     cout << "\n" << *pHand << endl;
-
-	delete pDeck;
-	pDeck = NULL;
-	delete pHand;
-	pHand = NULL;
 }

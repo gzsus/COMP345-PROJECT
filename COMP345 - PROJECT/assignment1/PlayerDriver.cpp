@@ -51,11 +51,9 @@ int main() {
         run(allPlayersCopy[i]);
     }
 
-    //deleting the pointers
+    //deleting the Player pointers to prevent memory leaks
     for (int i=0; i<numberOfPlayers; i++) {
         delete allPlayersCopy[i];
-        //Question: Is this necessary?
-        allPlayersCopy[i] = NULL;
     }
 
     allPlayersCopy.clear();
@@ -74,9 +72,6 @@ void run(Player *pPlayer) {
     //outputs arbitrary territories to attack
     cout << "\nHere are your territories to attack:" << endl;
     pPlayer -> toAttack();
-
-    //initalize vector with the order list to be inputted
-    vector<int> desiredOrders;
 
     //asks the user for their order, with a maximum of five orders
     for (int i=0; i<5; i++) {
@@ -122,13 +117,33 @@ void run(Player *pPlayer) {
             }
         }
 
-        desiredOrders.push_back(chosenOrder-1);
+        if (chosenOrder == 1) {
+            Deploy *deploy = new Deploy();
+            pPlayer -> issueOrder(deploy);
+        }
+        else if (chosenOrder == 2) {
+            Advance *advance = new Advance();
+            pPlayer -> issueOrder(advance);
+        }
+        else if (chosenOrder == 3) {
+            Bomb *bomb = new Bomb();
+            pPlayer -> issueOrder(bomb);
+        }
+        else if (chosenOrder == 4) {
+            Blockade *blockade = new Blockade();
+            pPlayer -> issueOrder(blockade);
+        }
+        else if (chosenOrder == 5) {
+            Airlift *airlift = new Airlift();
+            pPlayer -> issueOrder(airlift);
+        }
+        else if (chosenOrder == 6) {
+            Negotiate *negotiate = new Negotiate();
+            pPlayer -> issueOrder(negotiate);
+        }
     }
 
-    //sends a desired orders to the issueOrder() function
-    pPlayer -> issueOrder(desiredOrders);
-
-    //outputs the player's hand
+    pPlayer -> displayOrders();
     pPlayer -> displayHand();
 
     //asks the user whether they want to continue to trial or terminate the program
