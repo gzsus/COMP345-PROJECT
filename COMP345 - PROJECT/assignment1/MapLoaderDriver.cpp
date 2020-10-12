@@ -17,23 +17,23 @@
 
 int main() 
 {
-	std::string mapfiles[1] = { "C:\\Users\\samue\\Downloads\\comp345\\maps\\canada.map" };
+	std::string mapfiles[3] = { "C:\\Users\\samue\\Downloads\\comp345\\maps\\canada.map","C:\\Users\\samue\\Downloads\\comp345\\maps\\artic_bad.map","C:\\Users\\samue\\Downloads\\comp345\\maps\\europe.map" };
+	MapLoader* loader[3];
 
-	for (int i = 0; i < 1; i++)
+	for (int i = 0; i < 3; i++)
 	{
 		std::cout << "loop"<<i<<"\n";
 		try {
-			MapLoader* loader = new MapLoader(mapfiles[i]); //create a pointer that points to the maploader object
-			//std::cout << "\n"<<*loader;
+			loader[i] = new MapLoader(mapfiles[i]); //create a pointer that points to the maploader object
 
 
 			//delete loader; //take care of memory leak
 			//loader = NULL;
-			std::cout << "all done \n";
+			std::cout << "\nEnd of Program \n\n";
 			}
 		catch (int e)
 		{
-			std::cout << "error";
+			std::cout << "I/O error";
 		}
 	}
 

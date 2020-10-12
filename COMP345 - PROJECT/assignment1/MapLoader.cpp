@@ -10,6 +10,8 @@
 
 #include "MapLoader.h"
 #include "Map.h"
+#include "Territory.h"
+#include "Continent.h"
 #include <string>
 #include <vector>
 #include <fstream>
@@ -27,6 +29,7 @@ MapLoader::MapLoader(const MapLoader& a) {file = a.file;}
 //constructor that takes in a file string and creates a map right away
 MapLoader::MapLoader(std::string mapfile)
 {
+	bool error = false; //if there is an error at one point this is set to true and the program breaks
 	file = mapfile;
 	std::ifstream input(mapfile);
 	while (!input.eof())
@@ -116,6 +119,7 @@ MapLoader::MapLoader(std::string mapfile)
 		if (index == -3)
 		{
 			std::cout << " error in .map file";
+			error = true;
 			break;
 		}
 		if (continent_list.size() == 0 && country_list.size() != 0 || continent_list.size() != 0 && country_list.size() == 0)
@@ -123,6 +127,7 @@ MapLoader::MapLoader(std::string mapfile)
 			if (continent_list.size() == 0)
 			{
 				std::cout << "no continents stored, error in .map file";
+				error = true;
 				break;
 			}
 		}
@@ -135,6 +140,8 @@ MapLoader::MapLoader(std::string mapfile)
 			else
 			{
 				std::cout << "number of continents and countries do not match !";
+				error = true;
+				break;
 			}
 		}
 
@@ -144,6 +151,12 @@ MapLoader::MapLoader(std::string mapfile)
 			for (int j = 0; j < (country_list.size()); j++) //go through the "j" number of countries and document border info
 			{
 				getline(input, temp, '\n');
+				if (temp.empty() == true) //not enough borders given
+				{
+					std::cout << "Not enough borders given!";
+					error = true;
+					break;
+				}
 				if (temp.at(0) == ';') //found a map that has comments after the continent declaration...
 				{
 					j = j - 1;
@@ -164,24 +177,24 @@ MapLoader::MapLoader(std::string mapfile)
 				//std::cout <<"VECTOR Border #"<<j<<" :"<< border_list[j][0]<<" "<< border_list[j][1]<< "... \n" ;
 			}
 			getline(input, temp, '\n');
+			if (temp.empty() == false) //make sure the last border line was read
+			{
+				std::cout << "error in reading file more borders than countries given";
+				error = true;
+				break;
+			}
 		}
-
-		if (temp.empty() == false) {std::cout << "error in reading file more borders than countries given";}
-		////////////////////////////ERROR CHECKING/////////////////////////////////////////////////
-		//FINAL ERRROR FIX MAKE SURE THERE ARE ENOUGH BORDERS FOR ALL COUNTRIES
-		/*
-		*
-		*
-		*/
 		
 	}
 	input.close();
 
 	std::cout << "\n";
 
-	//now build the map using the extracted information and store it into a pointer
-	created_map = new Map(LoadMap(continent_list,country_list,border_list));
-
+	if (error == false) //if there were no errors in reading the file build the map
+	{
+		//now build the map using the extracted information and store it into a pointer
+		created_map = new Map(LoadMap(continent_list, country_list, border_list));
+	}
 }
 
 MapLoader::~MapLoader()
@@ -207,8 +220,8 @@ MapLoader::~MapLoader()
 		 //need to loop through all border indices to get all neighbours, annoyingly the first index is just that of the same country so reduce accordingly
 		 for (int j = 1; j < borders[i].size(); j++)
 		 {
-			 territory_list[i]->connet_to(territory_list[stoi(borders[i][j])-1]);
-			// std::cout << "connected:" << *territory_list[i] << " , TO: " << *territory_list[stoi(borders[i][j]) - 1] << "\n";
+			territory_list[i]->connet_to(territory_list[stoi(borders[i][j])-1]);
+			//std::cout << "connected:" << *territory_list[i] << " , TO: " << *territory_list[stoi(borders[i][j]) - 1] << "\n";
 		 }
 	 }
 
@@ -226,7 +239,7 @@ MapLoader::~MapLoader()
 		 for(; (i+1)==stoi(territories[j][2]) &&j<territory_list.size()-1; j++)
 		 {
 			cont_list[i]->add_territory(territory_list[j]);
-			std::cout << "connected:" << *territory_list[j] << " , TO CONTINENT: " << *cont_list[i] << "\n";
+			//std::cout << "connected:" << *territory_list[j] << " , TO CONTINENT: " << *cont_list[i] << "\n";
 			//std::cout << i << " " << j<<"\n";
 		 }
 	 }
@@ -240,7 +253,7 @@ MapLoader::~MapLoader()
 	 Map* created_map = new Map("created_map");
 	 for (int i = 0; i < cont_list.size(); i++)
 	 {
-		 std::cout << i<<" pased \n";
+		 //std::cout << i<<" pased \n";
 		  created_map->add_continent(cont_list[i]);
 	 }
 
