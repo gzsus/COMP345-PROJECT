@@ -7,6 +7,7 @@
 #pragma once
 #include<string>
 #include<vector>
+#include "Map.h"
 
 class MapLoader
 {
@@ -16,12 +17,15 @@ class MapLoader
 		MapLoader(const MapLoader& a); //copy constructor
 		MapLoader(std::string mapfile);
 		//fix this
-		MapLoader& operator =(const MapLoader& oldloader);
-		void setfile(std::string newfile); // assignment operator
+		MapLoader& operator =(const MapLoader& oldloader);// assignment operator
+		void setfile(std::string newfile); 
 		std::string getfile();
-		void LoadMap();
+		Map LoadMap(std::vector<std::vector<std::string>>continents, std::vector<std::vector<std::string>> territories, std::vector<std::vector<std::string>>borders);
+		
+		~MapLoader();
 
 	private:
+		Map* created_map; //this will store the map objects once they are created
 		friend std::ostream& operator<<(std::ostream&, const MapLoader&); //stream insertion operator
 		std::string file;
 		//lists used to store informaion taken from .map files

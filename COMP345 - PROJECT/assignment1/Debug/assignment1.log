@@ -1,7 +1,12 @@
-﻿  Continent.cpp
-C:\Users\adria\OneDrive\Desktop\COMP 345\COMP345-Assignment1\COMP345 - PROJECT\assignment1\Continent.cpp(93,29): warning C4018: '<': signed/unsigned mismatch
-  Map.cpp
-  MapDriver.cpp
-  Territory.cpp
-  Generating Code...
-  assignment1.vcxproj -> C:\Users\adria\OneDrive\Desktop\COMP 345\COMP345-Assignment1\COMP345 - PROJECT\Debug\assignment1.exe
+﻿  MapLoader.cpp
+C:\Users\samue\source\repos\gzsus\COMP345-Assignment1\COMP345 - PROJECT\assignment1\MapLoader.cpp(144,22): warning C4018: '<': signed/unsigned mismatch
+C:\Users\samue\source\repos\gzsus\COMP345-Assignment1\COMP345 - PROJECT\assignment1\MapLoader.cpp(159,23): warning C4018: '<': signed/unsigned mismatch
+C:\Users\samue\source\repos\gzsus\COMP345-Assignment1\COMP345 - PROJECT\assignment1\MapLoader.cpp(202,21): warning C4018: '<': signed/unsigned mismatch
+C:\Users\samue\source\repos\gzsus\COMP345-Assignment1\COMP345 - PROJECT\assignment1\MapLoader.cpp(207,21): warning C4018: '<': signed/unsigned mismatch
+C:\Users\samue\source\repos\gzsus\COMP345-Assignment1\COMP345 - PROJECT\assignment1\MapLoader.cpp(210,22): warning C4018: '<': signed/unsigned mismatch
+C:\Users\samue\source\repos\gzsus\COMP345-Assignment1\COMP345 - PROJECT\assignment1\MapLoader.cpp(219,21): warning C4018: '<': signed/unsigned mismatch
+C:\Users\samue\source\repos\gzsus\COMP345-Assignment1\COMP345 - PROJECT\assignment1\MapLoader.cpp(226,21): warning C4018: '<': signed/unsigned mismatch
+C:\Users\samue\source\repos\gzsus\COMP345-Assignment1\COMP345 - PROJECT\assignment1\MapLoader.cpp(229,44): warning C4018: '<': signed/unsigned mismatch
+C:\Users\samue\source\repos\gzsus\COMP345-Assignment1\COMP345 - PROJECT\assignment1\MapLoader.cpp(237,21): warning C4018: '<': signed/unsigned mismatch
+C:\Users\samue\source\repos\gzsus\COMP345-Assignment1\COMP345 - PROJECT\assignment1\MapLoader.cpp(244,21): warning C4018: '<': signed/unsigned mismatch
+  assignment1.vcxproj -> C:\Users\samue\Source\Repos\gzsus\COMP345-Assignment1\COMP345 - PROJECT\Debug\assignment1.exe

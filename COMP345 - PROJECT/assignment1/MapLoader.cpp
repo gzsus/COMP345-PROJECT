@@ -23,6 +23,7 @@ MapLoader::MapLoader()
 }
 //copy constructor
 MapLoader::MapLoader(const MapLoader& a) {file = a.file;}
+
 //constructor that takes in a file string and creates a map right away
 MapLoader::MapLoader(std::string mapfile)
 {
@@ -35,6 +36,7 @@ MapLoader::MapLoader(std::string mapfile)
 		int index = 0; //used to get size of data or variable to store in vector
 		int counter = 0; //keeps the count of the number of countries to determine number of borders
 
+		////////////////////////////CONTINENTS FROM .MAP/////////////////////////////////////////////////
 		getline(input, temp, '\n');
 		std::cout << temp << "\n";
 		if (temp.find("[continents]") != -1) //store all the continents
@@ -60,7 +62,6 @@ MapLoader::MapLoader(std::string mapfile)
 						index = -2;
 						break;
 					}
-
 				}
 				if (index == -2 || index == -3)
 				{
@@ -69,12 +70,11 @@ MapLoader::MapLoader(std::string mapfile)
 				}
 				std::cout << "VECTOR continent #" << counter << " :" << continent_list[counter][0] << " " << continent_list[counter][1] << " " << continent_list[counter][2] << "\n";
 				counter++;
-
 			}
-
 		}
 		counter = 0; //reset for use in other file reading code
 
+		////////////////////////////COUNTRIES FROM .MAP/////////////////////////////////////////////////
 		if (temp.find("[countries]") != -1)
 		{
 			while (temp.find("[borders]") == -1)
@@ -109,8 +109,9 @@ MapLoader::MapLoader(std::string mapfile)
 
 		}
 
+		////////////////////////////ERROR CHECKING/////////////////////////////////////////////////
 		//check continent count and parameters ERROR CHECKING
-		//to check continents you need to read all countries and make sure that the 3rd element in the index, the contninent to which the country belongs
+		//to check continents you need to read all countries and make sure that the 3rd element in the index, the continent to which the country belongs
 		//adds up properly to the number of continents read
 		if (index == -3)
 		{
@@ -137,7 +138,7 @@ MapLoader::MapLoader(std::string mapfile)
 			}
 		}
 
-
+		////////////////////////////BORDERS FROM .MAP/////////////////////////////////////////////////
 		if (temp.find("[borders]") != -1)
 		{
 			for (int j = 0; j < (country_list.size()); j++) //go through the "j" number of countries and document border info
@@ -166,6 +167,7 @@ MapLoader::MapLoader(std::string mapfile)
 		}
 
 		if (temp.empty() == false) {std::cout << "error in reading file more borders than countries given";}
+		////////////////////////////ERROR CHECKING/////////////////////////////////////////////////
 		//FINAL ERRROR FIX MAKE SURE THERE ARE ENOUGH BORDERS FOR ALL COUNTRIES
 		/*
 		*
@@ -173,36 +175,79 @@ MapLoader::MapLoader(std::string mapfile)
 		*/
 		
 	}
-	
-	//now build the map using the extracted information
-
-
-
-
-
 	input.close();
+
+	std::cout << "\n";
+
+	//now build the map using the extracted information and store it into a pointer
+	created_map = new Map(LoadMap(continent_list,country_list,border_list));
+
 }
-// maploader for non directly constructed maploader object
- void MapLoader::LoadMap()
+
+MapLoader::~MapLoader()
 {
-	 if(file=="")
+	std::cout << "OK!";
+	delete created_map;
+	created_map = NULL;
+}
+
+// this will load the map from the store vectors 
+ Map MapLoader::LoadMap(std::vector<std::vector<std::string>>continents, std::vector<std::vector<std::string>> territories, std::vector<std::vector<std::string>>borders)
+{
+	 //create a new *territory list for each index in the territories vector and store the name
+	 std::vector<Territory*> territory_list;
+	 std::vector<Continent*> cont_list;
+	 for (int i = 0; i < territories.size();i++)
 	 {
-		 std::cout<< "No file to load";
+		 territory_list.push_back(new Territory(territories[i][1], 0));
 	 }
-	 else
+	 //need to connect all the territories now using the border list
+	 for (int i = 0; i < territories.size(); i++)
 	 {
-		 std::ifstream input(file);
-		 while (!input.eof())
+		 //need to loop through all border indices to get all neighbours, annoyingly the first index is just that of the same country so reduce accordingly
+		 for (int j = 1; j < borders[i].size(); j++)
 		 {
-
+			 territory_list[i]->connet_to(territory_list[stoi(borders[i][j])-1]);
+			// std::cout << "connected:" << *territory_list[i] << " , TO: " << *territory_list[stoi(borders[i][j]) - 1] << "\n";
 		 }
-
-		 input.close();
 	 }
+
+	 //now that all the territories are created and linked create continents and link them to countries
+	 for (int i = 0; i < continents.size(); i++)
+	 {
+		 //this should also implement bonus but for now it doesnt cause the class is not available
+		 cont_list.push_back(new Continent(continents[i][0]));
+	 }
+	 //go through continents
+	 int j=0; // once we complete a series of countries counted by j we dont want j=0 again it should just keep going from where it was before
+	 for (int i = 0; i < cont_list.size(); i++)
+	 {
+		 //go through each country/territory and check if its continent is the one we are currently adding to
+		 for(; (i+1)==stoi(territories[j][2]) &&j<territory_list.size()-1; j++)
+		 {
+			cont_list[i]->add_territory(territory_list[j]);
+			std::cout << "connected:" << *territory_list[j] << " , TO CONTINENT: " << *cont_list[i] << "\n";
+			//std::cout << i << " " << j<<"\n";
+		 }
+	 }
+
+	 /*for (int i = 0; i < cont_list.size(); i++)
+	 {
+		 std::cout << *cont_list[i] << " pased \n";
+	 }*/
+
+	 //Finally create a new map and add the continents to it
+	 Map* created_map = new Map("created_map");
+	 for (int i = 0; i < cont_list.size(); i++)
+	 {
+		 std::cout << i<<" pased \n";
+		  created_map->add_continent(cont_list[i]);
+	 }
+
+	 return *created_map;
 }
 
 //assinment operator
-
  MapLoader& MapLoader::operator=(const MapLoader& oldloader)
  {
 	 file = oldloader.file;

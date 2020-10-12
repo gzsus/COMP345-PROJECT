@@ -24,10 +24,12 @@ int main()
 		std::cout << "loop"<<i<<"\n";
 		try {
 			MapLoader* loader = new MapLoader(mapfiles[i]); //create a pointer that points to the maploader object
-			std::cout << "\n"<<*loader;
+			//std::cout << "\n"<<*loader;
 
-			delete(loader); //take care of memory leak
-			loader = NULL;
+
+			//delete loader; //take care of memory leak
+			//loader = NULL;
+			std::cout << "all done \n";
 			}
 		catch (int e)
 		{
