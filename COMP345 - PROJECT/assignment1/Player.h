@@ -40,12 +40,7 @@ class Player {
         int getNumberOfPlayers();
         void toDefend();
         void toAttack();
-        //function declaration
-        template <class SelectedOrders>
-        void issueOrder(SelectedOrders *chosenOrder) {
-            orders.push_back(chosenOrder);
-            pOrderList -> setList(orders);
-        }
+        void issueOrder(Order *chosenOrder);
         //prototypes of temporary functions
         void createTerritories();
         void possibleOrders();

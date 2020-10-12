@@ -18,14 +18,12 @@
 
 
 #include "Map.h"
-#include "Continent.h"
-#include "Territory.h"
 
 
 int main()
 {
 	// Pointers to new territories (Name,armies)
-	Territory* can = new Territory("Canada",0);
+	Territory* can = new Territory("Canada", 0);
 	Territory* usa = new Territory("USA", 0);
 	Territory* mex = new Territory("Mexico", 0);
 
@@ -47,16 +45,16 @@ int main()
 	gua->connet_to(sal);
 	gua->connet_to(hon);
 	hon->connet_to(sal);
-	//sal->connet_to(hon); // Existing connection adding test
+	sal->connet_to(hon); // Existing connection adding test
 
-	Territory* nortA[] = {can,usa,mex};	// Array of countries to add to NA
-	na->add_territory(nortA,3);
+	Territory* nortA[] = { can,usa,mex };	// Array of countries to add to NA
+	na->add_territory(nortA, 3);
 
 	Map* America = new Map();
 
 	// validate map and show map information
 	std::string result = America->validate() ? "true" : "false";
-	std::cout << "\n"+America->get_name() + " valid map? " + result + "\n" << std::endl;
+	std::cout << "\n" + America->get_name() + " valid map? " + result + "\n" << std::endl;
 
 	// add continents to map
 	America->add_continent(na);
@@ -70,7 +68,7 @@ int main()
 
 
 	Territory* nortA2[] = { chi }; // Array of countries to add to NA
-	na->add_territory(nortA2,1);
+	na->add_territory(nortA2, 1);
 	America->add_continent(na);
 
 	std::cout << *na << "\n";
@@ -80,18 +78,32 @@ int main()
 	result = America->validate() ? "true" : "false";
 	std::cout << America->get_name() + " valid map? " + result + "\n" << std::endl;
 
-	//// Show territory information
-	//std::cout << *usa << "\n";
-	//std::cout << *mex << "\n";
-	//std::cout << *gua << "\n";
+	// Show territory information
+	std::cout << *usa << "\n";
+	std::cout << *mex << "\n";
+	std::cout << *gua << "\n";
 
 
 	//Territory* chi = new Territory(*usa); // Copy constructor use
-	//Territory* chi = new Territory();
-	//*chi = *usa;							// Assignment Operator use
-	//chi->set_name("Japan");
-	//std::cout << *usa << std::endl;
-	//std::cout << *chi;
+
+	*chi = *usa;							// Assignment Operator use
+	chi->set_name("Japan");
+	std::cout << *usa << std::endl;
+	std::cout << *chi;
+
+
+	delete America;
+
+	//delete na;
+	//delete ca;
+	//delete as;
+
+	//delete usa;
+	//delete can;
+	//delete mex;
+	//delete gua;
+	//delete hon;
+	//delete sal;
 
 
 	std::cout << "\nPress any key to close the screen...\n";
