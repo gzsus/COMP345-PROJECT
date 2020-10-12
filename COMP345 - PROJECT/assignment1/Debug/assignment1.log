@@ -1,3 +1,6 @@
-﻿  MapLoaderDriver.cpp
-C:\Users\samue\source\repos\gzsus\COMP345-Assignment1\COMP345 - PROJECT\assignment1\MapLoaderDriver.cpp(34,14): warning C4101: 'e': unreferenced local variable
-  assignment1.vcxproj -> C:\Users\samue\Source\Repos\gzsus\COMP345-Assignment1\COMP345 - PROJECT\Debug\assignment1.exe
+﻿  Continent.cpp
+  Map.cpp
+  MapDriver.cpp
+  Territory.cpp
+  Generating Code...
+  assignment1.vcxproj -> C:\Users\adria\OneDrive\Desktop\COMP 345\COMP345-Assignment1\COMP345 - PROJECT\Debug\assignment1.exe
