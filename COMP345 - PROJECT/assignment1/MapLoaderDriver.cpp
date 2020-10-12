@@ -42,6 +42,7 @@ int main()
 	for (int i = 0; i < 3; i++)
 	{
 	delete loader[i]; //take care of memory leak
+	loader[i] = NULL;
 	}
 
 	return 0;

@@ -201,7 +201,7 @@ MapLoader::~MapLoader()
 {
 	std::cout << "Deleting Map \n";
 	delete created_map;
-	//created_map = NULL;
+	created_map = NULL;
 }
 
 // this will load the map from the store vectors 

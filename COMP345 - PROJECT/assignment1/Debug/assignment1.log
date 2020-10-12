@@ -1,3 +1,14 @@
-﻿  MapLoaderDriver.cpp
+﻿  MapLoader.cpp
+C:\Users\samue\source\repos\gzsus\COMP345-Assignment1\COMP345 - PROJECT\assignment1\MapLoader.cpp(151,22): warning C4018: '<': signed/unsigned mismatch
+C:\Users\samue\source\repos\gzsus\COMP345-Assignment1\COMP345 - PROJECT\assignment1\MapLoader.cpp(172,23): warning C4018: '<': signed/unsigned mismatch
+C:\Users\samue\source\repos\gzsus\COMP345-Assignment1\COMP345 - PROJECT\assignment1\MapLoader.cpp(213,21): warning C4018: '<': signed/unsigned mismatch
+C:\Users\samue\source\repos\gzsus\COMP345-Assignment1\COMP345 - PROJECT\assignment1\MapLoader.cpp(218,21): warning C4018: '<': signed/unsigned mismatch
+C:\Users\samue\source\repos\gzsus\COMP345-Assignment1\COMP345 - PROJECT\assignment1\MapLoader.cpp(221,22): warning C4018: '<': signed/unsigned mismatch
+C:\Users\samue\source\repos\gzsus\COMP345-Assignment1\COMP345 - PROJECT\assignment1\MapLoader.cpp(229,21): warning C4018: '<': signed/unsigned mismatch
+C:\Users\samue\source\repos\gzsus\COMP345-Assignment1\COMP345 - PROJECT\assignment1\MapLoader.cpp(236,21): warning C4018: '<': signed/unsigned mismatch
+C:\Users\samue\source\repos\gzsus\COMP345-Assignment1\COMP345 - PROJECT\assignment1\MapLoader.cpp(239,44): warning C4018: '<': signed/unsigned mismatch
+C:\Users\samue\source\repos\gzsus\COMP345-Assignment1\COMP345 - PROJECT\assignment1\MapLoader.cpp(254,21): warning C4018: '<': signed/unsigned mismatch
+  MapLoaderDriver.cpp
 C:\Users\samue\source\repos\gzsus\COMP345-Assignment1\COMP345 - PROJECT\assignment1\MapLoaderDriver.cpp(32,14): warning C4101: 'e': unreferenced local variable
+  Generating Code...
   assignment1.vcxproj -> C:\Users\samue\Source\Repos\gzsus\COMP345-Assignment1\COMP345 - PROJECT\Debug\assignment1.exe
