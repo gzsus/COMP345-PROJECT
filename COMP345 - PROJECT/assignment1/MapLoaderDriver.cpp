@@ -26,7 +26,6 @@ int main()
 		try {
 			loader[i] = new MapLoader(mapfiles[i]); //create a pointer that points to the maploader object
 
-
 			//delete loader; //take care of memory leak
 			//loader = NULL;
 			std::cout << "\nEnd of Program \n\n";

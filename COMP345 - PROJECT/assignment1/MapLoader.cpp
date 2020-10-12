@@ -199,7 +199,7 @@ MapLoader::MapLoader(std::string mapfile)
 
 MapLoader::~MapLoader()
 {
-	std::cout << "OK!";
+	std::cout << "Deleting Map \n";
 	delete created_map;
 	created_map = NULL;
 }
@@ -256,6 +256,16 @@ MapLoader::~MapLoader()
 		 //std::cout << i<<" pased \n";
 		  created_map->add_continent(cont_list[i]);
 	 }
+
+	 if (false == created_map->validate())
+	{
+		 std::cout << "validation of the map has failed! \n";
+	}
+	 else
+	 {
+		 std::cout << "map validation succesful! \n";
+	 }
+
 
 	 return *created_map;
 }
