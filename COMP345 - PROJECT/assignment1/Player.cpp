@@ -113,6 +113,12 @@ void Player::possibleOrders() {
     }
 }
 
+//issues the orders the player chooses
+void Player::issueOrder(Order *chosenOrder) {
+    orders.push_back(chosenOrder);
+    pOrderList -> setList(orders);
+}
+
 //displays the orders to be executed
 void Player::displayOrders() {
     cout << "\nThe orders to be executed are:" << endl;
