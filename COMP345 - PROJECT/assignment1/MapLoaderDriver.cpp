@@ -15,25 +15,34 @@
 #include <fstream>
 #include<iostream>
 
-int main() 
+int main()
 {
 	std::string mapfiles[3] = { "C:\\Users\\samue\\Downloads\\comp345\\maps\\canada.map","C:\\Users\\samue\\Downloads\\comp345\\maps\\artic_bad.map","C:\\Users\\samue\\Downloads\\comp345\\maps\\europe.map" };
 	MapLoader* loader[3];
 
 	for (int i = 0; i < 3; i++)
 	{
-		std::cout << "loop"<<i<<"\n";
+		std::cout << "loop" << i << "\n";
 		try {
 			loader[i] = new MapLoader(mapfiles[i]); //create a pointer that points to the maploader object
 
-			//delete loader; //take care of memory leak
 			//loader = NULL;
 			std::cout << "\nEnd of Program \n\n";
-			}
+		}
 		catch (int e)
 		{
 			std::cout << "I/O error";
 		}
 	}
 
+	std::cout << "\nPress any key to delete maps and close the screen...\n";
+	std::cin.get();
+	
+
+	for (int i = 0; i < 3; i++)
+	{
+	delete loader[i]; //take care of memory leak
+	}
+
+	return 0;
 }
