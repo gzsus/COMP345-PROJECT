@@ -14,7 +14,7 @@ int main() {
     //welcome message
     cout << "Welcome to the player section of WARZONE!" << endl;
 
-    //asks the user total number of players
+    //asks the user for the total number of players
     cout << "\nWARZONE is played with between 2 and 7 players." << endl;
 
     //ensures that the user enters a valid number of players
@@ -65,7 +65,7 @@ int main() {
 
 //demonstrates functionality of the Player class
 void run(Player *pPlayer) {
-//outputs arbitrary territories to defend
+    //outputs arbitrary territories to defend
     cout << "\nHere are your territories to defend:" << endl;
     pPlayer -> toDefend();
 
@@ -143,10 +143,14 @@ void run(Player *pPlayer) {
         }
     }
 
+    //demonstrates the functionality of the issueOrder() function
     pPlayer -> displayOrders();
+    //demonstrates that each player has a hand of cards
     pPlayer -> displayHand();
+    //demonstates the functionality of the stream insertion operator
+    cout << *pPlayer << endl;
 
-    //asks the user whether they want to continue to trial or terminate the program
+    //asks the user whether they want to continue the trial or terminate the program
     while (true) {
         char stop = '.';
         cout << "\nWould you like to continue with this trial? (y/n) ";

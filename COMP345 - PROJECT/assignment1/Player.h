@@ -7,6 +7,7 @@
 
 using std::vector;
 using std::string;
+using std::ostream;
 
 class Player {
     private:
@@ -14,11 +15,11 @@ class Player {
         //static data members
         static int counter;
         //data members from the Orders class
-        vector <Order> orders;
-        OrdersList orderList;
+        vector <Order*> orders;
+        OrdersList *pOrderList;
         //data members from the Cards class
-        Deck *pDeck = new Deck();
-        Hand *pHand = new Hand();
+        Deck *pDeck;
+        Hand *pHand;
         //temporary arrays
         string allTerritories[10] = {"North Africa", "Egypt", "South Africa", "Congo", "East Africa", "Madagascar", "Indonesia", "New Guinea", "Eastern Australia", "Western Australia"};
         string allOrders[6] = {"deploy", "advance", "bomb", "blockade", "airlift", "negotiate"};
@@ -27,11 +28,11 @@ class Player {
 
     public:
         //constructor prototype
-        Player();
-        //overloaded constructor prototype
         Player(int players);
         //copy constructor prototype
         Player(const Player& other);
+        //overloaded assignment operator prototype
+        Player& operator=(const Player &other);
         //destructor prototype
         ~Player();
         //function prototypes
@@ -42,12 +43,14 @@ class Player {
         //function declaration
         template <class SelectedOrders>
         void issueOrder(SelectedOrders *chosenOrder) {
-            orders.push_back(*chosenOrder);
-            orderList.setList(orders);
+            orders.push_back(chosenOrder);
+            pOrderList -> setList(orders);
         }
         //prototypes of temporary functions
         void createTerritories();
         void possibleOrders();
         void displayHand();
         void displayOrders();
+        //stream insertion operator
+        friend ostream& operator<<(ostream& ostream, Player& player);
 };

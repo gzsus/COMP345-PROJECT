@@ -9,20 +9,31 @@ using std::cout;
 using std::endl;
 using std::vector;
 using std::string;
+using std::ostream;
 
 //Constructor
-Player::Player(){
-    numberOfPlayers = 0;
-}
-
-//Overloaded constructor
 Player::Player(int players) {
     numberOfPlayers = players;
+    pDeck = new Deck();
+    pHand = new Hand();
+    pOrderList = new OrdersList();
 }
 
 //Copy constructor
 Player::Player(const Player& other) {
-    memcpy(this, &other, sizeof(Player));
+    pDeck = new Deck(*other.pDeck);
+    pHand = new Hand(*other.pHand);
+    pOrderList = new OrdersList(*other.pOrderList);
+}
+
+//Overloaded assignment operator
+Player& Player::operator=(const Player &other){
+    if (this != &other) {
+        *pDeck = *other.pDeck;
+        *pHand = *other.pHand;
+        *pOrderList = *other.pOrderList;
+    }
+    return *this;
 }
 
 //Destructor
@@ -35,8 +46,16 @@ Player::~Player() {
     //prevents memory leaks from pointers
     delete pDeck;
     delete pHand;
+    delete pOrderList;
     pDeck = NULL;
     pHand = NULL;
+    pOrderList = NULL;
+
+    //prevents memory leaks from pointers in vectors
+    for (int i=0; i<orders.size(); i++) {
+        delete orders[i];
+    }
+    orders.clear();
 }
 
 //initialization of static data members
@@ -97,8 +116,8 @@ void Player::possibleOrders() {
 //displays the orders to be executed
 void Player::displayOrders() {
     cout << "\nThe orders to be executed are:" << endl;
-    for (int i=0; i<(orderList.getList().size()); i++) {
-		cout << (orderList.getList()[i]) << endl;
+    for (int i=0; i<(pOrderList->getList().size()); i++) {
+		cout << *(pOrderList->getList()[i]) << endl;
 	}
 }
 
@@ -110,4 +129,9 @@ void Player::displayHand() {
 	}
 	//displays hand
     cout << "\n" << *pHand << endl;
+}
+
+//Stream insertion operator displaying the total number of players
+ostream& operator<<(ostream& output, Player& player) {
+	return output << "\n(Match of " << player.getNumberOfPlayers() << " players)";
 }
