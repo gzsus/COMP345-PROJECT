@@ -19,6 +19,16 @@ void Order::execute()
 	}
 }
 
+Order& Order::operator=(const Order& right)
+{
+	if (this == &right)
+		return *this;
+	else {
+		Type = right.Type;
+		return *this;
+	}
+}
+
 std::ostream& operator<<(std::ostream& str, const Order& o)
 {
 	if (o.Type == "deploy") {
@@ -74,6 +84,7 @@ std::ostream& operator<<(std::ostream& str, const Order& o)
 	}
 	return str;
 }
+
 
 Deploy::Deploy()
 {
@@ -135,7 +146,7 @@ Negotiate::Negotiate(const Order& order)
 	Type = order.Type;
 }
 
-OrdersList::~OrdersList()
+OrdersList::~OrdersList() //Loop through the vector of pointers and delete each pointer to remove memory leaks
 {
 	while (ListOfOrders.empty() != true) {
 		delete(ListOfOrders[0]);
@@ -143,12 +154,12 @@ OrdersList::~OrdersList()
 	}
 }
 
-void OrdersList::delete_order(int position)
+void OrdersList::delete_order(int position) //Delete the pointer at the index given in the argument
 {
 	ListOfOrders.erase(ListOfOrders.begin() + position);
 }
 
-void OrdersList::move(int currentPosition, int desiredPosition)
+void OrdersList::move(int currentPosition, int desiredPosition) // Create a copy of the pointer in the current position, delete the pointer at the current position, insert the copy at the desired position
 {
 
 	if (ListOfOrders[currentPosition]->Type == "deploy") {
@@ -187,12 +198,12 @@ void OrdersList::move(int currentPosition, int desiredPosition)
 	}
 }
 
-void OrdersList::setList(std::vector<Order*> list)
+void OrdersList::setList(std::vector<Order*> list) //Getter for vector
 {
 	ListOfOrders = list;
 }
 
-std::vector<Order*> OrdersList::getList()
+std::vector<Order*> OrdersList::getList() //Setter for vector
 {
 	return ListOfOrders;
 }

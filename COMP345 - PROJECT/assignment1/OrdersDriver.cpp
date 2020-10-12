@@ -13,8 +13,11 @@ int main() {
 	Bomb* bomb1 = new Bomb();
 
 	Bomb* bomb2 = new Bomb();
-
-	//std::cout << *deploy1 << endl;
+	
+	std::cout << "Output the ostream of an order:" << std::endl;
+	std::cout << *deploy1 << endl;
+	std::cout << std::endl;
+	
 	std::vector<Order*> newList;
 
 	newList.push_back(deploy1);
