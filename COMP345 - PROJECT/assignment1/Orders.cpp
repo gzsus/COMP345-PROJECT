@@ -2,6 +2,7 @@
 
 Order::Order()
 {
+	Type = "default";
 }
 
 bool Order::validate()
@@ -12,86 +13,64 @@ bool Order::validate()
 
 void Order::execute()
 {
-	//Runs the validate method and changes hasBeenExectuted to true
 	bool is_order_valid = validate();
-	if (is_order_valid)
-	{
+	if (is_order_valid) {
 		hasBeenExecuted = true;
 	}
 }
 
-std::ostream &operator<<(std::ostream &str, const Order &o)
+std::ostream& operator<<(std::ostream& str, const Order& o)
 {
-	// TODO: insert return statement here
-	if (o.Type == "deploy")
-	{
-		if (o.hasBeenExecuted == true)
-		{
+	if (o.Type == "deploy") {
+		if (o.hasBeenExecuted == true) {
 			str << "Description of deploy and its effects";
 		}
-		else
-		{
+		else {
 			str << "Description of deploy";
 		}
 	}
-	else if (o.Type == "advance")
-	{
-		if (o.hasBeenExecuted == true)
-		{
+	else if (o.Type == "advance") {
+		if (o.hasBeenExecuted == true) {
 			str << "Description of advance and its effects";
 		}
-		else
-		{
+		else {
 			str << "Description of advance";
 		}
 	}
-	else if (o.Type == "blockade")
-	{
-		if (o.hasBeenExecuted == true)
-		{
+	else if (o.Type == "blockade") {
+		if (o.hasBeenExecuted == true) {
 			str << "Description of blockade and its effects";
 		}
-		else
-		{
+		else {
 			str << "Description of blockade";
 		}
 	}
-	else if (o.Type == "airlift")
-	{
-		if (o.hasBeenExecuted == true)
-		{
+	else if (o.Type == "airlift") {
+		if (o.hasBeenExecuted == true) {
 			str << "Description of airlift and its effects";
 		}
-		else
-		{
+		else {
 			str << "Description of airlift";
 		}
 	}
-	else if (o.Type == "negotiate")
-	{
-		if (o.hasBeenExecuted == true)
-		{
+	else if (o.Type == "negotiate") {
+		if (o.hasBeenExecuted == true) {
 			str << "Description of negotiate and its effects";
 		}
-		else
-		{
+		else {
 			str << "Description of negotiate";
 		}
 	}
-	else if (o.Type == "bomb")
-	{
-		if (o.hasBeenExecuted == true)
-		{
+	else if (o.Type == "bomb") {
+		if (o.hasBeenExecuted == true) {
 			str << "Description of bomb and its effects";
 		}
-		else
-		{
+		else {
 			str << "Description of bomb";
 		}
 	}
-	else
-	{
-		str << "Order cannot be described";
+	else {
+		str << "order is not defined";
 	}
 	return str;
 }
@@ -101,7 +80,7 @@ Deploy::Deploy()
 	Type = "deploy";
 }
 
-Deploy::Deploy(const Order &order)
+Deploy::Deploy(const Order& order)
 {
 	Type = order.Type;
 }
@@ -111,7 +90,7 @@ Bomb::Bomb()
 	Type = "bomb";
 }
 
-Bomb::Bomb(const Order &order)
+Bomb::Bomb(const Order& order)
 {
 	Type = order.Type;
 }
@@ -121,7 +100,7 @@ Advance::Advance()
 	Type = "advance";
 }
 
-Advance::Advance(const Order &order)
+Advance::Advance(const Order& order)
 {
 	Type = order.Type;
 }
@@ -131,7 +110,7 @@ Blockade::Blockade()
 	Type = "blockade";
 }
 
-Blockade::Blockade(const Order &order)
+Blockade::Blockade(const Order& order)
 {
 	Type = order.Type;
 }
@@ -141,7 +120,7 @@ Airlift::Airlift()
 	Type = "airlift";
 }
 
-Airlift::Airlift(const Order &order)
+Airlift::Airlift(const Order& order)
 {
 	Type = order.Type;
 }
@@ -151,65 +130,69 @@ Negotiate::Negotiate()
 	Type = "negotiate";
 }
 
-Negotiate::Negotiate(const Order &order)
+Negotiate::Negotiate(const Order& order)
 {
 	Type = order.Type;
 }
 
+OrdersList::~OrdersList()
+{
+	while (ListOfOrders.empty() != true) {
+		delete(ListOfOrders[0]);
+		ListOfOrders.erase(ListOfOrders.begin());
+	}
+}
+
 void OrdersList::delete_order(int position)
 {
-	//Delete the object at position
 	ListOfOrders.erase(ListOfOrders.begin() + position);
 }
 
 void OrdersList::move(int currentPosition, int desiredPosition)
 {
-	//Move by position two position arguments move position 1 to position 2
-	//Copy the object in currentPosition and store it in temp, delete the object in currentPosition, insert copy into desiredPosition
-	if (ListOfOrders[currentPosition].Type == "deploy")
-	{
-		Deploy temp = Deploy(ListOfOrders[currentPosition]);
+
+	if (ListOfOrders[currentPosition]->Type == "deploy") {
+		Deploy* temp = new Deploy(*ListOfOrders[currentPosition]);
 		delete_order(currentPosition);
 		ListOfOrders.insert(ListOfOrders.begin() + desiredPosition, temp);
 	}
-	else if (ListOfOrders[currentPosition].Type == "advance")
-	{
-		Advance temp = Advance(ListOfOrders[currentPosition]);
+	else if (ListOfOrders[currentPosition]->Type == "advance") {
+		Advance* temp = new Advance(*ListOfOrders[currentPosition]);
 		delete_order(currentPosition);
 		ListOfOrders.insert(ListOfOrders.begin() + desiredPosition, temp);
+
 	}
-	else if (ListOfOrders[currentPosition].Type == "blockade")
-	{
-		Blockade temp = Blockade(ListOfOrders[currentPosition]);
+	else if (ListOfOrders[currentPosition]->Type == "blockade") {
+		Blockade* temp = new Blockade(*ListOfOrders[currentPosition]);
 		delete_order(currentPosition);
 		ListOfOrders.insert(ListOfOrders.begin() + desiredPosition, temp);
+
 	}
-	else if (ListOfOrders[currentPosition].Type == "airlift")
-	{
-		Airlift temp = Airlift(ListOfOrders[currentPosition]);
+	else if (ListOfOrders[currentPosition]->Type == "airlift") {
+		Airlift* temp = new Airlift(*ListOfOrders[currentPosition]);
 		delete_order(currentPosition);
 		ListOfOrders.insert(ListOfOrders.begin() + desiredPosition, temp);
+
 	}
-	else if (ListOfOrders[currentPosition].Type == "negotiate")
-	{
-		Negotiate temp = Negotiate(ListOfOrders[currentPosition]);
+	else if (ListOfOrders[currentPosition]->Type == "negotiate") {
+		Negotiate* temp = new Negotiate(*ListOfOrders[currentPosition]);
 		delete_order(currentPosition);
 		ListOfOrders.insert(ListOfOrders.begin() + desiredPosition, temp);
+
 	}
-	else if (ListOfOrders[currentPosition].Type == "bomb")
-	{
-		Bomb temp = Bomb(ListOfOrders[currentPosition]);
+	else if (ListOfOrders[currentPosition]->Type == "bomb") {
+		Bomb* temp = new Bomb(*ListOfOrders[currentPosition]);
 		delete_order(currentPosition);
 		ListOfOrders.insert(ListOfOrders.begin() + desiredPosition, temp);
 	}
 }
 
-void OrdersList::setList(std::vector<Order> list)
+void OrdersList::setList(std::vector<Order*> list)
 {
 	ListOfOrders = list;
 }
 
-std::vector<Order> OrdersList::getList()
+std::vector<Order*> OrdersList::getList()
 {
 	return ListOfOrders;
 }

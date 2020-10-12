@@ -1,74 +1,83 @@
 #pragma once
-#include <vector>
 #include <iostream>
 #include <string>
+#include <vector>
+using namespace std;
 
-class Order
-{
+
+class Order {
 public:
 	Order();
+
 	bool validate();
 	void execute();
 
-	std::string Type = "Default";
-	bool hasBeenExecuted = false;
+	std::string Type;
 
 private:
-	friend std::ostream &operator<<(std::ostream &, const Order &); //stream insertion operator
+	bool hasBeenExecuted;
+	friend std::ostream& operator<<(std::ostream&, const Order&);
 };
 
-class Deploy : public Order
-{
+
+class Deploy : public Order {
 
 public:
 	Deploy();
-	Deploy(const Order &order); //copy constructor
+	Deploy(const Order& order);
 };
 
-class Bomb : public Order
-{
+
+class Bomb : public Order {
 public:
 	Bomb();
-	Bomb(const Order &order); //copy constructor
+	Bomb(const Order& order);
+
 };
 
-class Advance : public Order
-{
+
+class Advance : public Order {
 public:
 	Advance();
-	Advance(const Order &order); //copy constructor
+	Advance(const Order& order);
 };
 
-class Blockade : public Order
-{
+
+class Blockade : public Order {
 public:
 	Blockade();
-	Blockade(const Order &order); //copy constructor
+	Blockade(const Order& order);
 };
 
-class Airlift : public Order
-{
+
+class Airlift : public Order {
 public:
 	Airlift();
-	Airlift(const Order &order); //copy constructor
+	Airlift(const Order& order);
 };
 
-class Negotiate : public Order
-{
+
+class Negotiate : public Order {
 public:
 	Negotiate();
-	Negotiate(const Order &order); //copy constructor
+	Negotiate(const Order& order);
 };
 
-class OrdersList
-{
+
+class OrdersList {
 public:
-	//Using Vectors
+	~OrdersList();
 	void delete_order(int position);
-	void move(int currentPosition, int desiredPosition);
-	void setList(std::vector<Order> list); //assignment operator
-	std::vector<Order> getList();
 
+	void move(int currentPosition, int desiredPosition);
+
+	void setList(std::vector<Order*> list);
+
+	std::vector<Order*> getList();
 private:
-	std::vector<Order> ListOfOrders;
+	std::vector<Order*> ListOfOrders;
 };
+
+
+
+
