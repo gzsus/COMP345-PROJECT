@@ -1,3 +1,8 @@
+/////////////////////////////////////
+//
+// Cards - Donovan Upsdell
+//
+/////////////////////////////////////
 #include<cstdlib>
 #include<ctime>
 #include "Cards.h"
@@ -12,9 +17,14 @@ int main() {
 		hand->add(deck->draw()); //draw cards until the deck is empty
 	}
 	std::cout << *hand << "\n"; //Output hand, contains each card.
-	std::cout << *deck << "\n"; //Deck is now empty
+	std::cout << *deck << "\n\n"; //Deck is now empty
 
-	// TODO PLAY CARDS WHEN PLAY IS FUNCTIONAL
+	while (hand->getHand()->empty() != true) {
+		std::string type = hand->getHand()->at(0).play(hand, deck, 0); //card is played, then removed from the player's hand, and a card of that type is added back to the deck.
+		std::cout << "Played card: " << type << "\n";
+		std::cout << *hand << "\n";
+		std::cout << *deck << "\n\n";
+	}
 
 	delete(hand); //tidying up
 	hand = NULL;

@@ -6,39 +6,52 @@
 
 
 #include "Continent.h"
+#include "Territory.h"
+#include "Map.h"
 
 
 using namespace std;
 
-/////////////////////////////////// Constructors/Destructor /////////////////////////////////////
 
+/////////////////////////////////// Constructors/Destructor /////////////////////////////////////
 Continent::Continent()
 {
 	continent_name = "unnamed";
 	owner = NULL;
 	bonus = NULL;
+	container = NULL;
 	cout << "[CREATED]  " << *this;
 }
-
 Continent::Continent(string given_name)
 {
 	continent_name = given_name;
 	owner = NULL;
 	bonus = NULL;
+	container = NULL;
 	cout << "[CREATED]  " << *this;
 }
-
 Continent::Continent(string given_name, Bonus* given_bonus)
 {
 	continent_name = given_name;
 	bonus = given_bonus;
+	bonus = NULL;
+	container = NULL;
 	cout << "[CREATED]  " << *this;
 }
-
+Continent::Continent(const Continent& given_continent)
+{
+	continent_name = given_continent.continent_name;
+	territories = given_continent.territories;
+	owner = given_continent.owner;
+	bonus = given_continent.bonus;
+	container = given_continent.container;
+	cout << "[COPIED]  " << *this;
+}
 Continent::~Continent()
 {
 	bonus = NULL;
 	owner = NULL;
+	//container = NULL;
 	continent_name.clear();
 	for (Territory* t : territories)
 		t->set_continent(NULL);
@@ -46,8 +59,8 @@ Continent::~Continent()
 }
 
 
-/////////////////////////////////// Sets and gets /////////////////////////////////////
 
+/////////////////////////////////// Sets and gets /////////////////////////////////////
 void Continent::set_territories(std::vector<Territory*> given_vector) { territories = given_vector; }
 std::vector<Territory*> Continent::get_territories() { return territories; }
 
@@ -57,8 +70,12 @@ string Continent::get_name() { return continent_name; }
 void Continent::set_owner(Player* given_owner) { owner = given_owner; }
 Player* Continent::get_owner() { return owner; }
 
-void Continent::set_bonus(Bonus* given_bonus) {  }
+void Continent::set_bonus(Bonus* given_bonus) { bonus = given_bonus; }
 Bonus* Continent::get_bonus() { return bonus; }
+
+void Continent::set_map(Map* given_map) { container = given_map; }
+Map* Continent::get_map() { return container; }
+
 
 
 /////////////////////////////////// Territories manipulation /////////////////////////////////////
@@ -90,7 +107,7 @@ bool Continent::add_territory(Territory* given_territory)
 }
 void Continent::add_territory(Territory* given_territories[], int arr_size)
 {
-	for (unsigned int i = 0; i < arr_size; i++) {
+	for (int i = 0; i < arr_size; i++) {
 		//	If it is not already set
 		if ( !(this->index_territory(given_territories[i]) > -1 )) {
 			// Add on this vector 
@@ -113,18 +130,13 @@ bool Continent::remove_territory(Territory* given_territory)
 	}
 	return false;
 }
-
-void Continent::show_territories()
+bool Continent::is_connected()
 {
-	if (territories.empty()) {
-		cout << "Continent \"" << this->get_name() << "\" is empty. " << endl;
-		return;
-	}
-	cout << "Continent: " << this->get_name() << endl;
-	for (Territory* t : territories) {
-		cout << "\t" << t->get_name();
-	}
-	cout << endl;
+	for (Territory* contained_t : this->territories)	// territories in this continent
+		for (Territory* neighbour_t : contained_t->get_neighbours()) // neighbour territories to each of the contained territories
+			if ( neighbour_t->get_continent() != this || neighbour_t->get_continent() != NULL )	// if neighbour territory is not part of this conntinent
+				return true;	// this continent is connected to other continent
+	return false;
 }
 
 
