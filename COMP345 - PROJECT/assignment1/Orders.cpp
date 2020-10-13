@@ -198,12 +198,12 @@ void OrdersList::move(int currentPosition, int desiredPosition) // Create a copy
 	}
 }
 
-void OrdersList::setList(std::vector<Order*> list) //Getter for vector
+void OrdersList::setList(std::vector<Order*> list) //Setter for vector
 {
 	ListOfOrders = list;
 }
 
-std::vector<Order*> OrdersList::getList() //Setter for vector
+std::vector<Order*> OrdersList::getList() //Getter for vector
 {
 	return ListOfOrders;
 }
