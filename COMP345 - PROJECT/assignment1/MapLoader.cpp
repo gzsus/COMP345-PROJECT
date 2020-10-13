@@ -10,8 +10,6 @@
 
 #include "MapLoader.h"
 #include "Map.h"
-#include "Territory.h"
-#include "Continent.h"
 #include <string>
 #include <vector>
 #include <fstream>

@@ -15,13 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Map.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Territory.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Continent.cpp">
+    <ClCompile Include="Cards.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="MapLoader.cpp">
@@ -30,18 +24,18 @@
     <ClCompile Include="MapLoaderDriver.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Map.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Territory.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Continent.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Map.h">
+    <ClInclude Include="Cards.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="MapLoader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Map.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
