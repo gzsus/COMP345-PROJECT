@@ -94,17 +94,6 @@ int main()
 
 	delete America;
 
-	//delete na;
-	//delete ca;
-	//delete as;
-
-	//delete usa;
-	//delete can;
-	//delete mex;
-	//delete gua;
-	//delete hon;
-	//delete sal;
-
 
 	std::cout << "\nPress any key to close the screen...\n";
 	std::cin.get();

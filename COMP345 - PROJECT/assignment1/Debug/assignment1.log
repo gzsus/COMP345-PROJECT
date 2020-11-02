@@ -1,11 +1,1 @@
-﻿  MapLoader.cpp
-C:\Users\samue\source\repos\gzsus\COMP345-Assignment1\COMP345 - PROJECT\assignment1\MapLoader.cpp(149,22): warning C4018: '<': signed/unsigned mismatch
-C:\Users\samue\source\repos\gzsus\COMP345-Assignment1\COMP345 - PROJECT\assignment1\MapLoader.cpp(170,23): warning C4018: '<': signed/unsigned mismatch
-C:\Users\samue\source\repos\gzsus\COMP345-Assignment1\COMP345 - PROJECT\assignment1\MapLoader.cpp(211,21): warning C4018: '<': signed/unsigned mismatch
-C:\Users\samue\source\repos\gzsus\COMP345-Assignment1\COMP345 - PROJECT\assignment1\MapLoader.cpp(216,21): warning C4018: '<': signed/unsigned mismatch
-C:\Users\samue\source\repos\gzsus\COMP345-Assignment1\COMP345 - PROJECT\assignment1\MapLoader.cpp(219,22): warning C4018: '<': signed/unsigned mismatch
-C:\Users\samue\source\repos\gzsus\COMP345-Assignment1\COMP345 - PROJECT\assignment1\MapLoader.cpp(227,21): warning C4018: '<': signed/unsigned mismatch
-C:\Users\samue\source\repos\gzsus\COMP345-Assignment1\COMP345 - PROJECT\assignment1\MapLoader.cpp(234,21): warning C4018: '<': signed/unsigned mismatch
-C:\Users\samue\source\repos\gzsus\COMP345-Assignment1\COMP345 - PROJECT\assignment1\MapLoader.cpp(237,44): warning C4018: '<': signed/unsigned mismatch
-C:\Users\samue\source\repos\gzsus\COMP345-Assignment1\COMP345 - PROJECT\assignment1\MapLoader.cpp(252,21): warning C4018: '<': signed/unsigned mismatch
-  assignment1.vcxproj -> C:\Users\samue\Source\Repos\gzsus\COMP345-Assignment1\COMP345 - PROJECT\Debug\assignment1.exe
+﻿  assignment1.vcxproj -> C:\Users\adria\OneDrive\Desktop\COMP 345\COMP345-Assignment1\COMP345 - PROJECT\Debug\assignment1.exe
