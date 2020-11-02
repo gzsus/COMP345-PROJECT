@@ -3,3 +3,7 @@ CppProperties.json
 
 **x64/
 **Debug/
+**assignment1/x64/
+**assignment1/Debug/
+**.obj
+**.exe
