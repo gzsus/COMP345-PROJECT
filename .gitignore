@@ -1,10 +1,5 @@
 
 CppProperties.json
 
-**.vs/
 **x64/
 **Debug/
-
-**assignment1.vcxproj
-**assignment1.vcxproj.filters
-assignment1.vcxproj.user
