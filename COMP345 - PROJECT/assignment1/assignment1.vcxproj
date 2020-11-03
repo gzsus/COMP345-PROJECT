@@ -21,8 +21,8 @@
   <ItemGroup>
     <ClCompile Include="Cards.cpp" />
     <ClCompile Include="Map.cpp" />
-    <ClCompile Include="MapDriver.cpp" />
     <ClCompile Include="MapLoader.cpp" />
+    <ClCompile Include="MapLoaderDriver.cpp" />
     <ClCompile Include="Orders.cpp" />
     <ClCompile Include="Player.cpp" />
   </ItemGroup>

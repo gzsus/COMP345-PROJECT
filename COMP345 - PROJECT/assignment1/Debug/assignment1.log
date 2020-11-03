@@ -1,26 +1,20 @@
-﻿  Cards.cpp
-C:\Users\adria\OneDrive\Desktop\COMP 345\COMP345-Assignment1\COMP345 - PROJECT\assignment1\Cards.cpp(19,20): warning C4018: '<': signed/unsigned mismatch
-C:\Users\adria\OneDrive\Desktop\COMP 345\COMP345-Assignment1\COMP345 - PROJECT\assignment1\Cards.cpp(112,20): warning C4018: '<': signed/unsigned mismatch
-C:\Users\adria\OneDrive\Desktop\COMP 345\COMP345-Assignment1\COMP345 - PROJECT\assignment1\Cards.cpp(192,20): warning C4018: '<': signed/unsigned mismatch
-C:\Users\adria\OneDrive\Desktop\COMP 345\COMP345-Assignment1\COMP345 - PROJECT\assignment1\Cards.cpp(202,20): warning C4018: '<': signed/unsigned mismatch
-  Map.cpp
-  MapDriver.cpp
-  MapLoader.cpp
-C:\Users\adria\OneDrive\Desktop\COMP 345\COMP345-Assignment1\COMP345 - PROJECT\assignment1\MapLoader.cpp(149,22): warning C4018: '<': signed/unsigned mismatch
-C:\Users\adria\OneDrive\Desktop\COMP 345\COMP345-Assignment1\COMP345 - PROJECT\assignment1\MapLoader.cpp(170,23): warning C4018: '<': signed/unsigned mismatch
-C:\Users\adria\OneDrive\Desktop\COMP 345\COMP345-Assignment1\COMP345 - PROJECT\assignment1\MapLoader.cpp(211,21): warning C4018: '<': signed/unsigned mismatch
-C:\Users\adria\OneDrive\Desktop\COMP 345\COMP345-Assignment1\COMP345 - PROJECT\assignment1\MapLoader.cpp(216,21): warning C4018: '<': signed/unsigned mismatch
-C:\Users\adria\OneDrive\Desktop\COMP 345\COMP345-Assignment1\COMP345 - PROJECT\assignment1\MapLoader.cpp(219,22): warning C4018: '<': signed/unsigned mismatch
-C:\Users\adria\OneDrive\Desktop\COMP 345\COMP345-Assignment1\COMP345 - PROJECT\assignment1\MapLoader.cpp(227,21): warning C4018: '<': signed/unsigned mismatch
-C:\Users\adria\OneDrive\Desktop\COMP 345\COMP345-Assignment1\COMP345 - PROJECT\assignment1\MapLoader.cpp(234,21): warning C4018: '<': signed/unsigned mismatch
-C:\Users\adria\OneDrive\Desktop\COMP 345\COMP345-Assignment1\COMP345 - PROJECT\assignment1\MapLoader.cpp(237,44): warning C4018: '<': signed/unsigned mismatch
-C:\Users\adria\OneDrive\Desktop\COMP 345\COMP345-Assignment1\COMP345 - PROJECT\assignment1\MapLoader.cpp(252,21): warning C4018: '<': signed/unsigned mismatch
-  Orders.cpp
+﻿  MapLoader.cpp
+C:\Users\samue\source\repos\gzsus\COMP345-Assignment1\COMP345 - PROJECT\assignment1\MapLoader.cpp(149,22): warning C4018: '<': signed/unsigned mismatch
+C:\Users\samue\source\repos\gzsus\COMP345-Assignment1\COMP345 - PROJECT\assignment1\MapLoader.cpp(170,23): warning C4018: '<': signed/unsigned mismatch
+C:\Users\samue\source\repos\gzsus\COMP345-Assignment1\COMP345 - PROJECT\assignment1\MapLoader.cpp(218,21): warning C4018: '<': signed/unsigned mismatch
+C:\Users\samue\source\repos\gzsus\COMP345-Assignment1\COMP345 - PROJECT\assignment1\MapLoader.cpp(223,21): warning C4018: '<': signed/unsigned mismatch
+C:\Users\samue\source\repos\gzsus\COMP345-Assignment1\COMP345 - PROJECT\assignment1\MapLoader.cpp(226,22): warning C4018: '<': signed/unsigned mismatch
+C:\Users\samue\source\repos\gzsus\COMP345-Assignment1\COMP345 - PROJECT\assignment1\MapLoader.cpp(234,21): warning C4018: '<': signed/unsigned mismatch
+C:\Users\samue\source\repos\gzsus\COMP345-Assignment1\COMP345 - PROJECT\assignment1\MapLoader.cpp(241,21): warning C4018: '<': signed/unsigned mismatch
+C:\Users\samue\source\repos\gzsus\COMP345-Assignment1\COMP345 - PROJECT\assignment1\MapLoader.cpp(244,44): warning C4018: '<': signed/unsigned mismatch
+C:\Users\samue\source\repos\gzsus\COMP345-Assignment1\COMP345 - PROJECT\assignment1\MapLoader.cpp(252,21): warning C4018: '<': signed/unsigned mismatch
+  MapLoaderDriver.cpp
+C:\Users\samue\source\repos\gzsus\COMP345-Assignment1\COMP345 - PROJECT\assignment1\MapLoaderDriver.cpp(32,14): warning C4101: 'e': unreferenced local variable
   Player.cpp
-C:\Users\adria\OneDrive\Desktop\COMP 345\COMP345-Assignment1\COMP345 - PROJECT\assignment1\Player.cpp(42,23): warning C4154: deletion of an array expression; conversion to pointer supplied
-C:\Users\adria\OneDrive\Desktop\COMP 345\COMP345-Assignment1\COMP345 - PROJECT\assignment1\Player.cpp(43,33): warning C4154: deletion of an array expression; conversion to pointer supplied
-C:\Users\adria\OneDrive\Desktop\COMP 345\COMP345-Assignment1\COMP345 - PROJECT\assignment1\Player.cpp(44,33): warning C4154: deletion of an array expression; conversion to pointer supplied
-C:\Users\adria\OneDrive\Desktop\COMP 345\COMP345-Assignment1\COMP345 - PROJECT\assignment1\Player.cpp(55,20): warning C4018: '<': signed/unsigned mismatch
-C:\Users\adria\OneDrive\Desktop\COMP 345\COMP345-Assignment1\COMP345 - PROJECT\assignment1\Player.cpp(125,20): warning C4018: '<': signed/unsigned mismatch
+C:\Users\samue\source\repos\gzsus\COMP345-Assignment1\COMP345 - PROJECT\assignment1\Player.cpp(42,23): warning C4154: deletion of an array expression; conversion to pointer supplied
+C:\Users\samue\source\repos\gzsus\COMP345-Assignment1\COMP345 - PROJECT\assignment1\Player.cpp(43,33): warning C4154: deletion of an array expression; conversion to pointer supplied
+C:\Users\samue\source\repos\gzsus\COMP345-Assignment1\COMP345 - PROJECT\assignment1\Player.cpp(44,33): warning C4154: deletion of an array expression; conversion to pointer supplied
+C:\Users\samue\source\repos\gzsus\COMP345-Assignment1\COMP345 - PROJECT\assignment1\Player.cpp(55,20): warning C4018: '<': signed/unsigned mismatch
+C:\Users\samue\source\repos\gzsus\COMP345-Assignment1\COMP345 - PROJECT\assignment1\Player.cpp(125,20): warning C4018: '<': signed/unsigned mismatch
   Generating Code...
-  assignment1.vcxproj -> C:\Users\adria\OneDrive\Desktop\COMP 345\COMP345-Assignment1\COMP345 - PROJECT\Debug\assignment1.exe
+  assignment1.vcxproj -> C:\Users\samue\Source\Repos\gzsus\COMP345-Assignment1\COMP345 - PROJECT\Debug\assignment1.exe

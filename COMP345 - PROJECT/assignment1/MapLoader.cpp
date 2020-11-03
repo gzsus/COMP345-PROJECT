@@ -91,7 +91,7 @@ MapLoader::MapLoader(std::string mapfile)
 						break;
 					}
 					index = temp.find(" "); // store the index of the current variable to be stored
-					//std::cout <<"find"<< (temp.find(" ")==-1)<<" index:"<<i<<"\n";
+
 					if (i == 0 && index == -1) //this is an empty line and we are done with this section
 					{
 						index = -2; //needed a way to break out the other loop too 
@@ -172,7 +172,6 @@ MapLoader::MapLoader(std::string mapfile)
 					std::cout << border_list[j][k] << " ";
 				}
 				std::cout << "\n";
-				//std::cout <<"VECTOR Border #"<<j<<" :"<< border_list[j][0]<<" "<< border_list[j][1]<< "... \n" ;
 			}
 			getline(input, temp, '\n');
 			if (temp.empty() == false) //make sure the last border line was read
@@ -182,7 +181,7 @@ MapLoader::MapLoader(std::string mapfile)
 				break;
 			}
 		}
-		
+
 	}
 	input.close();
 
@@ -193,6 +192,15 @@ MapLoader::MapLoader(std::string mapfile)
 		//now build the map using the extracted information and store it into a pointer
 		created_map = new Map(LoadMap(continent_list, country_list, border_list));
 	}
+
+	else
+	{
+		//adressing memory leak
+		continent_list.clear();
+		country_list.clear();
+		border_list.clear();
+	}
+
 }
 
 MapLoader::~MapLoader()
@@ -237,21 +245,13 @@ MapLoader::~MapLoader()
 		 for(; (i+1)==stoi(territories[j][2]) &&j<territory_list.size()-1; j++)
 		 {
 			cont_list[i]->add_territory(territory_list[j]);
-			//std::cout << "connected:" << *territory_list[j] << " , TO CONTINENT: " << *cont_list[i] << "\n";
-			//std::cout << i << " " << j<<"\n";
 		 }
 	 }
-
-	 /*for (int i = 0; i < cont_list.size(); i++)
-	 {
-		 std::cout << *cont_list[i] << " pased \n";
-	 }*/
 
 	 //Finally create a new map and add the continents to it
 	 Map* created_map = new Map("created_map");
 	 for (int i = 0; i < cont_list.size(); i++)
 	 {
-		 //std::cout << i<<" pased \n";
 		  created_map->add_continent(cont_list[i]);
 	 }
 
