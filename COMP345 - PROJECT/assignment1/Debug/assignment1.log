@@ -1,20 +1,3 @@
-﻿  MapLoader.cpp
-C:\Users\samue\source\repos\gzsus\COMP345-Assignment1\COMP345 - PROJECT\assignment1\MapLoader.cpp(149,22): warning C4018: '<': signed/unsigned mismatch
-C:\Users\samue\source\repos\gzsus\COMP345-Assignment1\COMP345 - PROJECT\assignment1\MapLoader.cpp(170,23): warning C4018: '<': signed/unsigned mismatch
-C:\Users\samue\source\repos\gzsus\COMP345-Assignment1\COMP345 - PROJECT\assignment1\MapLoader.cpp(218,21): warning C4018: '<': signed/unsigned mismatch
-C:\Users\samue\source\repos\gzsus\COMP345-Assignment1\COMP345 - PROJECT\assignment1\MapLoader.cpp(223,21): warning C4018: '<': signed/unsigned mismatch
-C:\Users\samue\source\repos\gzsus\COMP345-Assignment1\COMP345 - PROJECT\assignment1\MapLoader.cpp(226,22): warning C4018: '<': signed/unsigned mismatch
-C:\Users\samue\source\repos\gzsus\COMP345-Assignment1\COMP345 - PROJECT\assignment1\MapLoader.cpp(234,21): warning C4018: '<': signed/unsigned mismatch
-C:\Users\samue\source\repos\gzsus\COMP345-Assignment1\COMP345 - PROJECT\assignment1\MapLoader.cpp(241,21): warning C4018: '<': signed/unsigned mismatch
-C:\Users\samue\source\repos\gzsus\COMP345-Assignment1\COMP345 - PROJECT\assignment1\MapLoader.cpp(244,44): warning C4018: '<': signed/unsigned mismatch
-C:\Users\samue\source\repos\gzsus\COMP345-Assignment1\COMP345 - PROJECT\assignment1\MapLoader.cpp(252,21): warning C4018: '<': signed/unsigned mismatch
-  MapLoaderDriver.cpp
-C:\Users\samue\source\repos\gzsus\COMP345-Assignment1\COMP345 - PROJECT\assignment1\MapLoaderDriver.cpp(32,14): warning C4101: 'e': unreferenced local variable
-  Player.cpp
-C:\Users\samue\source\repos\gzsus\COMP345-Assignment1\COMP345 - PROJECT\assignment1\Player.cpp(42,23): warning C4154: deletion of an array expression; conversion to pointer supplied
-C:\Users\samue\source\repos\gzsus\COMP345-Assignment1\COMP345 - PROJECT\assignment1\Player.cpp(43,33): warning C4154: deletion of an array expression; conversion to pointer supplied
-C:\Users\samue\source\repos\gzsus\COMP345-Assignment1\COMP345 - PROJECT\assignment1\Player.cpp(44,33): warning C4154: deletion of an array expression; conversion to pointer supplied
-C:\Users\samue\source\repos\gzsus\COMP345-Assignment1\COMP345 - PROJECT\assignment1\Player.cpp(55,20): warning C4018: '<': signed/unsigned mismatch
-C:\Users\samue\source\repos\gzsus\COMP345-Assignment1\COMP345 - PROJECT\assignment1\Player.cpp(125,20): warning C4018: '<': signed/unsigned mismatch
-  Generating Code...
+﻿  GameEngine.cpp
+C:\Users\samue\source\repos\gzsus\COMP345-Assignment1\COMP345 - PROJECT\assignment1\GameEngine.cpp(25,13): warning C4101: 'e': unreferenced local variable
   assignment1.vcxproj -> C:\Users\samue\Source\Repos\gzsus\COMP345-Assignment1\COMP345 - PROJECT\Debug\assignment1.exe

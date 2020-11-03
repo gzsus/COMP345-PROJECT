@@ -21,9 +21,9 @@
   <ItemGroup>
     <ClCompile Include="Cards.cpp" />
     <ClCompile Include="GameEngine.cpp" />
+    <ClCompile Include="GameEngineDriver.cpp" />
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="MapLoader.cpp" />
-    <ClCompile Include="MapLoaderDriver.cpp" />
     <ClCompile Include="Orders.cpp" />
     <ClCompile Include="Player.cpp" />
   </ItemGroup>
@@ -34,6 +34,26 @@
     <ClInclude Include="MapLoader.h" />
     <ClInclude Include="Orders.h" />
     <ClInclude Include="Player.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="map_dir\artic\artic.map" />
+    <None Include="map_dir\austria-hungary\austria-hungary.map" />
+    <None Include="map_dir\austria\austria.map" />
+    <None Include="map_dir\bigeurope\bigeurope.map" />
+    <None Include="map_dir\eire\eire.map" />
+    <None Include="map_dir\europass\europass.map" />
+    <None Include="map_dir\europe\europe.map" />
+    <None Include="map_dir\Falkland-Islands\Falkland-Islands.map" />
+    <None Include="map_dir\france\france.map" />
+    <None Include="map_dir\google\google.map" />
+    <None Include="map_dir\haiti\haiti.map" />
+    <None Include="map_dir\kosova\kosova.map" />
+    <None Include="map_dir\MiddleEast-Qatar\MiddleEast-Qatar.map" />
+    <None Include="map_dir\solar\solar.map" />
+    <None Include="map_dir\spain\spain.map" />
+    <None Include="map_dir\sudamerica\sudamerica.map" />
+    <None Include="map_dir\swiss\swiss.map" />
+    <None Include="map_dir\sw_baltic\sw_baltic.map" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
@@ -133,6 +153,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

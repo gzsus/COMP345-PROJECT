@@ -1,0 +1,52 @@
+[cards]
+Infantry 1
+Cannon 2
+Cavalry 3
+Infantry 4
+Cannon 5
+Cavalry 6
+Infantry 7
+Cannon 8
+Cavalry 9
+Infantry 10
+Cannon 11
+Cavalry 12
+Infantry 13
+Cannon 14
+Cavalry 15
+Infantry 16
+Cannon 17
+Cavalry 18
+Infantry 19
+Cannon 20
+Cavalry 21
+Infantry 22
+Cannon 23
+Cavalry 24
+Infantry 25
+Cannon 26
+Cavalry 27
+Infantry 28
+Cannon 29
+Cavalry 30
+Infantry 31
+Cannon 32
+wildcard
+wildcard
+wildcard
+wildcard
+
+
+[missions]
+0	0 0	1 4 0	Conquer Leinster and Connacht.
+0	0 0	2 3 0	Conquer Ulster and Munster.
+0	0 0	1 * 0	Conquer Leinster and any other province.
+0	0 0	2 * 0	Conquer Ulster and any other province.
+0	0 0	* * *	Conquer any three provinces.
+1	22 2	0 0 0	Conquer Player 1. If you are that player or they have been destroyed, conquer 22 counties with 2 armies in each.
+2	16 2	0 0 0	Conquer Player 2. If you are that player or they have been destroyed, conquer 16 counties with 3 armies in each.
+3	22 2	0 0 0	Conquer Player 3. If you are that player or they have been destroyed, conquer 22 counties with 2 armies in each.
+4	16 2	0 0 0	Conquer Player 4. If you are that player or they have been destroyed, conquer 16 counties with 3 armies in each.
+5	22 2	0 0 0	Conquer Player 5. If you are that player or they have been destroyed, conquer 22 counties with 2 armies in each.
+6	16 2	0 0 0	Conquer Player 6. If you are that player or they have been destroyed, conquer 16 counties with 3 armies in each.
+
