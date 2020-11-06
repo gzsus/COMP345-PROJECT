@@ -215,7 +215,7 @@ MapLoader::MapLoader(std::string mapfile)
 
 MapLoader::~MapLoader()
 {
-	std::cout << "Deleting Map \n";
+	std::cout << "Deleting MapLoader \n";
 	delete created_map;
 	created_map = NULL;
 }

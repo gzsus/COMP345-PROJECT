@@ -53,16 +53,17 @@ Map* GameEngine::loadmap(std::string map)
 	try
 	{
 		MapLoader* loader = new MapLoader(map);
-		std::cout << "PASED";
+		//for efficiency drop the loader and keep only a pointer to the map
+		Map *loaded_map = new Map(*(loader->getmap()));
+		//then dereference the map for the loader since it is now kept by the pointer above
+		loader->setmap(NULL);
+		//now we delete the loader without deleting the map
+		delete loader;
+		return loaded_map;
 	}
 	catch (int e) { std::cout << "error"; }
-	/*MapLoader* loader = new MapLoader(map);
-	Map* loaded_map = loader->getmap();
-	std::cout << loader;
-	delete loader;
-	std::cout << loaded_map;
-	return loader->getmap();*/
-	return new Map();
+
+	
 }
 
 
@@ -72,7 +73,25 @@ int main()
 	GameEngine game;
 	std::string mapfile;
 	mapfile = game.getmap();
-	Map *loaded_map = game.loadmap(mapfile);
+	Map* loaded_map = game.loadmap(mapfile);
+
+	std::cout << "\n\n";
+	int num_players = 0;
+	do
+	{
+		std::cout << "-----Please type the number of players that will play----- [2-5]: ";
+		std::cin >> num_players;
+	} while (num_players < 2 || num_players > 5);
+
+	std::cout << "\n\n";
+	char P_obs, S_obs;
+	do
+	{
+		std::cout << "-----PHASE OBSERVER ON?----- [y/n]: ";
+		std::cin >> P_obs;
+		std::cout << "-----GAME STATISTICS OBSERVER ON?----- [y/n]: ";
+		std::cin >> S_obs;
+	} while ((P_obs!='y' && P_obs!='n' ) || (S_obs != 'y' && S_obs != 'n'));
 
 
 	//taking care of memory leak
