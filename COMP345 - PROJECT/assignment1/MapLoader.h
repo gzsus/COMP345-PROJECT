@@ -18,6 +18,8 @@ class MapLoader
 		//fix this
 		MapLoader& operator =(const MapLoader& oldloader);// assignment operator
 		void setfile(std::string newfile); 
+		void setmap(Map* new_map){this->created_map = new_map;}
+		Map* getmap() { return this->created_map; }
 		std::string getfile();
 		Map LoadMap(std::vector<std::vector<std::string>>continents, std::vector<std::vector<std::string>> territories, std::vector<std::vector<std::string>>borders);
 		~MapLoader();

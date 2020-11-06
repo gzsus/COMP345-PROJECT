@@ -14,6 +14,7 @@
 #include <vector>
 #include <fstream>
 #include <iostream>
+#include <algorithm>
 
 std::string file;
 //empty constructor
@@ -29,7 +30,11 @@ MapLoader::MapLoader(std::string mapfile)
 {
 	bool error = false; //if there is an error at one point this is set to true and the program breaks
 	file = mapfile;
+	//std::cout << mapfile;
 	std::ifstream input(mapfile);
+	std::string line;
+	getline(input, line, '\n');
+	std::cout << line;
 	while (!input.eof())
 	{
 		//these are temporary
@@ -105,7 +110,7 @@ MapLoader::MapLoader(std::string mapfile)
 					country_list.erase(country_list.begin() + (country_list.size() - 1)); //gets rid of extra country added
 					break;
 				} //we are done so break out of this too
-				std::cout << "VECTOR country #" << (counter / 5) - 1 << " :" << country_list[(counter / 5) - 1][0] << country_list[(counter / 5) - 1][1] << country_list[(counter / 5) - 1][2] << country_list[(counter / 5) - 1][3] << country_list[(counter / 5) - 1][4] << "\n";
+				std::cout << "VECTOR country #" << (counter / 5) - 1 << " :" << country_list[(counter / 5) - 1][0] <<" "<< country_list[(counter / 5) - 1][1] << " " << country_list[(counter / 5) - 1][2] << " " << country_list[(counter / 5) - 1][3] << " " << country_list[(counter / 5) - 1][4] << "\n";
 			}
 
 		}
@@ -131,13 +136,17 @@ MapLoader::MapLoader(std::string mapfile)
 		}
 		if (continent_list.size() != 0 && country_list.size() != 0 && border_list.size() == 0)
 		{
-			if (continent_list.size() == (stoi(country_list[country_list.size() - 1][2])))
+			std::vector<int> number_of_countries;
+			for (int i = 0; i < country_list.size(); i++) { number_of_countries.push_back(stoi(country_list[i][2])); }
+			auto maximum = std::max_element(number_of_countries.begin(), number_of_countries.end());
+			if (continent_list.size() == (*maximum))
 			{
 				std::cout << "contninent number has been confirmed with countries at:" << continent_list.size() << " continents" << "\n";
 			}
 			else
 			{
 				std::cout << "number of continents and countries do not match !";
+				std::cout << "number of continents: " << continent_list.size() << " number of countries: " << (*maximum);
 				error = true;
 				break;
 			}
@@ -149,6 +158,7 @@ MapLoader::MapLoader(std::string mapfile)
 			for (int j = 0; j < (country_list.size()); j++) //go through the "j" number of countries and document border info
 			{
 				getline(input, temp, '\n');
+				if (temp.rfind(" ") >= temp.size() - 1) { temp=temp.substr(0, temp.size() - 1); }
 				if (temp.empty() == true) //not enough borders given
 				{
 					std::cout << "Not enough borders given!";
@@ -238,13 +248,15 @@ MapLoader::~MapLoader()
 		 cont_list.push_back(new Continent(continents[i][0]));
 	 }
 	 //go through continents
-	 int j=0; // once we complete a series of countries counted by j we dont want j=0 again it should just keep going from where it was before
+	 //int j=0; // once we complete a series of countries counted by j we dont want j=0 again it should just keep going from where it was before
 	 for (int i = 0; i < cont_list.size(); i++)
 	 {
-		 //go through each country/territory and check if its continent is the one we are currently adding to
-		 for(; (i+1)==stoi(territories[j][2]) &&j<territory_list.size()-1; j++)
+		 for (int j = 0; j < territories.size(); j++)
 		 {
-			cont_list[i]->add_territory(territory_list[j]);
+			 if (i + 1 == stoi(territories[j][2]))
+			 {
+				 cont_list[i]->add_territory(territory_list[j]);
+			 }
 		 }
 	 }
 
@@ -268,13 +280,14 @@ MapLoader::~MapLoader()
 	 return *created_map;
 }
 
-//assinment operator
+//assingment operator
  MapLoader& MapLoader::operator=(const MapLoader& oldloader)
  {
 	 file = oldloader.file;
 	 return *this;
  }
 
+ 
  //set the file for the maploader object
 void MapLoader::setfile(std::string newfile) {file = newfile;}
 //get the file for this object

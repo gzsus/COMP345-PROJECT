@@ -1,4 +1,5 @@
 #include "GameEngine.h"
+#include "MapLoader.h"
 #include <fstream>
 #include<iostream>
 #include<filesystem>
@@ -31,24 +32,52 @@ std::string GameEngine::getmap()
 	{
 		std::cout << "Map #"<<i<<" -> "<<maps[i].substr(8)<<"\n";
 	}
-	std::cout << "Please Enter the number of the map which you would like to select: \n";
+	std::cout << "Please Enter the number of the map which you would like to select: ";
 	int map_number;
 	std::cin>> map_number;
+	std::string selected_map = maps[map_number];
 
+	//empty vectors to avoid memory leak
+	maps.clear();
 
-
-
-	return std::string();
+	return selected_map;
 }
 
-
+Map* GameEngine::loadmap(std::string map)
+{
+	std::string map_name = map.substr(8);
+	map.append("\\");
+	map.append(map_name);
+	map.append(".map");
+	std::cout << map;
+	try
+	{
+		MapLoader* loader = new MapLoader(map);
+		std::cout << "PASED";
+	}
+	catch (int e) { std::cout << "error"; }
+	/*MapLoader* loader = new MapLoader(map);
+	Map* loaded_map = loader->getmap();
+	std::cout << loader;
+	delete loader;
+	std::cout << loaded_map;
+	return loader->getmap();*/
+	return new Map();
+}
 
 
 int main()
 {
 	std::cout << "-----Welcom To Risk!-----\n\n";
 	GameEngine game;
-	game.getmap();
+	std::string mapfile;
+	mapfile = game.getmap();
+	Map *loaded_map = game.loadmap(mapfile);
+
+
+	//taking care of memory leak
+	delete loaded_map;
+	loaded_map = NULL;
 
 	game.~GameEngine();
 

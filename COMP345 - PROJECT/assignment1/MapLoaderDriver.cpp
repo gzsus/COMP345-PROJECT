@@ -17,7 +17,7 @@
 
 int main()
 {
-	std::string mapfiles[3] = { "C:\\Users\\samue\\Downloads\\comp345\\maps\\canada.map","C:\\Users\\samue\\Downloads\\comp345\\maps\\artic_bad.map","C:\\Users\\samue\\Downloads\\comp345\\maps\\europe.map" };
+	std::string mapfiles[3] = { "C:\\Users\\samue\\Downloads\\comp345\\maps\\canada.map","C:\\Users\\samue\\Downloads\\comp345\\maps\\artic.map","C:\\Users\\samue\\Downloads\\comp345\\maps\\europe.map" };
 	MapLoader* loader[3];
 
 	for (int i = 0; i < 3; i++)

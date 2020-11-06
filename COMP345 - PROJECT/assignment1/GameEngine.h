@@ -1,5 +1,6 @@
 #pragma once
 #include "Map.h"
+#include "MapLoader.h"
 #include<string>
 
 class GameEngine
@@ -17,6 +18,8 @@ public:
 	~GameEngine();
 
 	std::string getmap();
+
+	Map* loadmap(std::string map);
 
 
 

@@ -56,7 +56,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="map_dir\artic\artic.map" />
-    <None Include="map_dir\austria\austria.map" />
     <None Include="map_dir\austria-hungary\austria-hungary.map" />
     <None Include="map_dir\bigeurope\bigeurope.map" />
     <None Include="map_dir\eire\eire.map" />
@@ -65,11 +64,9 @@
     <None Include="map_dir\Falkland-Islands\Falkland-Islands.map" />
     <None Include="map_dir\france\france.map" />
     <None Include="map_dir\google\google.map" />
-    <None Include="map_dir\haiti\haiti.map" />
     <None Include="map_dir\kosova\kosova.map" />
     <None Include="map_dir\MiddleEast-Qatar\MiddleEast-Qatar.map" />
     <None Include="map_dir\solar\solar.map" />
-    <None Include="map_dir\spain\spain.map" />
     <None Include="map_dir\sudamerica\sudamerica.map" />
     <None Include="map_dir\sw_baltic\sw_baltic.map" />
     <None Include="map_dir\swiss\swiss.map" />
