@@ -30,7 +30,7 @@
     <ClCompile Include="Player.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="GameEngine.cpp">
+    <ClCompile Include="CardsDriver.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

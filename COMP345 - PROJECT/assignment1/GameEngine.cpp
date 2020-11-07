@@ -1,21 +1,29 @@
 #include "GameEngine.h"
+#include "GameEngine.h"
 #include "MapLoader.h"
+#include "Player.h"
 #include <fstream>
 #include<iostream>
 #include<filesystem>
 
 
 
-//default constructor
+/////////////////////////////////// Constructors/Destructor /////////////////////////////////////
 GameEngine::GameEngine() :  game_map()
 {}
-
 GameEngine::~GameEngine()
 {
 	delete game_map;
 	game_map = NULL;
 }
+GameEngine::GameEngine(const GameEngine& old_copy)
+{
+	this->game_map = new Map(*(old_copy.game_map));
+}
 
+
+
+/////////////////////////////////// Sets and gets /////////////////////////////////////
 //used to pick a map
 std::string GameEngine::getmap()
 {
@@ -42,7 +50,6 @@ std::string GameEngine::getmap()
 
 	return selected_map;
 }
-
 Map* GameEngine::loadmap(std::string map)
 {
 	std::string map_name = map.substr(8);
@@ -65,6 +72,17 @@ Map* GameEngine::loadmap(std::string map)
 
 	
 }
+GameEngine& GameEngine::operator=(const GameEngine& oldengine)
+{
+	this->game_map = new Map(*(oldengine.game_map));
+}
+
+
+std::ostream& operator<<(std::ostream& ostrm, const GameEngine& game_engine)
+{
+	return ostrm << "Game Engine Map: \n (" << game_engine.game_map << ")";
+}
+
 
 
 int main()
@@ -82,6 +100,11 @@ int main()
 		std::cout << "-----Please type the number of players that will play----- [2-5]: ";
 		std::cin >> num_players;
 	} while (num_players < 2 || num_players > 5);
+	//create the appropriate number of players.
+	std::vector<Player*>players;
+	for (int i = 0; i < num_players; i++) { players.push_back(new Player(0)); } //the player.h is strange it does not really make sense for each player to store the number of players...
+	
+
 
 	std::cout << "\n\n";
 	char P_obs, S_obs;
@@ -97,8 +120,11 @@ int main()
 	//taking care of memory leak
 	delete loaded_map;
 	loaded_map = NULL;
+	//the player destructor is broken !-----------------------------------------------------------------
+	/*for (int i = 0; i < num_players; i++) { delete players[i]; }
+	for (int i = 0; i < num_players; i++) { players[i] = NULL; }
 
-	game.~GameEngine();
+	game.~GameEngine();*/
 
 	return 0;
 }

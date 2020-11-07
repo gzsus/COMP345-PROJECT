@@ -12,16 +12,16 @@ private:
 
 
 public:
-	//default constructor
+	/////////////////////////////////// Constructors/Destructor /////////////////////////////////////
 	GameEngine();
-	//destructor
+	GameEngine(const GameEngine& old_copy);
 	~GameEngine();
 
+	/////////////////////////////////// Sets and gets /////////////////////////////////////
 	std::string getmap();
-
 	Map* loadmap(std::string map);
+	GameEngine& operator =(const GameEngine& oldengine);// assignment operator
 
-
-
+	friend std::ostream& operator<<(std::ostream&, const GameEngine&); //stream insertion operator
 };
 
