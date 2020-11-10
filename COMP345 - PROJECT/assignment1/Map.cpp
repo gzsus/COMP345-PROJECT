@@ -72,6 +72,13 @@ Map::~Map()
 std::string Map::get_name() { return name; }
 void Map::set_name(std::string given_name) { name = given_name; }
 std::vector<Territory*> Map::get_territories() { return territories; }
+std::vector<Territory*> Map::get_territories(Player* p) {
+	vector <Territory*> owned_terrritories;
+	for (Territory* t : territories)
+		if (p == t->get_owner())
+			owned_terrritories.push_back(t);
+	return owned_terrritories;
+}
 void Map::set_territories(std::vector<Territory*> given_territories) { territories = given_territories; }
 std::vector<Continent*> Map::get_continents() { return continents; }
 void Map::set_continents(std::vector<Continent*> given_continents) { continents = given_continents; }
