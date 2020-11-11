@@ -45,6 +45,7 @@ public:
 	void set_name(std::string given_name);
 	std::vector<Territory*> get_territories();
 	std::vector<Territory*> get_territories(Player* p);
+	std::vector<Territory*> get_neighbour_territories(Player* p);
 	void set_territories(std::vector<Territory*> neighbours);
 	std::vector<Continent*> get_continents();
 	void set_continents(std::vector<Continent*> neighbours);

@@ -27,6 +27,19 @@ static int get_player_id(Player* p, vector <Player*> v) {
 }
 
 
+//	Read an integer from the user only
+static int get_integer_option() {
+	int option = -1;
+
+	while (!(cin >> option)) {
+		cin.clear();              //to clear the buffer memory
+		cin.ignore(numeric_limits<streamsize>::max(), '\n');
+		cout << "Please enter a valid number";
+	}
+	return option;
+}
+
+
 //	Players are given a number of armies
 static int* reinforcementPhase(vector<Player*> allPlayers, int num_players, Map* map) {
 
@@ -67,43 +80,119 @@ static int* reinforcementPhase(vector<Player*> allPlayers, int num_players, Map*
 
 
 //	Territories in the map to be defended by the player
-vector<Territory*> toDefend(Player* player, Map* map) {
-	return map->get_territories(player);
+list<Territory*> toAttack(Player* player, Map* map) {
+	vector<Territory*> territories_toAttack = map->get_neighbour_territories(player);
+
+	list<Territory*> territories_list;
+
+	if (territories_toAttack.size() > 0){
+		//	Show possible attack
+		cout << " Territories to attack:";
+		for (int i = 0; i < territories_toAttack.size(); i++)
+			cout << "  (" << i << ")" + territories_toAttack[i]->get_name() + "-" << territories_toAttack[i]->get_armies();
+		cout << endl;
+
+		cout << "Choose which territory you would like to attack or any other number to finish: ";
+
+		int option = get_integer_option();
+		while ( true ) {
+			//	Show chosen option
+			cout << " You chose to attack ";
+			if (option > -1 && option < territories_toAttack.size()){
+
+				// Check if element is already chosen
+				list<Territory*>::iterator it;
+				it = find(territories_list.begin(), territories_list.end(), territories_toAttack[option]);
+
+				if (it != territories_list.end())
+					cout << "(already chosen)";
+				else{
+					cout << territories_toAttack[option]->get_name();
+					territories_list.push_back(territories_toAttack[option]);
+				}
+			}
+			else {
+				cout << "none\n";
+				break;
+			}
+			cout << endl;
+			option = get_integer_option();
+		}
+	}
+
+	return territories_list;
 }
 
 
 //	Territories in the map to be defended by the player
-vector<Territory*> toAttack(Player* player, vector<Territory*>owned_terrritories) {
+list<Territory*> toDefend(Player* player, Map* map) {
 
-	vector<Territory*> neighbouring_terrritories;
+	vector<Territory*> territories_owned = map->get_territories(player);
 
-	// Get neighbour territories ( territories to attack )
-	for (Territory* owned : owned_terrritories) {
-		vector<Territory*> tNeighbours = owned->get_neighbours();
-		for (Territory* neighbour : tNeighbours) {
-			if (!(std::find(neighbouring_terrritories.begin(), neighbouring_terrritories.end(), neighbour) != neighbouring_terrritories.end()))
-				if (neighbour->get_owner() != player)
-					neighbouring_terrritories.push_back(neighbour);
-				else continue;
-		}
+	list<Territory*> territories_toDefend ;
+
+	if (territories_owned.size() > 0) {
+		//	Show possible defend
+		cout << " Territories to defend:";
+		for (int i = 0; i < territories_owned.size(); i++)
+			cout << "  (" << i << ")" + territories_owned[i]->get_name() + "-" << territories_owned[i]->get_armies();
+		cout << endl;
 	}
-	return neighbouring_terrritories;
+	else {
+		cout << " You own 0 territories" << endl;
+		return territories_toDefend;
+	}
+
+	cout << "Choose which territory you would like to defend or any other number to finish: ";
+
+	int option = get_integer_option();
+	while (true) {
+		//	Show chosen option
+		cout << " You chose to defend ";
+		if (option > -1 && option < territories_owned.size()) {
+
+			// Check if element is already chosen
+			list<Territory*>::iterator it;
+			it = find(territories_toDefend.begin(), territories_toDefend.end(), territories_owned[option]);
+
+			if (it != territories_toDefend.end())
+				cout << "(already chosen)";
+			else{
+				cout << territories_owned[option]->get_name();
+				territories_toDefend.push_back(territories_owned[option]);
+			}
+		}
+		else {
+			cout << "none\n";
+			break;
+		}
+		cout << endl;
+		option = get_integer_option();
+	}
+	return territories_toDefend;
 }
 
 
 // A player chooses his orders
 int issueOrder(Player* player, int player_id, Map* map) {
 
-	cout << " Player " << player_id << " Orders \n";
+	cout << "   Player " << player_id << " Orders \n";
 
-	vector<Territory*> owned_terrritories = toDefend(player, map);
-	vector<Territory*> territories_toAttack = toAttack(player, owned_terrritories);
+	list<Territory*> territories_toDefend = toDefend(player, map);
 
-	//
-	cout << " Territories to attack:";
-	for (int i = 0; i < territories_toAttack.size(); i++)
-		cout << "  (" << i << ")" + territories_toAttack[i]->get_name() + "-" << territories_toAttack[i]->get_armies();
-	cout << endl;
+	cout << " List to defend: ";
+	for (auto t : territories_toDefend)
+		cout << "  " + t->get_name();
+	cout << endl << endl;
+
+
+	list<Territory*> territories_toAttack = toAttack(player, map);
+
+	cout << " List to atack: ";
+	for (auto t : territories_toAttack)
+		cout << "  " + t->get_name();
+	cout << endl << endl;
+	
 
 	return 0;
 }
@@ -114,6 +203,7 @@ int issueOrderPhase(vector<Player*> allPlayers, int num_players, Map* map) {
 
 	for (int i = 0; i < num_players; i++) {
 		issueOrder(allPlayers[i], i, map);
+		cout << endl;
 	}
 	return 0;
 }
@@ -138,13 +228,13 @@ static Player* mainGameLoop(vector<Player*> allPlayers, Map* map) {
 	//	Main loop of game
 	//while (1) {
 
-	std::cout << "\n Reinforcement Phase\n";
+	std::cout << "\n\n\tReinforcement Phase\n\n";
 	int* reinforcements = reinforcementPhase(allPlayers, num_players, map);
 
-	std::cout << "\n Order Issuing Phase\n";
+	std::cout << "\n\n\tOrder Issuing Phase\n\n";
 	issueOrderPhase(allPlayers, num_players, map);
 
-	std::cout << "\n Order Execution Phase\n";
+	std::cout << "\n\n\tOrder Execution Phase\n\n";
 	executeOrdersPhase();
 
 	//}
@@ -153,7 +243,7 @@ static Player* mainGameLoop(vector<Player*> allPlayers, Map* map) {
 
 
 int main() {
-	std::cout << "\tWelcome to WARZONE!" << endl;
+	std::cout << "\tWelcome to WARZONE!\n\n";
 
 	//	Intialize Number of Players
 	int numberOfPlayers = 0;
@@ -219,10 +309,10 @@ int main() {
 	america->add_continent(na);
 	america->add_continent(ca);
 
-	std::cout << "\n\tGame loop\n";
+	std::cout << "\n\n============== Game loop ==============\n";
 	mainGameLoop(allPlayers, america);
 
 	// End of game
-	std::cout << "\n\tGame finished\n";
+	std::cout << "\n\t\tGame finished\n";
 	system("pause");
 }

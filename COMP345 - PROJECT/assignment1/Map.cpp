@@ -79,6 +79,21 @@ std::vector<Territory*> Map::get_territories(Player* p) {
 			owned_terrritories.push_back(t);
 	return owned_terrritories;
 }
+std::vector<Territory*> Map::get_neighbour_territories(Player* p) {
+	vector<Territory*>owned_terrritories = get_territories(p);
+	vector<Territory*> neighbouring_terrritories;
+	// Get neighbour territories ( territories to attack )
+	for (Territory* owned : owned_terrritories) {
+		vector<Territory*> tNeighbours = owned->get_neighbours();
+		for (Territory* neighbour : tNeighbours) {
+			if (!(std::find(neighbouring_terrritories.begin(), neighbouring_terrritories.end(), neighbour) != neighbouring_terrritories.end()))
+				if (neighbour->get_owner() != p)
+					neighbouring_terrritories.push_back(neighbour);
+				else continue;
+		}
+	}
+	return neighbouring_terrritories;
+}
 void Map::set_territories(std::vector<Territory*> given_territories) { territories = given_territories; }
 std::vector<Continent*> Map::get_continents() { return continents; }
 void Map::set_continents(std::vector<Continent*> given_continents) { continents = given_continents; }
