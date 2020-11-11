@@ -22,7 +22,7 @@ static int get_player_id(Player* p, vector <Player*> v) {
 		return index;
 	}
 	else {
-		std::cout << "-1" << endl;
+		cout << "-1" << endl;
 	}
 }
 
@@ -41,9 +41,9 @@ static int get_integer_option() {
 
 
 //	Players are given a number of armies
-static int* reinforcementPhase(vector<Player*> allPlayers, int num_players, Map* map) {
+int* reinforcementPhase(vector<Player*> allPlayers, int num_players, Map* map) {
 
-	int reinforcements[MAX_PLAYERS];	//	7 players is the max
+	static int reinforcements[MAX_PLAYERS];	//	7 players is the max
 	int territories_owned[MAX_PLAYERS] = { 0,0,0,0,0,0,0 };
 
 	/**************************** Count each player's territories ****************************/
@@ -61,7 +61,7 @@ static int* reinforcementPhase(vector<Player*> allPlayers, int num_players, Map*
 
 	for (int i = 0; i < num_players; i++) {	// Reinforcement per player calculation
 		reinforcements[i] = territories_owned[i] / 3;
-		std::cout << "Player" << i << " reinforcements: " << reinforcements[i] << endl;
+		cout << "Player" << i << " reinforcements: " << reinforcements[i] << endl;
 	}
 
 	/**************************** Add each player continent's bonus ****************************/
@@ -97,7 +97,6 @@ list<Territory*> toAttack(Player* player, Map* map) {
 		int option = get_integer_option();
 		while ( true ) {
 			//	Show chosen option
-			cout << " You chose to attack ";
 			if (option > -1 && option < territories_toAttack.size()){
 
 				// Check if element is already chosen
@@ -115,7 +114,7 @@ list<Territory*> toAttack(Player* player, Map* map) {
 				cout << "none\n";
 				break;
 			}
-			cout << endl;
+			cout << "\n Which other?";
 			option = get_integer_option();
 		}
 	}
@@ -148,7 +147,6 @@ list<Territory*> toDefend(Player* player, Map* map) {
 	int option = get_integer_option();
 	while (true) {
 		//	Show chosen option
-		cout << " You chose to defend ";
 		if (option > -1 && option < territories_owned.size()) {
 
 			// Check if element is already chosen
@@ -163,10 +161,10 @@ list<Territory*> toDefend(Player* player, Map* map) {
 			}
 		}
 		else {
-			cout << "none\n";
+			cout << "none\n\n";
 			break;
 		}
-		cout << endl;
+		cout << "\n Which other?";
 		option = get_integer_option();
 	}
 	return territories_toDefend;
@@ -174,19 +172,30 @@ list<Territory*> toDefend(Player* player, Map* map) {
 
 
 // A player chooses his orders
-int issueOrder(Player* player, int player_id, Map* map) {
+int issueOrder(Player* player, int player_id, Map* map, int* reinforcements) {
 
-	cout << "   Player " << player_id << " Orders \n";
+	cout << "  --- Player " << player_id << " Orders ---\n";
 
 	list<Territory*> territories_toDefend = toDefend(player, map);
-
-	cout << " List to defend: ";
-	for (auto t : territories_toDefend)
-		cout << "  " + t->get_name();
-	cout << endl << endl;
-
-
 	list<Territory*> territories_toAttack = toAttack(player, map);
+
+
+	int deployments_available = *(reinforcements+ player_id);
+
+	//cout << endl;
+
+	if ( deployments_available > 0) {
+		cout << " You have " << deployments_available << " armies available to deploy\tChoose where to deploy armies in:\n\t";
+		int i = 0;
+
+		for (auto t : territories_toDefend) {
+			cout << "  (" << i << ")" << t->get_name();
+			i++;
+		}
+		cout << endl << endl;
+	}
+	else
+		cout << "You have 0 armies available to deploy\n";
 
 	cout << " List to atack: ";
 	for (auto t : territories_toAttack)
@@ -194,15 +203,17 @@ int issueOrder(Player* player, int player_id, Map* map) {
 	cout << endl << endl;
 	
 
+
+
 	return 0;
 }
 
 
 //
-int issueOrderPhase(vector<Player*> allPlayers, int num_players, Map* map) {
+int issueOrderPhase(vector<Player*> allPlayers, int num_players, Map* map, int* reinforcements) {
 
 	for (int i = 0; i < num_players; i++) {
-		issueOrder(allPlayers[i], i, map);
+		issueOrder(allPlayers[i], i, map, reinforcements);
 		cout << endl;
 	}
 	return 0;
@@ -228,13 +239,19 @@ static Player* mainGameLoop(vector<Player*> allPlayers, Map* map) {
 	//	Main loop of game
 	//while (1) {
 
-	std::cout << "\n\n\tReinforcement Phase\n\n";
+	cout << "\n\n\tReinforcement Phase\n\n";
 	int* reinforcements = reinforcementPhase(allPlayers, num_players, map);
 
-	std::cout << "\n\n\tOrder Issuing Phase\n\n";
-	issueOrderPhase(allPlayers, num_players, map);
 
-	std::cout << "\n\n\tOrder Execution Phase\n\n";
+	cout << "Reinforcement Pool: " << *(reinforcements);
+	for (int i = 1; i < num_players; i++) {
+		cout << ", " << *(reinforcements + i);
+	}
+
+	cout << "\n\n\tOrder Issuing Phase\n\n";
+	issueOrderPhase(allPlayers, num_players, map, reinforcements);
+
+	cout << "\n\n\tOrder Execution Phase\n\n";
 	executeOrdersPhase();
 
 	//}
@@ -298,12 +315,12 @@ int main() {
 	hon->connet_to(sal);
 
 	// Give continents to players
-	can->set_owner(allPlayers[1]);
-	usa->set_owner(allPlayers[1]);
-	mex->set_owner(allPlayers[1]);
-	gua->set_owner(allPlayers[0]);
-	sal->set_owner(allPlayers[1]);
-	hon->set_owner(allPlayers[1]);
+	can->set_owner(allPlayers[0]);
+	usa->set_owner(allPlayers[0]);
+	mex->set_owner(allPlayers[0]);
+	gua->set_owner(allPlayers[1]);
+	sal->set_owner(allPlayers[0]);
+	hon->set_owner(allPlayers[0]);
 
 	// Add continents to map
 	america->add_continent(na);
