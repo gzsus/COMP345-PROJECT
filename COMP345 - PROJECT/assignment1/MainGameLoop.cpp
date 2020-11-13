@@ -6,7 +6,7 @@
 
 #include "Player.h"
 #include "Map.h"
-#include "MapLoader.h"
+
 
 #define MAX_PLAYERS 7
 #define MAX_TERRITORIES 6
@@ -92,7 +92,7 @@ list<Territory*> toAttack(Player* player, Map* map) {
 			cout << "  (" << i << ")" + territories_toAttack[i]->get_name() + "-" << territories_toAttack[i]->get_armies();
 		cout << endl;
 
-		cout << "Choose which territory you would like to attack or any other number to finish: ";
+		cout << "Choose the territory to attack or any other number to finish: ";
 
 		int option = get_integer_option();
 		while ( true ) {
@@ -114,11 +114,11 @@ list<Territory*> toAttack(Player* player, Map* map) {
 				cout << "none\n";
 				break;
 			}
-			cout << "\n Which other?";
+			cout << "\n Which other? ";
 			option = get_integer_option();
 		}
 	}
-
+	cout << endl;
 	return territories_list;
 }
 
@@ -132,7 +132,7 @@ list<Territory*> toDefend(Player* player, Map* map) {
 
 	if (territories_owned.size() > 0) {
 		//	Show possible defend
-		cout << " Territories to defend:";
+		cout << " Territories to defend-armies:";
 		for (int i = 0; i < territories_owned.size(); i++)
 			cout << "  (" << i << ")" + territories_owned[i]->get_name() + "-" << territories_owned[i]->get_armies();
 		cout << endl;
@@ -142,7 +142,7 @@ list<Territory*> toDefend(Player* player, Map* map) {
 		return territories_toDefend;
 	}
 
-	cout << "Choose which territory you would like to defend or any other number to finish: ";
+	cout << "Choose the territory number to defend or any other number to finish: ";
 
 	int option = get_integer_option();
 	while (true) {
@@ -161,49 +161,91 @@ list<Territory*> toDefend(Player* player, Map* map) {
 			}
 		}
 		else {
-			cout << "none\n\n";
+			cout << "none\n";
 			break;
 		}
-		cout << "\n Which other?";
+		cout << "\n Which other? ";
 		option = get_integer_option();
 	}
+	cout << endl;
 	return territories_toDefend;
 }
 
 
-// A player chooses his orders
+//	A player chooses his orders
 int issueOrder(Player* player, int player_id, Map* map, int* reinforcements) {
 
-	cout << "  --- Player " << player_id << " Orders ---\n";
+	cout << "\t--- Player " << player_id << " Orders ---\n";
 
-	list<Territory*> territories_toDefend = toDefend(player, map);
 	list<Territory*> territories_toAttack = toAttack(player, map);
+	list<Territory*> territories_toDefend = toDefend(player, map);
 
+	int territories_toAttack_number = territories_toAttack.size();
+	int territories_toDefend_number = territories_toDefend.size();
 
 	int deployments_available = *(reinforcements+ player_id);
 
-	//cout << endl;
+	//	For every choice made on the territories to defend
+	int count = 1;
 
-	if ( deployments_available > 0) {
-		cout << " You have " << deployments_available << " armies available to deploy\tChoose where to deploy armies in:\n\t";
-		int i = 0;
+	if( territories_toDefend_number > 0 ){
 
+		cout << " Deployment Orders: \n";
 		for (auto t : territories_toDefend) {
-			cout << "  (" << i << ")" << t->get_name();
-			i++;
+
+			if (deployments_available > 0) {
+				cout << "  (" << count << ")  " << *t;
+				cout << "You have " << deployments_available << " available. How many would you like to deploy in " << t->get_name() << "? ";
+
+				//	Choose the amount of armies to deploy in that 
+				int armies = get_integer_option();
+				if (armies < 0 || armies > deployments_available) {
+					while (true) {
+						cout << "Please choose a valid option...";
+						armies = get_integer_option();
+						if (armies > 0 && armies <= deployments_available)
+							break;
+					}
+				}
+
+				//	Create specific deploy order
+				t->increment_armies(armies);
+				deployments_available -= armies;
+				cout << " Deploy Order Issued!";
+
+				if (deployments_available <= 0)
+					break;
+			}
+			else {
+				cout << "You have 0 armies available to deploy";
+				break;
+			}
+
+			count++;
 		}
-		cout << endl << endl;
 	}
-	else
-		cout << "You have 0 armies available to deploy\n";
 
-	cout << " List to atack: ";
-	for (auto t : territories_toAttack)
-		cout << "  " + t->get_name();
-	cout << endl << endl;
+	count = 1;
+
+
+	vector<Territory*> territories_owned = map->get_territories(player);
+
+	if ( territories_owned.size() > 0 ) {
+
+
+		for (auto t : territories_owned) {
+			
+
+		}
+
+		//for (auto t : territories_toAttack) {
+		//	cout << "\n  (" << count << ")  " << *t;
+		//	count++;
+		//}
+
+	}
+	cout << endl;
 	
-
-
 
 	return 0;
 }
@@ -260,12 +302,12 @@ static Player* mainGameLoop(vector<Player*> allPlayers, Map* map) {
 
 
 int main() {
-	std::cout << "\tWelcome to WARZONE!\n\n";
+	cout << "\tWelcome to WARZONE!\n\n";
 
 	//	Intialize Number of Players
 	int numberOfPlayers = 0;
 	while (true) {
-		std::cout << "Enter the number of people playing today: ";
+		cout << "Enter the number of people playing today: ";
 
 		try {
 			cin >> numberOfPlayers;
@@ -275,7 +317,7 @@ int main() {
 			break;
 		}
 		catch (int x) {
-			std::cout << "[ERROR]: Invalid amount of players. Try a number between 2 and 7" << endl;
+			cout << "[ERROR]: Invalid amount of players. Try a number between 2 and 7" << endl;
 			cin.clear();
 			cin.ignore(1000, '\n');
 		}
@@ -326,10 +368,10 @@ int main() {
 	america->add_continent(na);
 	america->add_continent(ca);
 
-	std::cout << "\n\n============== Game loop ==============\n";
+	cout << "\n\n============== Game loop ==============\n";
 	mainGameLoop(allPlayers, america);
 
 	// End of game
-	std::cout << "\n\t\tGame finished\n";
+	cout << "\n\t\tGame finished\n";
 	system("pause");
 }

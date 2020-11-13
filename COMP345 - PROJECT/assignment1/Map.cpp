@@ -562,11 +562,11 @@ std::ostream& operator<<(std::ostream& ostream, const Territory& given_territory
 	if (given_territory.continent != NULL)
 		cont = "belongs to " + given_territory.continent->get_name() + ", ";
 
-	string neighb = "\n\tNeighbours: ";
+	string neighb = "\tNeighbours: ";
 	for (Territory* t : given_territory.neighbours)
 		neighb.append("  " + t->get_name());
 
-	if (neighb == "\n\tNeighbours: ")
+	if (neighb == "\tNeighbours: ")
 		neighb = "0 neighbours";
 
 	return ostream << "[Territory] " + given_territory.territory_name + ", " << given_territory.armies << " Armies, " + cont + neighb << std::endl;
