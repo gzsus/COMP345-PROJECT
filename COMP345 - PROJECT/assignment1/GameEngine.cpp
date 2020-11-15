@@ -75,6 +75,7 @@ Map* GameEngine::loadmap(std::string map)
 GameEngine& GameEngine::operator=(const GameEngine& oldengine)
 {
 	this->game_map = new Map(*(oldengine.game_map));
+	return *this;
 }
 
 
