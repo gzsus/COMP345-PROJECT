@@ -59,20 +59,16 @@ int* reinforcementPhase(vector<Player*> allPlayers, int num_players, Map* map) {
 
 
 
-//	A player chooses his orders
-int issueOrder(int player_id, Map* map, int reinforcements) {
-
-	return 0;
-}
-
-
-//
+// Part of the loop reserved to issuing orders
 int issueOrderPhase(vector<Player*> allPlayers, int num_players, Map* map, int* reinforcements) {
 
 	for (Player* p : allPlayers) {
 		int id = get_player_id(p, allPlayers);
-		p->issueOrder(id, map, *(reinforcements+id));
-		cout << endl;
+		p->issueOrder(id, map, *(reinforcements + id));
+		cout << "\n" ;
+
+
+
 	}
 	return 0;
 }
@@ -101,8 +97,8 @@ static Player* mainGameLoop(vector<Player*> allPlayers, Map* map) {
 	int* reinforcements = reinforcementPhase(allPlayers, num_players, map);
 
 
-	cout << "Reinforcement Pool: " << *(reinforcements);
-	/*for (int i = 1; i < num_players; i++) {
+	/*cout << "Reinforcement Pool: " << *(reinforcements);
+	for (int i = 1; i < num_players; i++) {
 		cout << ", " << *(reinforcements + i);
 	}*/
 

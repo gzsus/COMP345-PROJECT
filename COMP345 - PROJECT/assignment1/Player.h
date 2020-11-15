@@ -49,10 +49,16 @@ class Player {
         void setNumberOfPlayers(int players);
         int getNumberOfPlayers();
 
+
         /********** Order Issuing Phase **********/
         list<Territory*> toDefend(Map* map);
         list<Territory*> toAttack(Map* map);
         int issueOrder(int player_id, Map* map, int reinforcements);
+        list<Territory*> get_defending();
+        list<Territory*> get_attacking();
+        bool defending_contains(Territory* t);
+        bool attacking_contains(Territory* t);
+
 
         void issueOrder(Order *chosenOrder);
         //prototypes of temporary functions
