@@ -1,15 +1,6 @@
-#include <iostream>
-#include <stdio.h>
-#include <cstdio>
-#include <vector>
-#include <string>
 
-#include "Player.h"
-#include "Map.h"
+#include "MainGameLoop.h"
 
-
-#define MAX_PLAYERS 7
-#define MAX_TERRITORIES 6
 
 using namespace std;
 
@@ -26,18 +17,6 @@ static int get_player_id(Player* p, vector <Player*> v) {
 	}
 }
 
-
-//	Read an integer from the user only
-static int get_integer_option() {
-	int option = -1;
-
-	while (!(cin >> option)) {
-		cin.clear();              //to clear the buffer memory
-		cin.ignore(numeric_limits<streamsize>::max(), '\n');
-		cout << "Please enter a valid number";
-	}
-	return option;
-}
 
 
 //	Players are given a number of armies
@@ -79,173 +58,9 @@ int* reinforcementPhase(vector<Player*> allPlayers, int num_players, Map* map) {
 }
 
 
-//	Territories in the map to be defended by the player
-list<Territory*> toAttack(Player* player, Map* map) {
-	vector<Territory*> territories_toAttack = map->get_neighbour_territories(player);
-
-	list<Territory*> territories_list;
-
-	if (territories_toAttack.size() > 0){
-		//	Show possible attack
-		cout << " Territories to attack:";
-		for (int i = 0; i < territories_toAttack.size(); i++)
-			cout << "  (" << i << ")" + territories_toAttack[i]->get_name() + "-" << territories_toAttack[i]->get_armies();
-		cout << endl;
-
-		cout << "Choose the territory to attack or any other number to finish: ";
-
-		int option = get_integer_option();
-		while ( true ) {
-			//	Show chosen option
-			if (option > -1 && option < territories_toAttack.size()){
-
-				// Check if element is already chosen
-				list<Territory*>::iterator it;
-				it = find(territories_list.begin(), territories_list.end(), territories_toAttack[option]);
-
-				if (it != territories_list.end())
-					cout << "(already chosen)";
-				else{
-					cout << territories_toAttack[option]->get_name();
-					territories_list.push_back(territories_toAttack[option]);
-				}
-			}
-			else {
-				cout << "none\n";
-				break;
-			}
-			cout << "\n Which other? ";
-			option = get_integer_option();
-		}
-	}
-	cout << endl;
-	return territories_list;
-}
-
-
-//	Territories in the map to be defended by the player
-list<Territory*> toDefend(Player* player, Map* map) {
-
-	vector<Territory*> territories_owned = map->get_territories(player);
-
-	list<Territory*> territories_toDefend ;
-
-	if (territories_owned.size() > 0) {
-		//	Show possible defend
-		cout << " Territories to defend-armies:";
-		for (int i = 0; i < territories_owned.size(); i++)
-			cout << "  (" << i << ")" + territories_owned[i]->get_name() + "-" << territories_owned[i]->get_armies();
-		cout << endl;
-	}
-	else {
-		cout << " You own 0 territories" << endl;
-		return territories_toDefend;
-	}
-
-	cout << "Choose the territory number to defend or any other number to finish: ";
-
-	int option = get_integer_option();
-	while (true) {
-		//	Show chosen option
-		if (option > -1 && option < territories_owned.size()) {
-
-			// Check if element is already chosen
-			list<Territory*>::iterator it;
-			it = find(territories_toDefend.begin(), territories_toDefend.end(), territories_owned[option]);
-
-			if (it != territories_toDefend.end())
-				cout << "(already chosen)";
-			else{
-				cout << territories_owned[option]->get_name();
-				territories_toDefend.push_back(territories_owned[option]);
-			}
-		}
-		else {
-			cout << "none\n";
-			break;
-		}
-		cout << "\n Which other? ";
-		option = get_integer_option();
-	}
-	cout << endl;
-	return territories_toDefend;
-}
-
 
 //	A player chooses his orders
-int issueOrder(Player* player, int player_id, Map* map, int* reinforcements) {
-
-	cout << "\t--- Player " << player_id << " Orders ---\n";
-
-	list<Territory*> territories_toAttack = toAttack(player, map);
-	list<Territory*> territories_toDefend = toDefend(player, map);
-
-	int territories_toAttack_number = territories_toAttack.size();
-	int territories_toDefend_number = territories_toDefend.size();
-
-	int deployments_available = *(reinforcements+ player_id);
-
-	//	For every choice made on the territories to defend
-	int count = 1;
-
-	if( territories_toDefend_number > 0 ){
-
-		cout << " Deployment Orders: \n";
-		for (auto t : territories_toDefend) {
-
-			if (deployments_available > 0) {
-				cout << "  (" << count << ")  " << *t;
-				cout << "You have " << deployments_available << " available. How many would you like to deploy in " << t->get_name() << "? ";
-
-				//	Choose the amount of armies to deploy in that 
-				int armies = get_integer_option();
-				if (armies < 0 || armies > deployments_available) {
-					while (true) {
-						cout << "Please choose a valid option...";
-						armies = get_integer_option();
-						if (armies > 0 && armies <= deployments_available)
-							break;
-					}
-				}
-
-				//	Create specific deploy order
-				t->increment_armies(armies);
-				deployments_available -= armies;
-				cout << " Deploy Order Issued!";
-
-				if (deployments_available <= 0)
-					break;
-			}
-			else {
-				cout << "You have 0 armies available to deploy";
-				break;
-			}
-
-			count++;
-		}
-	}
-
-	count = 1;
-
-
-	vector<Territory*> territories_owned = map->get_territories(player);
-
-	if ( territories_owned.size() > 0 ) {
-
-
-		for (auto t : territories_owned) {
-			
-
-		}
-
-		//for (auto t : territories_toAttack) {
-		//	cout << "\n  (" << count << ")  " << *t;
-		//	count++;
-		//}
-
-	}
-	cout << endl;
-	
+int issueOrder(int player_id, Map* map, int reinforcements) {
 
 	return 0;
 }
@@ -254,8 +69,9 @@ int issueOrder(Player* player, int player_id, Map* map, int* reinforcements) {
 //
 int issueOrderPhase(vector<Player*> allPlayers, int num_players, Map* map, int* reinforcements) {
 
-	for (int i = 0; i < num_players; i++) {
-		issueOrder(allPlayers[i], i, map, reinforcements);
+	for (Player* p : allPlayers) {
+		int id = get_player_id(p, allPlayers);
+		p->issueOrder(id, map, *(reinforcements+id));
 		cout << endl;
 	}
 	return 0;
@@ -286,9 +102,9 @@ static Player* mainGameLoop(vector<Player*> allPlayers, Map* map) {
 
 
 	cout << "Reinforcement Pool: " << *(reinforcements);
-	for (int i = 1; i < num_players; i++) {
+	/*for (int i = 1; i < num_players; i++) {
 		cout << ", " << *(reinforcements + i);
-	}
+	}*/
 
 	cout << "\n\n\tOrder Issuing Phase\n\n";
 	issueOrderPhase(allPlayers, num_players, map, reinforcements);

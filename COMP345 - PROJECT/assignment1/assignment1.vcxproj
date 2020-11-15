@@ -29,6 +29,7 @@
   <ItemGroup>
     <ClInclude Include="Cards.h" />
     <ClInclude Include="GameEngine.h" />
+    <ClInclude Include="MainGameLoop.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="MapLoader.h" />
     <ClInclude Include="Orders.h" />
