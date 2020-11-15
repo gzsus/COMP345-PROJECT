@@ -93,17 +93,20 @@ Deck::Deck()
 	// May change as assignment progresses to implement multiple of each.
 	pile = new std::vector<Card>;
 	int random = 0;
-	pile->emplace(pile->begin() + random, "spy");
-	random = (rand() % (pile->size() + 1));
-	pile->emplace(pile->begin() + random, "bomb");
-	random = (rand() % (pile->size() + 1));
-	pile->emplace(pile->begin() + random, "reinforcement");
-	random = (rand() % (pile->size() + 1));
-	pile->emplace(pile->begin() + random, "blockade");
-	random = (rand() % (pile->size() + 1));
-	pile->emplace(pile->begin() + random, "airlift");
-	random = (rand() % (pile->size() + 1));
-	pile->emplace(pile->begin() + random, "diplomacy");
+	
+	//Default deck now contains 50 cards.
+	for (int i = 0; i < 10;i++) {
+		random = (rand() % (pile->size() + 1));
+		pile->emplace(pile->begin() + random, "bomb");
+		random = (rand() % (pile->size() + 1));
+		pile->emplace(pile->begin() + random, "reinforcement");
+		random = (rand() % (pile->size() + 1));
+		pile->emplace(pile->begin() + random, "blockade");
+		random = (rand() % (pile->size() + 1));
+		pile->emplace(pile->begin() + random, "airlift");
+		random = (rand() % (pile->size() + 1));
+		pile->emplace(pile->begin() + random, "diplomacy");
+	}
 }
 
 Deck::Deck(const Deck & d)
