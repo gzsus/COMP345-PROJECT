@@ -46,6 +46,7 @@ class Player {
         void setReinforcementPool(int reinforcements);
         int getReinforcementPool();
         Hand* getHand();
+        vector<Player*>* getNegotiating();
 
         /********** Order Issuing Phase **********/
         list<Territory*> toDefend(Map* map);
