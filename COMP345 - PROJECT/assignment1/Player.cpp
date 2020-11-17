@@ -13,15 +13,18 @@ using std::ostream;
 
 //Constructor
 Player::Player(int players) {
-    numberOfPlayers = players;
-    pDeck = new Deck();
+	negotiating = new vector<Player*>();
     pHand = new Hand();
     pOrderList = new OrdersList();
+	reinforcementPool = 0;
 }
 
 //Copy constructor
 Player::Player(const Player& other) {
-    pDeck = new Deck(*other.pDeck);
+	reinforcementPool = other.reinforcementPool;
+	negotiating = new vector<Player*>();
+	for (int i = 0; i < other.negotiating->size(); i++)
+		negotiating->push_back(other.negotiating->at(i));
     pHand = new Hand(*other.pHand);
     pOrderList = new OrdersList(*other.pOrderList);
 }
@@ -29,9 +32,12 @@ Player::Player(const Player& other) {
 //Overloaded assignment operator
 Player& Player::operator=(const Player &other){
     if (this != &other) {
-        *pDeck = *other.pDeck;
-        *pHand = *other.pHand;
-        *pOrderList = *other.pOrderList;
+		delete negotiating;
+		negotiating = other.negotiating;
+		delete pHand;
+        pHand = other.pHand;
+		delete pOrderList;
+        pOrderList = other.pOrderList;
     }
     return *this;
 }
@@ -44,10 +50,9 @@ Player::~Player() {
     delete[] territoriesToAttack;*/
 
     //prevents memory leaks from pointers
-    delete pDeck;
+	delete negotiating;
     delete pHand;
     delete pOrderList;
-    pDeck = NULL;
     pHand = NULL;
     pOrderList = NULL;
 
@@ -58,17 +63,24 @@ Player::~Player() {
     orders.clear();
 }
 
-//initialization of static data members
-int Player::counter = 0;
-
-//sets the number of players
-void Player::setNumberOfPlayers(int players) {
-    numberOfPlayers = players;
+void Player::setReinforcementPool(int reinforcements)
+{
+	if (reinforcements >= 0)
+		reinforcementPool = reinforcements;
 }
 
-//gets the number of players
-int Player::getNumberOfPlayers() {
-    return numberOfPlayers;
+int Player::getReinforcementPool()
+{
+	return reinforcementPool;
+}
+
+Hand* Player::getHand()
+{
+	return pHand;
+}
+
+vector<Order*>* Player::getOrders() {
+	return &orders;
 }
 
 /************* New functions **************/
@@ -383,6 +395,15 @@ void Player::possibleOrders() {
     }*/
 }
 
+bool Player::hasCard(std::string type)
+{
+	for (int i = 0; pHand->getHand()->size(); i++) {
+		if (pHand->getHand()->at(i).getType().compare(type) == 0)
+			return true;
+	}
+	return false;
+}
+
 //issues the orders the player chooses
 void Player::issueOrder(Order *chosenOrder) {
     orders.push_back(chosenOrder);
@@ -397,17 +418,12 @@ void Player::displayOrders() {
 	}
 }
 
-//displays player's hand
-void Player::displayHand() {
-    //draws hand
-	while (pDeck->getPile()->empty() == false) {
-		pHand->add(pDeck->draw());
-	}
-	//displays hand
-    cout << "\n" << *pHand << endl;
-}
-
 //Stream insertion operator displaying the total number of players
 ostream& operator<<(ostream& output, Player& player) {
-	return output << "\n(Match of " << player.getNumberOfPlayers() << " players)";
+	string temp = "";
+	temp += "Player has " + std::to_string(player.getReinforcementPool())+" reinforcements.\nOrders: ";
+	for (int i = 0; i < player.getOrders()->size(); i++)
+		temp += player.getOrders()->at(i)->Type+", ";
+	temp += "\n";
+	return output << temp << *player.getHand();
 }
