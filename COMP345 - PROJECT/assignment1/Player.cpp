@@ -79,6 +79,11 @@ Hand* Player::getHand()
 	return pHand;
 }
 
+vector<Player*>* Player::getNegotiating()
+{
+	return negotiating;
+}
+
 vector<Order*>* Player::getOrders() {
 	return &orders;
 }
