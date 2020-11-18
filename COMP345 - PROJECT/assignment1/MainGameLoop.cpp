@@ -1,4 +1,3 @@
-
 #include "MainGameLoop.h"
 
 
@@ -6,7 +5,7 @@ using namespace std;
 
 
 //	Get index of a player in a vector
-static int get_player_id(Player* p, vector <Player*> v) {
+int MainGameLoop::get_player_id(Player* p, vector <Player*> v) {
 	auto it = find(v.begin(), v.end(), p);
 	if (it != v.end()) {
 		int index = it - v.begin();
@@ -17,10 +16,24 @@ static int get_player_id(Player* p, vector <Player*> v) {
 	}
 }
 
+void MainGameLoop::setPhaseObserver(bool phaseMode) {
+	phase = phaseMode;
+}
 
+bool MainGameLoop::getPhaseObserver() {
+	return phase;
+}
+
+void MainGameLoop::setStatisticsObserver(bool statisticsMode) {
+	statistics = statisticsMode;
+}
+
+bool MainGameLoop::getStatisticsObserver() {
+	return statistics;
+}
 
 //	Players are given a number of armies
-int* reinforcementPhase(vector<Player*> allPlayers, int num_players, Map* map) {
+int* MainGameLoop::reinforcementPhase(vector<Player*> allPlayers, int num_players, Map* map) {
 
 	static int reinforcements[MAX_PLAYERS];	//	7 players is the max
 	int territories_owned[MAX_PLAYERS] = { 0,0,0,0,0,0,0 };
@@ -38,9 +51,25 @@ int* reinforcementPhase(vector<Player*> allPlayers, int num_players, Map* map) {
 
 	}
 
+	int total_territories = map->get_territories().size();
+
+	if (getStatisticsObserver()) {
+		cout << "\nGame Statistics\n" << endl;
+		cout << "Player ID" << "\t" << "Territories Owned" << "\t" << "Percentage of Map Owned" << "\n";
+		for (int i = 0; i < num_players; i++) {
+			GameObservers* go = new GameObservers();
+			go->statisticsView(territories_owned[i], total_territories, (i + 1));
+		}
+	}
+
 	for (int i = 0; i < num_players; i++) {	// Reinforcement per player calculation
-		reinforcements[i] = (territories_owned[i] / 3) + MIN_REINFORCEMENT ;
-		cout << "Player" << i << " reinforcements: " << reinforcements[i] << endl;
+		reinforcements[i] = (territories_owned[i] / 3) + MIN_REINFORCEMENT;
+
+		if (getPhaseObserver()) {
+			cout << "\nPlayer " << (i + 1) << ": Reinforcement Phase\n" << endl;
+			//add phase information
+		}
+		cout << "Reinforcements: " << reinforcements[i] << endl;
 	}
 
 	/**************************** Add each player continent's bonus ****************************/
@@ -60,12 +89,12 @@ int* reinforcementPhase(vector<Player*> allPlayers, int num_players, Map* map) {
 
 
 // Part of the loop reserved to issuing orders
-int issueOrderPhase(vector<Player*> allPlayers, int num_players, Map* map, int* reinforcements) {
+int MainGameLoop::issueOrderPhase(vector<Player*> allPlayers, int num_players, Map* map, int* reinforcements) {
 
 	for (Player* p : allPlayers) {
 		int id = get_player_id(p, allPlayers);
-		p->issueOrder(id, map, *(reinforcements + id));
-		cout << "\n" ;
+		p->issueOrder(id, map, *(reinforcements + id), getPhaseObserver());
+		cout << "\n";
 
 
 
@@ -74,8 +103,14 @@ int issueOrderPhase(vector<Player*> allPlayers, int num_players, Map* map, int* 
 }
 
 
-//
-int executeOrdersPhase() {
+int MainGameLoop::executeOrdersPhase(vector<Player*> allPlayers) {
+	for (Player* p : allPlayers) {
+		int id = get_player_id(p, allPlayers);
+		if (getPhaseObserver()) {
+			cout << "\nPlayer " << (id + 1) << ": Order Execution Phase\n" << endl;
+			//add phase information
+		}
+	}
 
 	return 0;
 }
@@ -83,7 +118,10 @@ int executeOrdersPhase() {
 
 
 // Main loop of the game
-static Player* mainGameLoop(vector<Player*> allPlayers, Map* map) {
+Player* MainGameLoop::mainGameLoop(vector<Player*> allPlayers, Map* map, bool phaseMode, bool statisticsMode) {
+
+	setPhaseObserver(phaseMode);
+	setStatisticsObserver(statisticsMode);
 
 	//	Amount of players
 	int num_players = allPlayers.size();
@@ -93,7 +131,6 @@ static Player* mainGameLoop(vector<Player*> allPlayers, Map* map) {
 	//	Main loop of game
 	//while (1) {
 
-	cout << "\n\n\tReinforcement Phase\n\n";
 	int* reinforcements = reinforcementPhase(allPlayers, num_players, map);
 
 
@@ -102,11 +139,9 @@ static Player* mainGameLoop(vector<Player*> allPlayers, Map* map) {
 		cout << ", " << *(reinforcements + i);
 	}*/
 
-	cout << "\n\n\tOrder Issuing Phase\n\n";
 	issueOrderPhase(allPlayers, num_players, map, reinforcements);
 
-	cout << "\n\n\tOrder Execution Phase\n\n";
-	executeOrdersPhase();
+	executeOrdersPhase(allPlayers);
 
 	//}
 	return allPlayers[0];
@@ -181,8 +216,15 @@ int main() {
 	america->add_continent(ca);
 
 	cout << "\n\n============== Game loop ==============\n";
-	mainGameLoop(allPlayers, america);
+	MainGameLoop* loop = new MainGameLoop();
 
+	// Temporary for the demo
+	bool phaseMode = false;
+	bool statisticsMode = false; 
+
+	loop->mainGameLoop(allPlayers, america, phaseMode, statisticsMode);
+
+	delete loop;
 	// End of game
 	cout << "\n\t\tGame finished\n";
 	system("pause");

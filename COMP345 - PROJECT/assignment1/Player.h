@@ -4,13 +4,11 @@
 #include "Orders.h"
 #include "MainGameLoop.h"
 
-
 #include <iostream>
 #include <string>
 #include <vector>
 #include <list>
 
-using std::string;
 using std::vector;
 using std::string;
 using std::ostream;
@@ -20,53 +18,53 @@ class Order;
 class OrdersList;
 
 class Player {
-    private:
-        int reinforcementPool;
-        //data members from the Orders class
-        vector <Order*> orders;
-        OrdersList *pOrderList;
-        //data members from the Cards class
-        Hand *pHand;
-        vector<Player*> *negotiating;
-        ////temporary arrays
-        //string allTerritories[10] = {"North Africa", "Egypt", "South Africa", "Congo", "East Africa", "Madagascar", "Indonesia", "New Guinea", "Eastern Australia", "Western Australia"};
-        //string allOrders[6] = {"deploy", "advance", "bomb", "blockade", "airlift", "negotiate"};
-        //string territoriesToDefend[2];
-        //string territoriesToAttack[8];
-        list<Territory*> territoriesToDefend;
-        list<Territory*> territoriesToAttack;
+private:
+    int reinforcementPool;
+    //data members from the Orders class
+    vector <Order*> orders;
+    OrdersList* pOrderList;
+    //data members from the Cards class
+    Hand* pHand;
+    vector<Player*>* negotiating;
+    ////temporary arrays
+    //string allTerritories[10] = {"North Africa", "Egypt", "South Africa", "Congo", "East Africa", "Madagascar", "Indonesia", "New Guinea", "Eastern Australia", "Western Australia"};
+    //string allOrders[6] = {"deploy", "advance", "bomb", "blockade", "airlift", "negotiate"};
+    //string territoriesToDefend[2];
+    //string territoriesToAttack[8];
+    list<Territory*> territoriesToDefend;
+    list<Territory*> territoriesToAttack;
 
-    public:
-        //constructor prototype
-        Player(int players);
-        //copy constructor prototype
-        Player(const Player& other);
-        //overloaded assignment operator prototype
-        Player& operator=(const Player &other);
-        //destructor prototype
-        ~Player();
-        //function prototypes
-        vector<Order*>* getOrders();
-        void setReinforcementPool(int reinforcements);
-        int getReinforcementPool();
-        Hand* getHand();
-        vector<Player*>* getNegotiating();
+public:
+    //constructor prototype
+    Player(int players);
+    //copy constructor prototype
+    Player(const Player& other);
+    //overloaded assignment operator prototype
+    Player& operator=(const Player& other);
+    //destructor prototype
+    ~Player();
+    //function prototypes
+    vector<Order*>* getOrders();
+    void setReinforcementPool(int reinforcements);
+    int getReinforcementPool();
+    Hand* getHand();
+    vector<Player*>* getNegotiating();
 
-        /********** Order Issuing Phase **********/
-        list<Territory*> toDefend(Map* map);
-        list<Territory*> toAttack(Map* map);
-        int issueOrder(int player_id, Map* map, int reinforcements);
-        list<Territory*> get_defending();
-        list<Territory*> get_attacking();
-        bool defending_contains(Territory* t);
-        bool attacking_contains(Territory* t);
+    /********** Order Issuing Phase **********/
+    list<Territory*> toDefend(Map* map);
+    list<Territory*> toAttack(Map* map);
+    int issueOrder(int player_id, Map* map, int reinforcements, bool phaseMode);
+    list<Territory*> get_defending();
+    list<Territory*> get_attacking();
+    bool defending_contains(Territory* t);
+    bool attacking_contains(Territory* t);
 
-        bool hasCard(std::string type);
-        void issueOrder(Order *chosenOrder);
-        //prototypes of temporary functions
-        //void createTerritories();
-        void possibleOrders();
-        void displayOrders();
-        //stream insertion operator
-        friend ostream& operator<<(ostream& ostream, Player& player);
+    bool hasCard(std::string type);
+    void issueOrder(Order* chosenOrder);
+    //prototypes of temporary functions
+    //void createTerritories();
+    void possibleOrders();
+    void displayOrders();
+    //stream insertion operator
+    friend ostream& operator<<(ostream& ostream, Player& player);
 };
