@@ -414,7 +414,7 @@ void Player::possibleOrders() {
 
 bool Player::hasCard(std::string type)
 {
-	for (int i = 0; pHand->getHand()->size(); i++) {
+	for (int i = 0; i<pHand->getHand()->size(); i++) {
 		if (pHand->getHand()->at(i).getType().compare(type) == 0)
 			return true;
 	}
