@@ -191,8 +191,8 @@ int Player::issueOrder(int player_id, Map* map, int reinforcements) {
 
 	cout << "\t--- Player " << player_id << " Orders ---\n";
 
-	territoriesToAttack = this->toAttack(map);
-	territoriesToDefend = this->toDefend(map);
+	//territoriesToAttack = this->toAttack(map);
+	//territoriesToDefend = this->toDefend(map);
 
 	int territories_toAttack_number = territoriesToAttack.size();
 	int territories_toDefend_number = territoriesToDefend.size();
@@ -236,9 +236,6 @@ int Player::issueOrder(int player_id, Map* map, int reinforcements) {
 						continue;
 					}
 
-
-
-					
 
 					if (deployments_available <= 0){
 						cout << "\tNo more armies available to deploy";
@@ -376,7 +373,14 @@ int Player::issueOrder(int player_id, Map* map, int reinforcements) {
 			cout << " You have no territories in your possession\n";
 	}
 
-	cout << endl;
+	cout << " You must now choose a card from your hand to use:\n";
+
+	vector<Card>* actual_hand = this->getHand()->getHand();
+
+	for (auto c : *actual_hand) {
+		cout << "   " << c;
+	}
+
 
 	return 0;
 }
