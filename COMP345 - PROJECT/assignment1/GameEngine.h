@@ -1,7 +1,9 @@
 #pragma once
 #include "Map.h"
 #include "MapLoader.h"
-#include<string>
+#include "Cards.h"
+#include "Player.h"
+#include <string>
 
 class GameEngine
 {
