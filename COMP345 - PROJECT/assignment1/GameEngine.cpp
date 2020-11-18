@@ -9,19 +9,22 @@
 
 
 /////////////////////////////////// Constructors/Destructor /////////////////////////////////////
-GameEngine::GameEngine() : game_map(), game_deck()
+GameEngine::GameEngine() : game_map(), deck(), neutralPlayer(0)
 {}
 GameEngine::~GameEngine()
 {
 	delete game_map;
-	delete game_deck;
+	delete deck;
+	delete neutralPlayer;
 	game_map = NULL;
-	game_deck = NULL;
+	deck = NULL;
+	neutralPlayer = NULL;
 }
 GameEngine::GameEngine(const GameEngine& old_copy)
 {
 	this->game_map = new Map(*(old_copy.game_map));
-	this->game_deck = new Deck(*(old_copy.game_deck));
+	this->deck = new Deck(*(old_copy.deck));
+	this->neutralPlayer = new Player(*(old_copy.neutralPlayer));
 }
 
 
@@ -79,7 +82,8 @@ Map* GameEngine::loadmap(std::string map)
 GameEngine& GameEngine::operator=(const GameEngine& oldengine)
 {
 	this->game_map = new Map(*(oldengine.game_map));
-	this->game_deck = new Deck(*(oldengine.game_deck));
+	this->deck = new Deck(*(oldengine.deck));
+	this->neutralPlayer = new Player(*(neutralPlayer));
 	return *this;
 }
 
@@ -161,12 +165,12 @@ void GameEngine::startupPhase(Map* mapfile, std::vector<Player*>* players) {
 
 	for (int i = 0; i < players->size(); i++) {
 		// Needs deck and neutralPlayer to be initialized to run!!
-		//(*players)[i]->getOrders()->push_back(new Deploy(this->deck));
-		//(*players)[i]->getOrders()->push_back(new Bomb(this->deck));
-		//(*players)[i]->getOrders()->push_back(new Advance(this->deck));
+		(*players)[i]->getOrders()->push_back(new Deploy(this->deck));
+		(*players)[i]->getOrders()->push_back(new Bomb(this->deck));
+		(*players)[i]->getOrders()->push_back(new Advance(this->deck));
 		//(*players)[i]->getOrders()->push_back(new Blockade(this->deck, this->neutralPlayer));
-		//(*players)[i]->getOrders()->push_back(new Airlift(this->deck));
-		//(*players)[i]->getOrders()->push_back(new Negotiate(this->deck));
+		(*players)[i]->getOrders()->push_back(new Airlift(this->deck));
+		(*players)[i]->getOrders()->push_back(new Negotiate(this->deck));
 	}
 }
 
@@ -187,7 +191,7 @@ int main()
 	} while (num_players < 2 || num_players > 5);
 	//create the appropriate number of players.
 	std::vector<Player*>players;
-	for (int i = 0; i < num_players; i++) { players.push_back(new Player(0)); } //the player.h is strange it does not really make sense for each player to store the number of players...
+	for (int i = 0; i < num_players; i++) { players.push_back(new Player(0)); } 
 	
 
 
