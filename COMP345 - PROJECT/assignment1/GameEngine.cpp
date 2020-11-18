@@ -155,6 +155,7 @@ void GameEngine::startupPhase(Map* mapfile, std::vector<Player*>* players) {
 	}
 
 	for (int i = 0; i < players->size(); i++) {
+		// Needs deck and neutralPlayer to be initialized to run!!
 		//(*players)[i]->getOrders()->push_back(new Deploy(this->deck));
 		//(*players)[i]->getOrders()->push_back(new Bomb(this->deck));
 		//(*players)[i]->getOrders()->push_back(new Advance(this->deck));
