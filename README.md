@@ -21,7 +21,7 @@ Assignment 1 is due Oct 9th @ 11:59 PM and is worth 10% of the total grade.
 ### Parts for Assignment 2:
 
 >1. Game Start (Sam)
->2. Game Startup Phase
+>2. Game Startup Phase (Donovan)
 >3. Main Game Loop (Adrian)
->4. Order Execution
->5. Observer
+>4. Order Execution (Shirwa)
+>5. Observer (Amina)
