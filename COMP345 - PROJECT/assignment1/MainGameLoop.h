@@ -9,7 +9,11 @@
 #include "Player.h"
 #include "Map.h"
 
-
+using std::vector;
+using std::cin;
+using std::cout;
+using std::numeric_limits;
+using std::streamsize;
 
 #define MAX_PLAYERS 7
 #define MAX_TERRITORIES 6

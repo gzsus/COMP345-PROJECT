@@ -1,8 +1,6 @@
-#include "MainGameLoop.h"
+
 #include "Player.h"
-#include "Orders.h"
-#include "Cards.h"
-#include "Map.h"
+
 
 
 using std::cout;
@@ -55,7 +53,6 @@ Player::~Player() {
     delete pOrderList;
     pHand = NULL;
     pOrderList = NULL;
-	negotiating = NULL;
 
     //prevents memory leaks from pointers in vectors
     for (int i=0; i<orders.size(); i++) {

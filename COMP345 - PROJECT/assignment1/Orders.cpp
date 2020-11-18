@@ -1,8 +1,20 @@
 #include "Orders.h"
 
+using std::string;
+using std::ostream;
+using std::vector;
+using std::cout;
+using std::endl;
+
 Order::Order()
 {
 	Type = "default";
+}
+
+Order::Order(Deck* new_deck)
+{
+	Type = "default";
+	deck = new_deck;
 }
 
 bool Order::validate()
@@ -29,7 +41,7 @@ Order& Order::operator=(const Order& right)
 	}
 }
 
-std::ostream& operator<<(std::ostream& str, const Order& o)
+ostream& operator<<(ostream& str, const Order& o)
 {
 	if (o.Type == "deploy") {
 		if (o.hasBeenExecuted == true) {
@@ -86,64 +98,378 @@ std::ostream& operator<<(std::ostream& str, const Order& o)
 }
 
 
+//DEPLOY-------------------------------------------------------------------------
 Deploy::Deploy()
 {
 	Type = "deploy";
 }
 
-Deploy::Deploy(const Order& order)
+Deploy::Deploy(Deck* new_deck)
 {
-	Type = order.Type;
+	Type = "deploy";
+	deck = new_deck;
 }
 
+
+//Deploy validate method
+bool Deploy::validate(Player* player, Territory* ter) {
+	Player* owner = ter->get_owner();
+
+	bool is_valid;
+
+	if (owner == player) {
+		//Orders is valid
+		is_valid = true;
+	}
+	else {
+		//Order is invalid
+		is_valid = false;
+		cout << "Player does not own this territory" << endl;
+	}
+
+	return is_valid;
+}
+
+//Deploy execute method
+void Deploy::execute(Player* player, Territory* ter, int reinforcement) {
+	bool is_order_valid = validate(player, ter);
+	if (is_order_valid) {
+		//get units from reinforcment pool and add the amount to the territory------------------------------------------
+		ter->increment_armies(reinforcement);
+		cout << "Troops have been deployed" << endl;
+		setHasBeenExecuted(true);
+	}
+}
+
+
+
+
+//BOMB-------------------------------------------------------------------------
 Bomb::Bomb()
 {
 	Type = "bomb";
 }
 
-Bomb::Bomb(const Order& order)
+Bomb::Bomb(Deck* new_deck)
 {
-	Type = order.Type;
+	Type = "bomb";
+	deck = new_deck;
 }
 
+//Bomb validate method
+bool Bomb::validate(Player* player, Territory* target) {
+	bool is_valid;
+	//If player does not have bomb card order fails-------------------------------------------------------
+	Player* owner_target = target->get_owner();
+
+
+	if (player != owner_target) {
+		is_valid = true;
+	}
+	else {
+		//Order is invalid
+		is_valid = false;
+		std::cout << "Order is invalid" << std::endl;
+	}
+
+
+	return is_valid;
+}
+
+//Bomb execute method
+void Bomb::execute(Player* player, Territory* target) {
+	bool is_order_valid = validate(player, target);
+
+	Player* owner_target = target->get_owner();
+
+	vector<Player*>* negotiation_source = player->getNegotiating();
+	vector<Player*>* negotiation_target = owner_target->getNegotiating();
+
+	bool in_negotiation;
+
+	if (find(negotiation_source->begin(), negotiation_source->end(), owner_target) != negotiation_source->end() || find(negotiation_target->begin(), negotiation_target->end(), player) != negotiation_target->end()) {
+
+		in_negotiation = true;
+	}
+	else {
+		in_negotiation = false;
+	}
+
+
+	if (is_order_valid) {
+		if (in_negotiation == false) {
+			int bombed_army = (target->get_armies()) / 2;
+			target->set_armies(bombed_army);
+			setHasBeenExecuted(true);
+		}
+		else {
+			cout << "These players are in negotation" << endl;
+		}
+
+	}
+}
+
+
+//ADVANCE-------------------------------------------------------------------------
 Advance::Advance()
 {
 	Type = "advance";
 }
 
-Advance::Advance(const Order& order)
+Advance::Advance(Deck* new_deck)
 {
-	Type = order.Type;
+	Type = "advance";
+	deck = new_deck;
 }
 
+//Advance validate method
+bool Advance::validate(Player* player, Territory* source, Territory* target) {
+	Player* owner_source = source->get_owner();
+	Player* owner_target = target->get_owner();
+
+	bool is_valid;
+
+	if (player == owner_source) {
+		 is_valid = true;
+	}
+	else {
+		//Order is invalid
+		is_valid = false;
+		std::cout << "Player does not own this territory" << std::endl;
+	}
+
+	return is_valid;
+}
+
+//Advance execute method
+void Advance::execute(Player* player, Territory* source, Territory* target, int armyunits) {
+	Player* owner_source = source->get_owner();
+	Player* owner_target = target->get_owner();
+
+	vector<Player*>* negotiation_source = player->getNegotiating();
+	vector<Player*>* negotiation_target = owner_target->getNegotiating();
+
+	bool in_negotiation;
+
+	if (find(negotiation_source->begin(), negotiation_source->end(), owner_target) != negotiation_source->end() || find(negotiation_target->begin(), negotiation_target->end(), player) != negotiation_target->end()) {
+
+		in_negotiation = true;
+	}
+	else {
+		in_negotiation = false;
+	}
+
+
+	bool is_order_valid = validate(player, source, target);
+	if (is_order_valid) {
+		std::cout << "Advance Forward" << std::endl;
+
+		if (player == owner_target) {
+			std::cout << "Advance to reinforce" << std::endl;
+			source->decrement_armies(armyunits);
+			target->increment_armies(armyunits);
+		}
+		//IF NEGOTIATE IS IN AFFECT YOU CANNOT ADVANCE ----------------------------------------
+		else if (player != owner_target) {
+			if (in_negotiation == false) {
+				source->decrement_armies(armyunits);
+
+				int total_defending_army = target->get_armies();
+				int total_attacking_army = armyunits;
+
+				int defending_army = target->get_armies();
+				int attacking_army = armyunits;
+
+				for (int i = 0; i < total_defending_army; i++) {
+					if ((1 + rand() % 10) <= 7) {
+						attacking_army -= 1;
+					}
+				}
+
+				for (int i = 0; i < total_attacking_army; i++) {
+					if ((1 + rand() % 10) <= 6) {
+						defending_army -= 1;
+					}
+				}
+				//If defence is zero TAKE THE TERRITORY
+				if (defending_army <= 0) {
+					defending_army = 0;
+
+					if (attacking_army <= 0) {
+						attacking_army = 0;
+					}
+					//TAKE THE TERRITORY
+					cout << "Attack successful the territory now belongs to the player" << endl;
+					target->set_owner(player);
+					target->set_armies(attacking_army);
+					//PLAYER GETS A NEW CARD-----------------------------------------------------------------
+
+					//Deck* deck = new Deck();
+					//player->getHand()->add(deck->draw());
+
+				}
+				else {
+					//If army is zero FAILED
+					if (attacking_army <= 0) {
+						attacking_army = 0;
+					}
+					cout << "Attack failed" << endl;
+					target->set_armies(defending_army);
+					source->increment_armies(attacking_army);
+				}
+				setHasBeenExecuted(true);
+			}
+			else {
+				cout << "These players are in negotation" << endl;
+			}
+		}
+		//End
+
+	}
+}
+
+
+//BLOCKADE-------------------------------------------------------------------------
 Blockade::Blockade()
 {
 	Type = "blockade";
 }
 
-Blockade::Blockade(const Order& order)
+Blockade::Blockade(Deck* new_deck)
 {
-	Type = order.Type;
+	Type = "blockade";
+	deck = new_deck;
 }
 
+//Blockade validate method
+bool Blockade::validate(Player* player, Territory* target) {
+	bool is_valid;
+
+	Player* owner_target = target->get_owner();
+
+	//MUST CHECK IF PLAYER HAS CARD-----------------------------------------------------
+	if (player == owner_target) {
+		is_valid = true;
+	}
+	else {
+		//Order is invalid
+		is_valid = false;
+		std::cout << "Player does not own this territory" << std::endl;
+	}
+
+	return is_valid;
+}
+
+//Blockade execute method
+void Blockade::execute(Player* player, Territory* target) {
+	bool is_order_valid = validate(player, target);
+	if (is_order_valid) {
+		std::cout << "Territory now has blockade" << std::endl;
+		int doubled_army = (target->get_armies()) * 2;
+		target->set_armies(doubled_army);
+		//OWNER IS TRANSFERED TO NEUTRAL PLAYER--------------------------------------------------
+
+		setHasBeenExecuted(true);
+	}
+}
+
+
+
+//AIRLIFT-------------------------------------------------------------------------
 Airlift::Airlift()
 {
 	Type = "airlift";
 }
 
-Airlift::Airlift(const Order& order)
+Airlift::Airlift(Deck* new_deck)
 {
-	Type = order.Type;
+	Type = "airlift";
+	deck = new_deck;
 }
 
+//Airlift validate method
+bool Airlift::validate(Player* player, Territory* source, Territory* target) {
+	Player* owner_source = source->get_owner();
+	Player* owner_target = target->get_owner();
+
+	bool is_valid;
+	//MUST CHECK IF PLAYER HAS CARD-----------------------------------------------------
+	if (player != owner_source && player != owner_target) {
+		is_valid = false;
+	}
+	else {
+		is_valid = true;
+	}
+
+	return is_valid;
+}
+
+//Airlift execute method
+void Airlift::execute(Player* player, Territory* source, Territory* target, int armyunits) {
+	bool is_order_valid = validate(player, source, target);
+	if (is_order_valid) {
+		std::cout << "Airlift the troops" << std::endl;
+
+		Player* owner_source = source->get_owner();
+		Player* owner_target = target->get_owner();
+
+
+		if (player == owner_source && player == owner_target) {
+			source->decrement_armies(armyunits);
+			target->increment_armies(armyunits);
+		}
+		else if (player == owner_source && player != owner_target) {
+			//EXECUTE ADVANCE ORDER -----------------------------------------------------------------------------------
+			Advance* advance = new Advance();
+			advance->execute(player, source, target, armyunits);
+			
+			//Removing memory leaks
+			delete(advance);
+			advance = NULL;
+		}
+
+		setHasBeenExecuted(true);
+	}
+}
+
+
+//NEGOTIATE-------------------------------------------------------------------------
 Negotiate::Negotiate()
 {
 	Type = "negotiate";
 }
 
-Negotiate::Negotiate(const Order& order)
+Negotiate::Negotiate(Deck* new_deck)
 {
-	Type = order.Type;
+	Type = "negotiate";
+	deck = new_deck;
+}
+
+//Negotiate validate method
+bool Negotiate::validate(Player* player, Player* target_player) {
+	bool is_valid;
+	//MUST CHECK IF PLAYER HAS CARD-----------------------------------------------------
+	if (player != target_player) {
+		is_valid = true;
+	}
+	else {
+		//Order is invalid
+		is_valid = false;
+		cout << "Target player is issuing this order" << endl;
+	}
+
+	return is_valid;
+}
+
+//Negotiate execute method
+void Negotiate::execute(Player* player, Player* target_player) {
+	bool is_order_valid = validate(player,target_player);
+	if (is_order_valid) {
+		player->getNegotiating()->push_back(target_player);
+		target_player->getNegotiating()->push_back(player);
+		cout << "Players are now in negotiation" << endl;
+		setHasBeenExecuted(true);
+	}
 }
 
 OrdersList::~OrdersList() //Loop through the vector of pointers and delete each pointer to remove memory leaks
@@ -154,56 +480,56 @@ OrdersList::~OrdersList() //Loop through the vector of pointers and delete each 
 	}
 }
 
-void OrdersList::delete_order(int position) //Delete the pointer at the index given in the argument
+void OrdersList::remove(int position) //Delete the pointer at the index given in the argument
 {
 	ListOfOrders.erase(ListOfOrders.begin() + position);
 }
 
 void OrdersList::move(int currentPosition, int desiredPosition) // Create a copy of the pointer in the current position, delete the pointer at the current position, insert the copy at the desired position
 {
-
+	//MAKE SURE IT IS COMPLETED _________________----------------------------------------------------
 	if (ListOfOrders[currentPosition]->Type == "deploy") {
-		Deploy* temp = new Deploy(*ListOfOrders[currentPosition]);
-		delete_order(currentPosition);
+		Deploy* temp = (Deploy*)(ListOfOrders[currentPosition]);
+		remove(currentPosition);
 		ListOfOrders.insert(ListOfOrders.begin() + desiredPosition, temp);
 	}
 	else if (ListOfOrders[currentPosition]->Type == "advance") {
-		Advance* temp = new Advance(*ListOfOrders[currentPosition]);
-		delete_order(currentPosition);
+		Advance* temp = (Advance*)(ListOfOrders[currentPosition]);
+		remove(currentPosition);
 		ListOfOrders.insert(ListOfOrders.begin() + desiredPosition, temp);
 
 	}
 	else if (ListOfOrders[currentPosition]->Type == "blockade") {
-		Blockade* temp = new Blockade(*ListOfOrders[currentPosition]);
-		delete_order(currentPosition);
+		Blockade* temp = (Blockade*)(ListOfOrders[currentPosition]);
+		remove(currentPosition);
 		ListOfOrders.insert(ListOfOrders.begin() + desiredPosition, temp);
 
 	}
 	else if (ListOfOrders[currentPosition]->Type == "airlift") {
-		Airlift* temp = new Airlift(*ListOfOrders[currentPosition]);
-		delete_order(currentPosition);
+		Airlift* temp = (Airlift*)(ListOfOrders[currentPosition]);
+		remove(currentPosition);
 		ListOfOrders.insert(ListOfOrders.begin() + desiredPosition, temp);
 
 	}
 	else if (ListOfOrders[currentPosition]->Type == "negotiate") {
-		Negotiate* temp = new Negotiate(*ListOfOrders[currentPosition]);
-		delete_order(currentPosition);
+		Negotiate* temp = (Negotiate*)(ListOfOrders[currentPosition]);
+		remove(currentPosition);
 		ListOfOrders.insert(ListOfOrders.begin() + desiredPosition, temp);
 
 	}
 	else if (ListOfOrders[currentPosition]->Type == "bomb") {
-		Bomb* temp = new Bomb(*ListOfOrders[currentPosition]);
-		delete_order(currentPosition);
+		Bomb* temp = (Bomb*)(ListOfOrders[currentPosition]);
+		remove(currentPosition);
 		ListOfOrders.insert(ListOfOrders.begin() + desiredPosition, temp);
 	}
 }
 
-void OrdersList::setList(std::vector<Order*> list) //Setter for vector
+void OrdersList::setList(vector<Order*> list) //Setter for vector
 {
 	ListOfOrders = list;
 }
 
-std::vector<Order*> OrdersList::getList() //Getter for vector
+vector<Order*> OrdersList::getList() //Getter for vector
 {
 	return ListOfOrders;
 }
