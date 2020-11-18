@@ -9,6 +9,8 @@ class GameEngine
 private:
 	//needs to be a pointer
 	Map *game_map;
+	Player *neutralPlayer;
+	Deck *deck;
 
 
 public:
@@ -23,5 +25,8 @@ public:
 	GameEngine& operator =(const GameEngine& oldengine);// assignment operator
 
 	friend std::ostream& operator<<(std::ostream&, const GameEngine&); //stream insertion operator
+	
+	/////////////////////////////////// Startup Phase ///////////////////////////////////
+	void startupPhase(Map* mapfile, std::vector<Player*>* players);
 };
 
