@@ -3,17 +3,21 @@
 #include "Cards.h"
 #include "Orders.h"
 #include "MainGameLoop.h"
-#include "Player.h"
+
 
 #include <iostream>
 #include <string>
 #include <vector>
 #include <list>
 
-
+using std::string;
 using std::vector;
 using std::string;
 using std::ostream;
+using std::list;
+
+class Order;
+class OrdersList;
 
 class Player {
     private:

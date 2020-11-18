@@ -89,7 +89,86 @@ std::ostream& operator<<(std::ostream& ostrm, const GameEngine& game_engine)
 	return ostrm << "Game Engine Map: \n (" << game_engine.game_map << ")";
 }
 
+/////////////////////////////////// Startup Phase ///////////////////////////////////
+void GameEngine::startupPhase(Map* mapfile, std::vector<Player*>* players) {
+	std::vector<Player*>playerstemp;
+	std::vector<int> nums;
+	int found = 0;
+	int random = 0;
 
+	//Generate the order of players. Creates a vector containing unique integers of 0 - number of players.
+	while (nums.size() != players->size()) {
+		found = 0;
+		random = rand() % players->size();
+		for (int i = 0; i < nums.size(); i++) {
+			if (random == nums[i])
+				found = 1;
+		}
+		if (found == 0)
+			nums.push_back(random);
+	}
+
+	//Use each of the unique integers as the position of the player in the play order
+	for (int i = 0; i < players->size(); i++) {
+		playerstemp.push_back((*players)[nums[i]]);
+	}
+
+	//Assign the new vector contents to the old one.
+	for (int i = 0; i < players->size(); i++) {
+		(*players)[i] = playerstemp[i];
+	}
+
+	//Re-using nums for randomly assigning territories
+	nums.clear();
+
+	while (nums.size() != mapfile->get_territories().size()) {
+		found = 0;
+		random = rand() % mapfile->get_territories().size();
+		for (int i = 0; i < nums.size(); i++) {
+			if (random == nums[i])
+				found = 1;
+		}
+		if (found == 0)
+			nums.push_back(random);
+	}
+
+	//Assigning territories to each player in round robin fashion
+	for (int i = 0, j = 0; i < mapfile->get_territories().size(); i++) {
+			mapfile->get_territories().at(nums[i])->set_owner((*players)[j]);
+			j = ++j % 5;
+	}
+
+	//Setting reinforcement pools for all players
+	int playersize = players->size();
+	switch (playersize) {
+	case 2:
+		for (int i = 0; i < playersize; i++)
+			(*players)[i]->setReinforcementPool(40);
+		break;
+	case 3:
+		for (int i = 0; i < playersize; i++)
+			(*players)[i]->setReinforcementPool(35);
+		break;
+	case 4:
+		for (int i = 0; i < playersize; i++)
+			(*players)[i]->setReinforcementPool(30);
+		break;
+	case 5:
+		for (int i = 0; i < playersize; i++)
+			(*players)[i]->setReinforcementPool(25);
+		break;
+	}
+
+	for (int i = 0; i < players->size(); i++) {
+		// Needs deck and neutralPlayer to be initialized to run!!
+		//(*players)[i]->getOrders()->push_back(new Deploy(this->deck));
+		//(*players)[i]->getOrders()->push_back(new Bomb(this->deck));
+		//(*players)[i]->getOrders()->push_back(new Advance(this->deck));
+		//(*players)[i]->getOrders()->push_back(new Blockade(this->deck, this->neutralPlayer));
+		//(*players)[i]->getOrders()->push_back(new Airlift(this->deck));
+		//(*players)[i]->getOrders()->push_back(new Negotiate(this->deck));
+	}
+}
 
 int main()
 {
@@ -122,15 +201,44 @@ int main()
 		std::cin >> S_obs;
 	} while ((P_obs!='y' && P_obs!='n' ) || (S_obs != 'y' && S_obs != 'n'));
 
+	////////////////////////////////////////////////Donovan Driver Start////////////////////////////////////////////////
+	
+	//Showing all territories are unowned before the startup phase
+	for (Territory* t : loaded_map->get_territories()) {
+		cout << t->get_name() << " is owned by:" << t->get_owner() << "\n";
+	}
+
+	//Showing the state of the players before the startup phase
+	for (Player* p : players) {
+		cout << *p<<"\n";
+	}
+
+	cout << "\n===Commencing Startup Phase===\n\n";
+
+	game.startupPhase(loaded_map, &players);
+
+	cout << "\n===End of Startup Phase===\n\n";
+
+	//Showing all territories are now owned after the startup phase
+	for (Territory* t : loaded_map->get_territories()) {
+		cout << t->get_name() << " is owned by:" << t->get_owner() << "\n";
+	}
+
+	//Showing the state of the players after the startup phase
+	for (Player* p : players) {
+		cout << *p<<"\n";
+	}
+
+	////////////////////////////////////////////////Donovan Driver End////////////////////////////////////////////////
 
 	//taking care of memory leak
 	delete loaded_map;
 	loaded_map = NULL;
-	//the player destructor is broken !-----------------------------------------------------------------
-	/*for (int i = 0; i < num_players; i++) { delete players[i]; }
+	
+	for (int i = 0; i < num_players; i++) { delete players[i]; }
 	for (int i = 0; i < num_players; i++) { players[i] = NULL; }
 
-	game.~GameEngine();*/
+	game.~GameEngine();
 
 	return 0;
 }

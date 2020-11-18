@@ -2,7 +2,8 @@
 #include "Map.h"
 #include "MapLoader.h"
 #include "Cards.h"
-#include<string>
+#include "Player.h"
+#include <string>
 
 class GameEngine
 {
@@ -10,8 +11,8 @@ class GameEngine
 private:
 	//needs to be a pointer
 	Map *game_map;
-	Deck* game_deck;
-
+	Player *neutralPlayer;
+	Deck *deck;
 
 
 public:
@@ -26,5 +27,8 @@ public:
 	GameEngine& operator =(const GameEngine& oldengine);// assignment operator
 
 	friend std::ostream& operator<<(std::ostream&, const GameEngine&); //stream insertion operator
+	
+	/////////////////////////////////// Startup Phase ///////////////////////////////////
+	void startupPhase(Map* mapfile, std::vector<Player*>* players);
 };
 

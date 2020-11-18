@@ -1,8 +1,6 @@
-#include "MainGameLoop.h"
+
 #include "Player.h"
-#include "Orders.h"
-#include "Cards.h"
-#include "Map.h"
+
 
 
 using std::cout;
@@ -195,14 +193,12 @@ int Player::issueOrder(int player_id, Map* map, int reinforcements) {
 	territoriesToAttack = this->toAttack(map);
 	territoriesToDefend = this->toDefend(map);
 
-	//int territories_toAttack_number = territories_toAttack.size();
+	int territories_toAttack_number = territoriesToAttack.size();
 	int territories_toDefend_number = territoriesToDefend.size();
 
 	int deployments_available = reinforcements;
 
 	//	Deployment Orders
-	int count = 1;
-
 	while (deployments_available > 0) {
 		if (territories_toDefend_number > 0) {
 
@@ -210,7 +206,7 @@ int Player::issueOrder(int player_id, Map* map, int reinforcements) {
 			for (auto t : territoriesToDefend) {
 
 				if (deployments_available > 0) {
-					cout << "\n  (" << count << ")  " << *t;
+					cout << "\n   " << *t;
 					cout << "You have " << deployments_available << " available. How many armies would you like to deploy in " << t->get_name() << "? ";
 
 					//	Choose the amount of armies to deploy in that 
@@ -229,6 +225,7 @@ int Player::issueOrder(int player_id, Map* map, int reinforcements) {
 
 					//t->increment_armies(armies);
 					deployments_available -= armies;
+					cout << "\tDeploying: " << armies << ((armies > 1)? " armies" :" army") << " in " << t->get_name() << endl; // missing create advance order here
 					cout << " Deploy Order Issued!";
 
 					if (deployments_available <= 0){
@@ -241,133 +238,117 @@ int Player::issueOrder(int player_id, Map* map, int reinforcements) {
 					cout << "You have 0 armies available to deploy";
 					break;
 				}
-				count++;
 			}
 		}
 		if (deployments_available > 0)
 			cout << "\nYou must deploy all your reiforcements before proceeding\n\n";
 	}
-	count = 0;
 
-	// Advance orders
-	cout << "\n\n Advance orders:";
 
-		// Show origin territory options
-		cout << "\nChoose where to move armies from:\n";
+
+
+	while (true) {
+
+		int count = 0;
+
+		// Advance orders
+		cout << "\n\n Advance orders:";
+
 		vector<Territory*>territories_owned = map->get_territories(this);
-		for (auto t : territories_owned) {
-			cout << "  (" << count << ")  " << *t;
-			count++;
-		}
 
-		// Get user chosen origin
-		int origin = get_integer_option();
-		if (origin < 0 || origin > territories_owned.size()) {
-			while (true) {
-				cout << "Please choose a number between 0 and " << territories_owned.size() << "... ";
-				origin = get_integer_option();
-				if (origin > 0 && origin <= territories_owned.size()) {
-					break;
+		if ((territories_owned.size() >= 1)) {
+			// Show origin territory options
+			cout << "\nChoose where to move armies from:\n";
+			for (auto t : territories_owned) {
+				cout << "  (" << count << ")  " << *t;
+				count++;
+			}
+
+			// Get user chosen origin
+			int origin = get_integer_option();
+			if (origin < 0 || origin > territories_owned.size()) {
+				while (true) {
+					cout << "Please choose a valid number... ";
+					origin = get_integer_option();
+					if (origin > 0 && origin <= territories_owned.size()) {
+						break;
+					}
 				}
 			}
-		}
 
 
-		count = 0;
-		//	Get destination territory options
-		cout << "\nChoose where to move armies to:\n";
-		//	Print neighbours included in todefend or toattack lists
-		vector<Territory*> origin_neighbours = territories_owned[origin]->get_neighbours();
-		vector <int> valid_options;
-		for (auto t : origin_neighbours) {
-			if (defending_contains(t)) {
-				cout << "  (" << count << ")  defend  " << *t;
-				valid_options.push_back(count);
+			count = 0;
+			//	Get destination territory options
+			cout << "\nChoose where to move armies to:\n";
+			//	Print neighbours included in todefend or toattack lists
+			vector<Territory*> origin_neighbours = territories_owned[origin]->get_neighbours();
+
+
+			for (auto t : origin_neighbours) {
+				if (defending_contains(t))
+					cout << "  (" << count << ")  toDefend  " << *t;
+				else if (attacking_contains(t))
+					cout << "  (" << count << ")  toAttack  " << *t;
+				else {
+					if (t->get_owner() == this)
+						cout << "  (" << count << ")  defend  " << *t;
+					else
+						cout << "  (" << count << ")  attack  " << *t;
+				}
+				count++;
+				continue;
 			}
-			else if (attacking_contains(t)) {
-				cout << "  (" << count << ")  attack  " << *t;
-				valid_options.push_back(count);
-			}
-			count++;
-			continue;
-		}
 
-		
-		//	Get user chosen destination
-		int destination = get_integer_option();
-		if (destination < 0 || destination > origin_neighbours.size() || find(valid_options.begin(), valid_options.end(), destination) == valid_options.end() ) {
-			while (true) {
-				cout << "Please choose a valid number between 0 and " << origin_neighbours.size() << "... ";
-				destination = get_integer_option();
-				if (destination > 0 && destination <= origin_neighbours.size() && find(valid_options.begin(), valid_options.end(), destination) != valid_options.end()) {
-					break;
+
+			//	Get user chosen destination
+			int destination = get_integer_option();
+			if (destination < 0 || destination > origin_neighbours.size() - 1) {
+				while (true) {
+					cout << "Please choose a valid number... ";
+					destination = get_integer_option();
+					if (destination >= 0 && destination <= origin_neighbours.size() - 1) {
+						break;
+					}
 				}
 			}
-		}
-		//	Get user chosen amount of armies to move
-		cout << "\nChoose how many armies to move, " << origin_neighbours[origin]->get_armies() << " available... ";
-		int amount = get_integer_option();
-		if (amount < 0 || amount > origin_neighbours[origin]->get_armies()) {
-			while (true) {
-				cout << "Please choose a number between 0 and " << origin_neighbours[origin]->get_armies() << "... ";
-				amount = get_integer_option();
-				if (amount > 0 && amount <= origin_neighbours[origin]->get_armies()) {
-					break;
+			//	Get user chosen amount of armies to move
+			cout << "\nChoose how many armies to move, " << origin_neighbours[origin]->get_armies() << " available... ";
+			int amount = get_integer_option();
+			if (amount < 0 || amount > origin_neighbours[origin]->get_armies()) {
+				while (true) {
+					cout << "Please choose a valid number... ";
+					amount = get_integer_option();
+					if (amount > 0 && amount <= origin_neighbours[origin]->get_armies()) {
+						break;
+					}
 				}
 			}
+
+			// Advance order should be created here
+			if (origin_neighbours[destination]->get_owner() == this)
+				cout << "\tDefending: " << amount << " armies from " << territories_owned[origin]->get_name() << " to " << origin_neighbours[destination]->get_name(); // missing create advance order here
+			else
+				cout << "\tAttacking: " << amount << " armies from " << territories_owned[origin]->get_name() << " to " << origin_neighbours[destination]->get_name(); // missing create advance order here
+
+			cout << "\n Another order? 1 for yes, 0 for no ... ";
+			int continuing = get_integer_option();
+			if (continuing < 0 || continuing > 1) {
+				while (true) {
+					cout << "Please choose 0 or 1  ";
+					continuing = get_integer_option();
+					if (continuing >= 0 && continuing <= 1) {
+						break;
+					}
+				}
+			}
+
+			if (continuing == 0)
+				break;
 		}
+		else
+			cout << " You have no territories in your possession\n";
+	}
 
-
-		// Advance order should be created here
-		cout << "\tMoving " << amount << " armies from "<< origin_neighbours[origin]->get_name()<< " to " << origin_neighbours[destination]->get_name(); // missing create advance order here
-		
-
-		valid_options.clear();
-
-
-
-	//if (territoriesToDefend.size() > 0) {
-	//	//	Fill up the vector of territories neighbouring the territory to defend
-	//	for (auto t : territoriesToDefend) {
-	//		vector<Territory*> neighbours = t->get_neighbours();
-
-	//		if (neighbours.size() > 0) {
-	//		// Loop through all the neighbours of the given territory
-	//			for (auto neighbour : neighbours) {
-
-	//				// If the neighbour is owned by the same owner
-	//				if (neighbour->get_owner() == this) {
-	//					cout << "\n  (" << count << ")  " << *t;
-	//					cout << "\tChoose how many armies to move from " << neighbour->get_name() + "-" << neighbour->get_armies() << " ";
-
-	//					int armies = get_integer_option();
-	//					if (armies < 0 || armies > neighbour->get_armies()) {
-	//						while (true) {
-	//							cout << "Please choose a number between 0 and " + neighbour->get_armies() << "... ";
-	//							armies = get_integer_option();
-	//							if (armies > 0 && armies <= neighbour->get_armies()) {
-	//								cout << "\tOrder should be created here\n"; // missing create advance order here
-	//								break;
-	//							}
-	//						}
-	//					}
-	//					else {
-	//						cout << "\tOrder should be created here\n"; // missing create advance order here
-	//						break;
-	//					}
-
-	//				}
-	//				else continue;
-
-	//			}
-	//		}
-	//		else {
-	//			cout << "You do not own any neighbour to this territory\n";
-	//			continue;
-	//		}
-	//	}
-
-	//}
 	cout << endl;
 
 	return 0;
