@@ -9,16 +9,19 @@
 
 
 /////////////////////////////////// Constructors/Destructor /////////////////////////////////////
-GameEngine::GameEngine() :  game_map()
+GameEngine::GameEngine() : game_map(), game_deck()
 {}
 GameEngine::~GameEngine()
 {
 	delete game_map;
+	delete game_deck;
 	game_map = NULL;
+	game_deck = NULL;
 }
 GameEngine::GameEngine(const GameEngine& old_copy)
 {
 	this->game_map = new Map(*(old_copy.game_map));
+	this->game_deck = new Deck(*(old_copy.game_deck));
 }
 
 
@@ -72,9 +75,11 @@ Map* GameEngine::loadmap(std::string map)
 
 	
 }
+
 GameEngine& GameEngine::operator=(const GameEngine& oldengine)
 {
 	this->game_map = new Map(*(oldengine.game_map));
+	this->game_deck = new Deck(*(oldengine.game_deck));
 	return *this;
 }
 

@@ -1,6 +1,7 @@
 #pragma once
 #include "Map.h"
 #include "MapLoader.h"
+#include "Cards.h"
 #include<string>
 
 class GameEngine
@@ -9,6 +10,8 @@ class GameEngine
 private:
 	//needs to be a pointer
 	Map *game_map;
+	Deck* game_deck;
+
 
 
 public:
