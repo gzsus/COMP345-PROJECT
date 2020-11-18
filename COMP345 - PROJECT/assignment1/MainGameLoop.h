@@ -16,11 +16,10 @@ using std::numeric_limits;
 using std::streamsize;
 
 #define MAX_PLAYERS 7
-#define MAX_TERRITORIES 6
+# define MIN_REINFORCEMENT 3
 
 static int get_player_id(Player* p, vector <Player*> v);
 int* reinforcementPhase(vector<Player*> allPlayers, int num_players, Map* map);
-int issueOrder(Player* player, int player_id, Map* map, int* reinforcements);
 
 static Player* mainGameLoop(vector<Player*> allPlayers, Map* map);
 int* reinforcementPhase(vector<Player*> allPlayers, int num_players, Map* map);

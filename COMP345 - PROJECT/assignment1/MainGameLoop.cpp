@@ -39,7 +39,7 @@ int* reinforcementPhase(vector<Player*> allPlayers, int num_players, Map* map) {
 	}
 
 	for (int i = 0; i < num_players; i++) {	// Reinforcement per player calculation
-		reinforcements[i] = territories_owned[i] / 3;
+		reinforcements[i] = (territories_owned[i] / 3) + MIN_REINFORCEMENT ;
 		cout << "Player" << i << " reinforcements: " << reinforcements[i] << endl;
 	}
 

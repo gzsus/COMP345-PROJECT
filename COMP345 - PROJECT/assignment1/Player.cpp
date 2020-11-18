@@ -86,6 +86,7 @@ vector<Order*>* Player::getOrders() {
 	return &orders;
 }
 
+
 /************* New functions **************/
 
 // choose the territories to defend
@@ -221,12 +222,23 @@ int Player::issueOrder(int player_id, Map* map, int reinforcements) {
 					}
 
 					//	execute specific deploy order
-					//	This should create an order and put it in the list not execute them
+					Deploy* deploy = new Deploy();
+					this->orders.push_back(deploy);
+					if (deploy->validate(this, t)) {
+						cout << "\tOrder specifics:\n";
+						deployments_available -= armies;
+						cout << "\tDeploying: " << armies << ((armies > 1)? " armies in " : " army in ") << t->get_name() << endl;
+						//cout << *deploy; 
+						cout << "\n Deploy Order created!";
+					}
+					else {
+						cout << "\n Invalid Order";
+						continue;
+					}
 
-					//t->increment_armies(armies);
-					deployments_available -= armies;
-					cout << "\tDeploying: " << armies << ((armies > 1)? " armies" :" army") << " in " << t->get_name() << endl; // missing create advance order here
-					cout << " Deploy Order Issued!";
+
+
+					
 
 					if (deployments_available <= 0){
 						cout << "\tNo more armies available to deploy";
@@ -270,20 +282,19 @@ int Player::issueOrder(int player_id, Map* map, int reinforcements) {
 				while (true) {
 					cout << "Please choose a valid number... ";
 					origin = get_integer_option();
-					if (origin > 0 && origin <= territories_owned.size()) {
+					if (origin >= 0 && origin <= territories_owned.size()) {
 						break;
 					}
 				}
 			}
 
 
-			count = 0;
 			//	Get destination territory options
 			cout << "\nChoose where to move armies to:\n";
 			//	Print neighbours included in todefend or toattack lists
 			vector<Territory*> origin_neighbours = territories_owned[origin]->get_neighbours();
 
-
+			count = 0;
 			for (auto t : origin_neighbours) {
 				if (defending_contains(t))
 					cout << "  (" << count << ")  toDefend  " << *t;
@@ -312,25 +323,41 @@ int Player::issueOrder(int player_id, Map* map, int reinforcements) {
 				}
 			}
 			//	Get user chosen amount of armies to move
-			cout << "\nChoose how many armies to move, " << origin_neighbours[origin]->get_armies() << " available... ";
+			cout << "Choose how many armies to move, " << territories_owned[origin]->get_armies() << " available... ";
 			int amount = get_integer_option();
-			if (amount < 0 || amount > origin_neighbours[origin]->get_armies()) {
+			if (amount < 0 || amount > territories_owned[origin]->get_armies()) {
 				while (true) {
 					cout << "Please choose a valid number... ";
 					amount = get_integer_option();
-					if (amount > 0 && amount <= origin_neighbours[origin]->get_armies()) {
+					if (amount > 0 && amount <= territories_owned[origin]->get_armies()) {
 						break;
 					}
 				}
 			}
 
+			cout << endl;
 			// Advance order should be created here
 			if (origin_neighbours[destination]->get_owner() == this)
-				cout << "\tDefending: " << amount << " armies from " << territories_owned[origin]->get_name() << " to " << origin_neighbours[destination]->get_name(); // missing create advance order here
+				cout << "Defending:\n";
 			else
-				cout << "\tAttacking: " << amount << " armies from " << territories_owned[origin]->get_name() << " to " << origin_neighbours[destination]->get_name(); // missing create advance order here
+				cout << "Attacking:\n";
 
-			cout << "\n Another order? 1 for yes, 0 for no ... ";
+
+			//	execute specific deploy order
+			Advance* advance = new Advance();
+			this->orders.push_back(advance);
+			if ( advance->validate(this, territories_owned[origin], origin_neighbours[destination]) ) {
+				cout << "\tOrder specifics:\n";
+				cout << "\t\tAdvance " << amount << ((amount > 1) ? " armies from " : " army from ") << territories_owned[origin]->get_name() + " to " << origin_neighbours[destination]->get_name();
+				//cout << *advance; 
+				cout << "\n\tDeploy Order created!";
+			}
+			else {
+				cout << "\n Invalid Order";
+			}
+
+
+			cout << "\n\nAnother order? 1 for yes, 0 for no ... ";
 			int continuing = get_integer_option();
 			if (continuing < 0 || continuing > 1) {
 				while (true) {
