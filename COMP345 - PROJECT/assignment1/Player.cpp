@@ -22,7 +22,7 @@ Player::Player(int players) {
 Player::Player(const Player& other) {
 	reinforcementPool = other.reinforcementPool;
 	negotiating = new vector<Player*>();
-	for (int i = 0; i < other.negotiating->size(); i++)
+	for (size_t i = 0; i < other.negotiating->size(); i++)
 		negotiating->push_back(other.negotiating->at(i));
 	pHand = new Hand(*other.pHand);
 	pOrderList = new OrdersList(*other.pOrderList);
@@ -49,15 +49,15 @@ Player::~Player() {
 	delete[] territoriesToAttack;*/
 
 	//prevents memory leaks from pointers
-	pHand-> ~Hand();
+	delete pHand;
 	delete pOrderList;
 	pOrderList = NULL;
 
 	//prevents memory leaks from pointers in vectors
-	for (int i = 0; i < orders.size(); i++) {
+	for (size_t i = 0; i < orders.size(); i++) {
 		delete orders[i];
 	}
-	for (int i = 0; i < negotiating->size(); i++) {
+	for (size_t i = 0; i < negotiating->size(); i++) {
 		delete negotiating->at(i);
 	}
 	delete negotiating;
@@ -103,7 +103,7 @@ list<Territory*> Player::toDefend(Map* map) {
 	if (territories_owned.size() > 0) {
 		//	Show possible territories to defend defend
 		cout << " Territories to defend-armies:";
-		for (int i = 0; i < territories_owned.size(); i++)
+		for (size_t i = 0; i < territories_owned.size(); i++)
 			cout << "  (" << i << ")" + territories_owned[i]->get_name() + "-" << territories_owned[i]->get_armies();
 		cout << endl;
 	}
@@ -156,7 +156,7 @@ list<Territory*> Player::toAttack(Map* map) {
 	if (territories_toAttack.size() > 0) {
 		//	Show possible attack
 		cout << " Territories to attack:";
-		for (int i = 0; i < territories_toAttack.size(); i++)
+		for (size_t i = 0; i < territories_toAttack.size(); i++)
 			cout << "  (" << i << ")" + territories_toAttack[i]->get_name() + "-" << territories_toAttack[i]->get_armies();
 		cout << endl;
 
@@ -194,8 +194,11 @@ list<Territory*> Player::toAttack(Map* map) {
 int Player::issueOrder(int player_id, Map* map, int reinforcements, bool phaseMode) {
 
 	if (phaseMode) {
-		cout << "\nPlayer " << (player_id + 1) << ": Issue Orders Phase\n\n";
-		//add info
+		cout << "\nPlayer " << (player_id + 1) << ": Issue Orders Phase" << endl;
+		GameObservers* go = new GameObservers();
+		go->issueOrderPhaseView();
+		delete go;
+		go = NULL;
 	}
 
 	//territoriesToAttack = this->toAttack(map);
@@ -259,7 +262,7 @@ int Player::issueOrder(int player_id, Map* map, int reinforcements, bool phaseMo
 		if (deployments_available > 0)
 			cout << "\nYou must deploy all your reiforcements before proceeding\n\n";
 		//TO CHANGE
-		break; 
+		break;
 	}
 
 
@@ -439,7 +442,7 @@ void Player::issueOrder(Order* chosenOrder) {
 //displays the orders to be executed
 void Player::displayOrders() {
 	cout << "\nThe orders to be executed are:" << endl;
-	for (int i = 0; i < (pOrderList->getList().size()); i++) {
+	for (size_t i = 0; i < (pOrderList->getList().size()); i++) {
 		cout << *(pOrderList->getList()[i]) << endl;
 	}
 }
@@ -448,7 +451,7 @@ void Player::displayOrders() {
 ostream& operator<<(ostream& output, Player& player) {
 	string temp = "";
 	temp += "Player has " + std::to_string(player.getReinforcementPool()) + " reinforcements.\nOrders: ";
-	for (int i = 0; i < player.getOrders()->size(); i++)
+	for (size_t i = 0; i < player.getOrders()->size(); i++)
 		temp += player.getOrders()->at(i)->Type + ", ";
 	temp += "\n";
 	return output << temp << *player.getHand();

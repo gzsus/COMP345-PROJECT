@@ -59,6 +59,8 @@ int* MainGameLoop::reinforcementPhase(vector<Player*> allPlayers, int num_player
 		for (int i = 0; i < num_players; i++) {
 			GameObservers* go = new GameObservers();
 			go->statisticsView(territories_owned[i], total_territories, (i + 1));
+			delete go;
+			go = NULL; 
 		}
 	}
 
@@ -66,8 +68,11 @@ int* MainGameLoop::reinforcementPhase(vector<Player*> allPlayers, int num_player
 		reinforcements[i] = (territories_owned[i] / 3) + MIN_REINFORCEMENT;
 
 		if (getPhaseObserver()) {
-			cout << "\nPlayer " << (i + 1) << ": Reinforcement Phase\n" << endl;
-			//add phase information
+			cout << "\nPlayer " << (i + 1) << ": Reinforcement Phase" << endl;
+			GameObservers* go = new GameObservers(); 
+			go->reinforcementPhaseView();
+			delete go;
+			go = NULL; 
 		}
 		cout << "Reinforcements: " << reinforcements[i] << endl;
 	}
@@ -107,8 +112,11 @@ int MainGameLoop::executeOrdersPhase(vector<Player*> allPlayers) {
 	for (Player* p : allPlayers) {
 		int id = get_player_id(p, allPlayers);
 		if (getPhaseObserver()) {
-			cout << "\nPlayer " << (id + 1) << ": Order Execution Phase\n" << endl;
-			//add phase information
+			cout << "\nPlayer " << (id + 1) << ": Order Execution Phase" << endl;
+			GameObservers* go = new GameObservers();
+			go->executeOrderPhaseView();
+			delete go;
+			go = NULL;
 		}
 	}
 
