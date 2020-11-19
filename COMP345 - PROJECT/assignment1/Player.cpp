@@ -268,8 +268,6 @@ int Player::issueOrder(int player_id, Map* map, int reinforcements, bool phaseMo
 		}
 		if (deployments_available > 0)
 			cout << "\nYou must deploy all your reiforcements before proceeding\n\n";
-		//TO CHANGE
-		break;
 	}
 
 
