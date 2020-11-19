@@ -9,8 +9,16 @@ using std::vector;
 using std::string;
 using std::ostream;
 
-//Constructor
+//Old Constructor for backwards compatability
 Player::Player(int players) {
+	negotiating = new vector<Player*>();
+    pHand = new Hand();
+    pOrderList = new OrdersList();
+	reinforcementPool = 0;
+}
+
+//Constructor
+Player::Player() {
 	negotiating = new vector<Player*>();
     pHand = new Hand();
     pOrderList = new OrdersList();
