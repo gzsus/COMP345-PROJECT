@@ -17,7 +17,7 @@ using std::endl;
 using std::numeric_limits;
 using std::streamsize;
 
-#define MAX_PLAYERS 7
+#define MAX_PLAYERS 5
 # define MIN_REINFORCEMENT 3
 
 class MainGameLoop {

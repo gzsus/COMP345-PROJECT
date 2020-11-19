@@ -139,7 +139,7 @@ void GameEngine::startupPhase(Map* mapfile, std::vector<Player*>* players) {
 	//Assigning territories to each player in round robin fashion
 	for (int i = 0, j = 0; i < mapfile->get_territories().size(); i++) {
 			mapfile->get_territories().at(nums[i])->set_owner((*players)[j]);
-			j = ++j % 5;
+			j = ++j % players->size();
 	}
 
 	//Setting reinforcement pools for all players
@@ -192,7 +192,7 @@ int main()
 	//create the appropriate number of players.
 	std::vector<Player*>players;
 	for (int i = 0; i < num_players; i++) { players.push_back(new Player(0)); } 
-	
+	std::cout << "\ncreated " << num_players << " players\n";
 
 
 	std::cout << "\n\n";
@@ -201,8 +201,14 @@ int main()
 	{
 		std::cout << "-----PHASE OBSERVER ON?----- [y/n]: ";
 		std::cin >> P_obs;
+		if (P_obs == 'y')
+		{	std::cout << "PHASE OBSERVER is ON\n";}
+		else { std::cout << "PHASE OBSERVER is OFF\n"; }
 		std::cout << "-----GAME STATISTICS OBSERVER ON?----- [y/n]: ";
 		std::cin >> S_obs;
+		if (S_obs == 'y')
+		{std::cout << "GAME STATISTICS OBSERVER is ON\n";}
+		else { std::cout << "GAME STATISTICS OBSERVER is OFF\n"; }
 	} while ((P_obs!='y' && P_obs!='n' ) || (S_obs != 'y' && S_obs != 'n'));
 
 	////////////////////////////////////////////////Donovan Driver Start////////////////////////////////////////////////

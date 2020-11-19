@@ -34,21 +34,23 @@ private:
     list<Territory*> territoriesToDefend;
     list<Territory*> territoriesToAttack;
 
-public:
-    //constructor prototype
-    Player(int players);
-    //copy constructor prototype
-    Player(const Player& other);
-    //overloaded assignment operator prototype
-    Player& operator=(const Player& other);
-    //destructor prototype
-    ~Player();
-    //function prototypes
-    vector<Order*>* getOrders();
-    void setReinforcementPool(int reinforcements);
-    int getReinforcementPool();
-    Hand* getHand();
-    vector<Player*>* getNegotiating();
+
+    public:
+        //constructor prototype
+        Player(int players);
+        Player();
+        //copy constructor prototype
+        Player(const Player& other);
+        //overloaded assignment operator prototype
+        Player& operator=(const Player &other);
+        //destructor prototype
+        ~Player();
+        //function prototypes
+        vector<Order*>* getOrders();
+        void setReinforcementPool(int reinforcements);
+        int getReinforcementPool();
+        Hand* getHand();
+        vector<Player*>* getNegotiating();
 
     /********** Order Issuing Phase **********/
     list<Territory*> toDefend(Map* map);

@@ -9,12 +9,19 @@ using std::vector;
 using std::string;
 using std::ostream;
 
-//Constructor
-//Removed here = removed everywhere using this object 
+//Old Constructor for backwards compatability
 Player::Player(int players) {
 	negotiating = new vector<Player*>();
 	pHand = new Hand();
 	pOrderList = new OrdersList();
+	reinforcementPool = 0;
+}
+
+//Constructor
+Player::Player() {
+	negotiating = new vector<Player*>();
+    pHand = new Hand();
+    pOrderList = new OrdersList();
 	reinforcementPool = 0;
 }
 
@@ -201,8 +208,8 @@ int Player::issueOrder(int player_id, Map* map, int reinforcements, bool phaseMo
 		go = NULL;
 	}
 
-	//territoriesToAttack = this->toAttack(map);
-	//territoriesToDefend = this->toDefend(map);
+	territoriesToAttack = this->toAttack(map);
+	territoriesToDefend = this->toDefend(map);
 
 	int territories_toAttack_number = territoriesToAttack.size();
 	int territories_toDefend_number = territoriesToDefend.size();
@@ -426,7 +433,7 @@ void Player::possibleOrders() {
 
 bool Player::hasCard(std::string type)
 {
-	for (int i = 0; pHand->getHand()->size(); i++) {
+	for (int i = 0; i<pHand->getHand()->size(); i++) {
 		if (pHand->getHand()->at(i).getType().compare(type) == 0)
 			return true;
 	}
