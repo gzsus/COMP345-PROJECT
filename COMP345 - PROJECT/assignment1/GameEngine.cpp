@@ -139,7 +139,7 @@ void GameEngine::startupPhase(Map* mapfile, std::vector<Player*>* players) {
 	//Assigning territories to each player in round robin fashion
 	for (int i = 0, j = 0; i < mapfile->get_territories().size(); i++) {
 			mapfile->get_territories().at(nums[i])->set_owner((*players)[j]);
-			j = ++j % 5;
+			j = ++j % players->size();
 	}
 
 	//Setting reinforcement pools for all players
