@@ -2,6 +2,7 @@
 #include "GameEngine.h"
 #include "MapLoader.h"
 #include "Player.h"
+#include "GameObservers.h"
 #include <fstream>
 #include<iostream>
 #include<filesystem>
@@ -164,11 +165,10 @@ void GameEngine::startupPhase(Map* mapfile, std::vector<Player*>* players) {
 	}
 
 	for (int i = 0; i < players->size(); i++) {
-		// Needs deck and neutralPlayer to be initialized to run!!
 		(*players)[i]->getOrders()->push_back(new Deploy(this->deck));
 		(*players)[i]->getOrders()->push_back(new Bomb(this->deck));
 		(*players)[i]->getOrders()->push_back(new Advance(this->deck));
-		//(*players)[i]->getOrders()->push_back(new Blockade(this->deck, this->neutralPlayer));
+		(*players)[i]->getOrders()->push_back(new Blockade(this->deck, this->neutralPlayer));
 		(*players)[i]->getOrders()->push_back(new Airlift(this->deck));
 		(*players)[i]->getOrders()->push_back(new Negotiate(this->deck));
 	}
@@ -190,7 +190,7 @@ int GameEngine::get_player_id(Player* p, vector<Player*> v)
 	}
 }
 
-Player* GameEngine::mainGameLoop(vector<Player*> allPlayers, Map* map)
+Player* GameEngine::mainGameLoop(vector<Player*> allPlayers, Map* map, bool phaseMode)
 {
 	//	Amount of players
 	int num_players = allPlayers.size();
@@ -205,7 +205,7 @@ Player* GameEngine::mainGameLoop(vector<Player*> allPlayers, Map* map)
 
 
 		std::cout << "\n\n\tOrder Issuing Phase\n\n";
-		issueOrderPhase(allPlayers, num_players, map, reinforcements);
+		issueOrderPhase(allPlayers, num_players, map, reinforcements, phaseMode);
 
 		std::cout << "\n\n\tOrder Execution Phase\n\n";
 		executeOrdersPhase();
@@ -281,11 +281,11 @@ int* GameEngine::reinforcementPhase(vector<Player*> allPlayers, int num_players,
 	return reinforcements;
 }
 
-int GameEngine::issueOrderPhase(vector<Player*> allPlayers, int num_players, Map* map, int* reinforcements)
+int GameEngine::issueOrderPhase(vector<Player*> allPlayers, int num_players, Map* map, int* reinforcements, bool phaseMode)
 {
 	for (Player* p : allPlayers) {
 		int id = get_player_id(p, allPlayers);
-		p->issueOrder(id, map, *(reinforcements + id));
+		p->issueOrder(id, map, *(reinforcements + id), phaseMode);
 		std::cout << "\n";
 	}
 	return 0;
@@ -302,11 +302,12 @@ int GameEngine::executeOrdersPhase()
 
 int main()
 {
-	std::cout << "-----Welcom To Risk!-----\n\n";
+	std::cout << "-----Welcome To Risk!-----\n\n";
 	GameEngine game;
 	std::string mapfile;
 	mapfile = game.getmap();
 	Map* loaded_map = game.loadmap(mapfile);
+	bool phaseMode = false, statisticsMode = false;
 
 	std::cout << "\n\n";
 	int num_players = 0;
@@ -336,6 +337,11 @@ int main()
 		{std::cout << "GAME STATISTICS OBSERVER is ON\n";}
 		else { std::cout << "GAME STATISTICS OBSERVER is OFF\n"; }
 	} while ((P_obs!='y' && P_obs!='n' ) || (S_obs != 'y' && S_obs != 'n'));
+	if (P_obs == 'y')
+		phaseMode = true;
+	if (S_obs == 'y')
+		statisticsMode = true;
+
 
 	////////////////////////////////////////////////Donovan Driver Start////////////////////////////////////////////////
 	
@@ -349,11 +355,10 @@ int main()
 		cout << *p<<"\n";
 	}
 
-	cout << "\n===Commencing Startup Phase===\n\n";
+	cout << "\n===Running Startup Phase===\n\n";
 
 	game.startupPhase(loaded_map, &players);
 
-	cout << "\n===End of Startup Phase===\n\n";
 
 	//Showing all territories are now owned after the startup phase
 	for (Territory* t : loaded_map->get_territories()) {
@@ -369,7 +374,7 @@ int main()
 
 
 	////////////////////////////////////////////////  Adrian Driver  ////////////////////////////////////////////////
-	game.mainGameLoop(players, loaded_map);
+	game.mainGameLoop(players, loaded_map, phaseMode);
 	////////////////////////////////////////////////Adrian Driver End////////////////////////////////////////////////
 
 	//taking care of memory leak
