@@ -191,8 +191,8 @@ int Player::issueOrder(int player_id, Map* map, int reinforcements) {
 
 	cout << "\t--- Player " << player_id << " Orders ---\n";
 
-	//territoriesToAttack = this->toAttack(map);
-	//territoriesToDefend = this->toDefend(map);
+	territoriesToAttack = this->toAttack(map);
+	territoriesToDefend = this->toDefend(map);
 
 	int territories_toAttack_number = territoriesToAttack.size();
 	int territories_toDefend_number = territoriesToDefend.size();

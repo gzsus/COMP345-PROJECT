@@ -15,7 +15,7 @@ using std::cout;
 using std::numeric_limits;
 using std::streamsize;
 
-#define MAX_PLAYERS 7
+#define MAX_PLAYERS 5
 # define MIN_REINFORCEMENT 3
 
 static int get_player_id(Player* p, vector <Player*> v);

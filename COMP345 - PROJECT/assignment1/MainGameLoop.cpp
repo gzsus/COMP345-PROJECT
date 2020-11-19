@@ -22,8 +22,8 @@ static int get_player_id(Player* p, vector <Player*> v) {
 //	Players are given a number of armies
 int* reinforcementPhase(vector<Player*> allPlayers, int num_players, Map* map) {
 
-	static int reinforcements[MAX_PLAYERS];	//	7 players is the max
-	int territories_owned[MAX_PLAYERS] = { 0,0,0,0,0,0,0 };
+	static int reinforcements[MAX_PLAYERS];	//	5 players is the max
+	int territories_owned[MAX_PLAYERS] = { 0,0,0,0,0 };
 
 	/**************************** Count each player's territories ****************************/
 
@@ -123,7 +123,7 @@ int main() {
 
 		try {
 			cin >> numberOfPlayers;
-			if (!(numberOfPlayers > 1 && numberOfPlayers < 8)) {
+			if (!(numberOfPlayers > 1 && numberOfPlayers < 6)) {
 				throw numberOfPlayers;
 			}
 			break;
