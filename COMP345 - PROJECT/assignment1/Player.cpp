@@ -12,8 +12,8 @@ using std::ostream;
 //Old Constructor for backwards compatability
 Player::Player(int players) {
 	negotiating = new vector<Player*>();
-    pHand = new Hand();
-    pOrderList = new OrdersList();
+	pHand = new Hand();
+	pOrderList = new OrdersList();
 	reinforcementPool = 0;
 }
 
@@ -29,44 +29,47 @@ Player::Player() {
 Player::Player(const Player& other) {
 	reinforcementPool = other.reinforcementPool;
 	negotiating = new vector<Player*>();
-	for (int i = 0; i < other.negotiating->size(); i++)
+	for (size_t i = 0; i < other.negotiating->size(); i++)
 		negotiating->push_back(other.negotiating->at(i));
-    pHand = new Hand(*other.pHand);
-    pOrderList = new OrdersList(*other.pOrderList);
+	pHand = new Hand(*other.pHand);
+	pOrderList = new OrdersList(*other.pOrderList);
 }
 
 //Overloaded assignment operator
-Player& Player::operator=(const Player &other){
-    if (this != &other) {
+Player& Player::operator=(const Player& other) {
+	if (this != &other) {
 		delete negotiating;
 		negotiating = other.negotiating;
 		delete pHand;
-        pHand = other.pHand;
+		pHand = other.pHand;
 		delete pOrderList;
-        pOrderList = other.pOrderList;
-    }
-    return *this;
+		pOrderList = other.pOrderList;
+	}
+	return *this;
 }
 
 //Destructor
 Player::~Player() {
-    //prevents memory leaks from arrays
-    /*delete[] allOrders;
-    delete[] territoriesToDefend;
-    delete[] territoriesToAttack;*/
+	//prevents memory leaks from arrays
+	/*delete[] allOrders;
+	delete[] territoriesToDefend;
+	delete[] territoriesToAttack;*/
 
-    //prevents memory leaks from pointers
+	//prevents memory leaks from pointers
+	delete pHand;
+	delete pOrderList;
+	pOrderList = NULL;
+
+	//prevents memory leaks from pointers in vectors
+	for (size_t i = 0; i < orders.size(); i++) {
+		delete orders[i];
+	}
+	for (size_t i = 0; i < negotiating->size(); i++) {
+		delete negotiating->at(i);
+	}
 	delete negotiating;
-    delete pHand;
-    delete pOrderList;
-    pHand = NULL;
-    pOrderList = NULL;
 
-    //prevents memory leaks from pointers in vectors
-    for (int i=0; i<orders.size(); i++) {
-        delete orders[i];
-    }
-    orders.clear();
+	orders.clear();
 }
 
 void Player::setReinforcementPool(int reinforcements)
@@ -107,7 +110,7 @@ list<Territory*> Player::toDefend(Map* map) {
 	if (territories_owned.size() > 0) {
 		//	Show possible territories to defend defend
 		cout << " Territories to defend-armies:";
-		for (int i = 0; i < territories_owned.size(); i++)
+		for (size_t i = 0; i < territories_owned.size(); i++)
 			cout << "  (" << i << ")" + territories_owned[i]->get_name() + "-" << territories_owned[i]->get_armies();
 		cout << endl;
 	}
@@ -152,7 +155,7 @@ list<Territory*> Player::toDefend(Map* map) {
 
 // choose the territories to attack
 list<Territory*> Player::toAttack(Map* map) {
-    //set the territories to attack vector in the given map
+	//set the territories to attack vector in the given map
 	vector<Territory*> territories_toAttack = map->get_neighbour_territories(this);
 
 	list<Territory*> attack_list;
@@ -160,7 +163,7 @@ list<Territory*> Player::toAttack(Map* map) {
 	if (territories_toAttack.size() > 0) {
 		//	Show possible attack
 		cout << " Territories to attack:";
-		for (int i = 0; i < territories_toAttack.size(); i++)
+		for (size_t i = 0; i < territories_toAttack.size(); i++)
 			cout << "  (" << i << ")" + territories_toAttack[i]->get_name() + "-" << territories_toAttack[i]->get_armies();
 		cout << endl;
 
@@ -195,9 +198,15 @@ list<Territory*> Player::toAttack(Map* map) {
 }
 
 // Player sets his orders to be executed in order
-int Player::issueOrder(int player_id, Map* map, int reinforcements) {
+int Player::issueOrder(int player_id, Map* map, int reinforcements, bool phaseMode) {
 
-	cout << "\t--- Player " << player_id << " Orders ---\n";
+	if (phaseMode) {
+		cout << "\nPlayer " << (player_id + 1) << ": Issue Orders Phase" << endl;
+		GameObservers* go = new GameObservers();
+		go->issueOrderPhaseView();
+		delete go;
+		go = NULL;
+	}
 
 	territoriesToAttack = this->toAttack(map);
 	territoriesToDefend = this->toDefend(map);
@@ -235,7 +244,7 @@ int Player::issueOrder(int player_id, Map* map, int reinforcements) {
 					if (deploy->validate(this, t)) {
 						cout << "\tOrder specifics:\n";
 						deployments_available -= armies;
-						cout << "\tDeploying: " << armies << ((armies > 1)? " armies in " : " army in ") << t->get_name() << endl;
+						cout << "\tDeploying: " << armies << ((armies > 1) ? " armies in " : " army in ") << t->get_name() << endl;
 						//cout << *deploy; 
 						cout << "\n Deploy Order created!";
 					}
@@ -245,7 +254,7 @@ int Player::issueOrder(int player_id, Map* map, int reinforcements) {
 					}
 
 
-					if (deployments_available <= 0){
+					if (deployments_available <= 0) {
 						cout << "\tNo more armies available to deploy";
 						break;
 					}
@@ -259,6 +268,8 @@ int Player::issueOrder(int player_id, Map* map, int reinforcements) {
 		}
 		if (deployments_available > 0)
 			cout << "\nYou must deploy all your reiforcements before proceeding\n\n";
+		//TO CHANGE
+		break;
 	}
 
 
@@ -351,7 +362,7 @@ int Player::issueOrder(int player_id, Map* map, int reinforcements) {
 			//	execute specific deploy order
 			Advance* advance = new Advance();
 			this->orders.push_back(advance);
-			if ( advance->validate(this, territories_owned[origin], origin_neighbours[destination]) ) {
+			if (advance->validate(this, territories_owned[origin], origin_neighbours[destination])) {
 				cout << "\tOrder specifics:\n";
 				cout << "\t\tAdvance " << amount << ((amount > 1) ? " armies from " : " army from ") << territories_owned[origin]->get_name() + " to " << origin_neighbours[destination]->get_name();
 				//cout << *advance; 
@@ -399,7 +410,7 @@ list<Territory*> Player::get_attacking() { return territoriesToAttack; }
 
 // check prescence of territory in defending/attacking lists
 bool  Player::defending_contains(Territory* t) {
-	list<Territory*>::iterator it = std::find(territoriesToDefend.begin(), territoriesToDefend.end(),t);
+	list<Territory*>::iterator it = std::find(territoriesToDefend.begin(), territoriesToDefend.end(), t);
 	if (it != territoriesToDefend.end())
 		return true;
 	return false;
@@ -414,10 +425,10 @@ bool  Player::attacking_contains(Territory* t) {
 
 //displays the orders that the user could choose from
 void Player::possibleOrders() {
-    /*cout << "Orders to choose from:" << endl;
-    for (int i=0; i<6; i++) {
-        cout << (i+1) << "- " + allOrders[i] << endl;
-    }*/
+	/*cout << "Orders to choose from:" << endl;
+	for (int i=0; i<6; i++) {
+		cout << (i+1) << "- " + allOrders[i] << endl;
+	}*/
 }
 
 bool Player::hasCard(std::string type)
@@ -430,15 +441,15 @@ bool Player::hasCard(std::string type)
 }
 
 //issues the orders the player chooses
-void Player::issueOrder(Order *chosenOrder) {
-    orders.push_back(chosenOrder);
-    pOrderList -> setList(orders);
+void Player::issueOrder(Order* chosenOrder) {
+	orders.push_back(chosenOrder);
+	pOrderList->setList(orders);
 }
 
 //displays the orders to be executed
 void Player::displayOrders() {
-    cout << "\nThe orders to be executed are:" << endl;
-    for (int i=0; i<(pOrderList->getList().size()); i++) {
+	cout << "\nThe orders to be executed are:" << endl;
+	for (size_t i = 0; i < (pOrderList->getList().size()); i++) {
 		cout << *(pOrderList->getList()[i]) << endl;
 	}
 }
@@ -446,9 +457,9 @@ void Player::displayOrders() {
 //Stream insertion operator displaying the total number of players
 ostream& operator<<(ostream& output, Player& player) {
 	string temp = "";
-	temp += "Player has " + std::to_string(player.getReinforcementPool())+" reinforcements.\nOrders: ";
-	for (int i = 0; i < player.getOrders()->size(); i++)
-		temp += player.getOrders()->at(i)->Type+", ";
+	temp += "Player has " + std::to_string(player.getReinforcementPool()) + " reinforcements.\nOrders: ";
+	for (size_t i = 0; i < player.getOrders()->size(); i++)
+		temp += player.getOrders()->at(i)->Type + ", ";
 	temp += "\n";
 	return output << temp << *player.getHand();
 }
