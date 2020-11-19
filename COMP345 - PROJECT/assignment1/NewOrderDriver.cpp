@@ -23,6 +23,8 @@ using std::find;
 int main() {
 	//NEEDED FOR Advance order
 	srand(time(0));
+	Deck* deck = new Deck();
+
 
 
 	//FILLER CODE FROM MAINGAMELOOP
@@ -35,6 +37,8 @@ int main() {
 		allPlayers.push_back(pPlayer);
 	}
 
+
+	
 
 	// Initialize a map
 	Map* america = new Map();
@@ -127,27 +131,36 @@ int main() {
 
 
 		//BLOCKADE NEEDS TO CALL THE CARD AND NEUTRAL TERRITORY
-		//std::cout << "target:" << usa->get_armies() << std::endl;
+		std::cout << "target:" << usa->get_armies() << std::endl;
 
-		//Blockade* blockade = new Blockade();
-		//blockade->execute(allPlayers[1], usa);
+		//NEUTRAL PLAYER MUST BE IMPLEMENTED HERE
+		allPlayers[1]->getHand()->add("blockade");
+		Blockade* blockade = new Blockade(deck);
+		blockade->execute(allPlayers[1], usa);
 
-		//std::cout << "target:" << usa->get_armies() << std::endl;
+		std::cout << "target:" << usa->get_armies() << std::endl;
 
 
 	//-------------------------------------------------------------------------
 
 		//NEGOTIATE
-	Negotiate* negotiate = new Negotiate();
-	negotiate->execute(allPlayers[0], allPlayers[1]);
+	//allPlayers[0]->getHand()->add("diplomacy");
+	//Negotiate* negotiate = new Negotiate(deck);
+	//negotiate->execute(allPlayers[0], allPlayers[1]);
 
-	Bomb* bomb = new Bomb();
-	bomb->execute(allPlayers[0], usa);
+	//allPlayers[0]->getHand()->add("bomb");
+	//std::cout << "target:" << gua->get_armies() << std::endl;
+	//Bomb* bomb = new Bomb(deck);
+	//bomb->execute(allPlayers[0], gua);
+	//std::cout << "target:" << gua->get_armies() << std::endl;
+	//
 
-	Advance* advance = new Advance();
-	advance->execute(allPlayers[0], can, usa, 2);
+	//Advance* advance = new Advance(deck);
+	//advance->execute(allPlayers[0], can, usa, 2);
 
-	Airlift* airlift = new Airlift();
-	airlift->execute(allPlayers[0], can, usa, 2);
+
+	//allPlayers[0]->getHand()->add("airlift");
+	//Airlift* airlift = new Airlift(deck);
+	//airlift->execute(allPlayers[0], can, usa, 2);
 
 }

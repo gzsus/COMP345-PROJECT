@@ -45,50 +45,50 @@ ostream& operator<<(ostream& str, const Order& o)
 {
 	if (o.Type == "deploy") {
 		if (o.hasBeenExecuted == true) {
-			str << "Description of deploy and its effects";
+			str << "Deploy successful";
 		}
 		else {
-			str << "Description of deploy";
+			str << "Deploy troops from reinforcement pool to territory";
 		}
 	}
 	else if (o.Type == "advance") {
 		if (o.hasBeenExecuted == true) {
-			str << "Description of advance and its effects";
+			str << "Advance successful";
 		}
 		else {
-			str << "Description of advance";
+			str << "Advance troops to territory";
 		}
 	}
 	else if (o.Type == "blockade") {
 		if (o.hasBeenExecuted == true) {
-			str << "Description of blockade and its effects";
+			str << "Blockade successful";
 		}
 		else {
-			str << "Description of blockade";
+			str << "Double the army in a territory and give ownership to neutral player";
 		}
 	}
 	else if (o.Type == "airlift") {
 		if (o.hasBeenExecuted == true) {
-			str << "Description of airlift and its effects";
+			str << "Airlift successful";
 		}
 		else {
-			str << "Description of airlift";
+			str << "Move troops to a target location";
 		}
 	}
 	else if (o.Type == "negotiate") {
 		if (o.hasBeenExecuted == true) {
-			str << "Description of negotiate and its effects";
+			str << "Negotiate successful";
 		}
 		else {
-			str << "Description of negotiate";
+			str << "Prevent players from attacking eachother";
 		}
 	}
 	else if (o.Type == "bomb") {
 		if (o.hasBeenExecuted == true) {
-			str << "Description of bomb and its effects";
+			str << "Bomb successful";
 		}
 		else {
-			str << "Description of bomb";
+			str << "Remove half of army in target territory";
 		}
 	}
 	else {
@@ -134,11 +134,17 @@ bool Deploy::validate(Player* player, Territory* ter) {
 void Deploy::execute(Player* player, Territory* ter, int reinforcement) {
 	bool is_order_valid = validate(player, ter);
 	if (is_order_valid) {
-		//get units from reinforcment pool and add the amount to the territory------------------------------------------
+		//get units from reinforcment pool and add the amount to the territory----------------------------------------------------------------
 		ter->increment_armies(reinforcement);
 		cout << "Troops have been deployed" << endl;
 		setHasBeenExecuted(true);
 	}
+}
+
+//Copy constructor
+Deploy::Deploy(const Deploy& d)
+{
+	Type = d.Type;
 }
 
 
@@ -162,8 +168,8 @@ bool Bomb::validate(Player* player, Territory* target) {
 	//If player does not have bomb card order fails-------------------------------------------------------
 	Player* owner_target = target->get_owner();
 
-
-	if (player != owner_target) {
+	//MUST CHECK IF PLAYER HAS CARD-----------------------------------------------------
+	if (player != owner_target && player->hasCard("bomb")) {
 		is_valid = true;
 	}
 	else {
@@ -207,6 +213,12 @@ void Bomb::execute(Player* player, Territory* target) {
 		}
 
 	}
+}
+
+//Copy constructor
+Bomb::Bomb(const Bomb& b)
+{
+	Type = b.Type;
 }
 
 
@@ -303,9 +315,9 @@ void Advance::execute(Player* player, Territory* source, Territory* target, int 
 					target->set_owner(player);
 					target->set_armies(attacking_army);
 					//PLAYER GETS A NEW CARD-----------------------------------------------------------------
-
-					//Deck* deck = new Deck();
-					//player->getHand()->add(deck->draw());
+	
+					player->getHand()->add(deck->draw());
+					cout << "Card has been added to player's hand" << endl;
 
 				}
 				else {
@@ -328,6 +340,12 @@ void Advance::execute(Player* player, Territory* source, Territory* target, int 
 	}
 }
 
+//Copy constructor
+Advance::Advance(const Advance& ad)
+{
+	Type = ad.Type;
+}
+
 
 //BLOCKADE-------------------------------------------------------------------------
 Blockade::Blockade()
@@ -341,6 +359,13 @@ Blockade::Blockade(Deck* new_deck)
 	deck = new_deck;
 }
 
+Blockade::Blockade(Deck* new_deck, Player* neutral)
+{
+	Type = "blockade";
+	deck = new_deck;
+	neutral_player = neutral;
+}
+
 //Blockade validate method
 bool Blockade::validate(Player* player, Territory* target) {
 	bool is_valid;
@@ -348,7 +373,7 @@ bool Blockade::validate(Player* player, Territory* target) {
 	Player* owner_target = target->get_owner();
 
 	//MUST CHECK IF PLAYER HAS CARD-----------------------------------------------------
-	if (player == owner_target) {
+	if (player == owner_target && player->hasCard("blockade")) {
 		is_valid = true;
 	}
 	else {
@@ -364,13 +389,19 @@ bool Blockade::validate(Player* player, Territory* target) {
 void Blockade::execute(Player* player, Territory* target) {
 	bool is_order_valid = validate(player, target);
 	if (is_order_valid) {
-		std::cout << "Territory now has blockade" << std::endl;
+		std::cout << "Territory now has blockade and belongs to the Neutral Player" << std::endl;
 		int doubled_army = (target->get_armies()) * 2;
 		target->set_armies(doubled_army);
 		//OWNER IS TRANSFERED TO NEUTRAL PLAYER--------------------------------------------------
-
+		target->set_owner(neutral_player);
 		setHasBeenExecuted(true);
 	}
+}
+
+//Copy constructor
+Blockade::Blockade(const Blockade& bl)
+{
+	Type = bl.Type;
 }
 
 
@@ -394,7 +425,7 @@ bool Airlift::validate(Player* player, Territory* source, Territory* target) {
 
 	bool is_valid;
 	//MUST CHECK IF PLAYER HAS CARD-----------------------------------------------------
-	if (player != owner_source && player != owner_target) {
+	if ((player != owner_source && player != owner_target) && (player->hasCard("airlift") == false)) {
 		is_valid = false;
 	}
 	else {
@@ -432,6 +463,10 @@ void Airlift::execute(Player* player, Territory* source, Territory* target, int 
 	}
 }
 
+Airlift::Airlift(const Airlift& a)
+{
+}
+
 
 //NEGOTIATE-------------------------------------------------------------------------
 Negotiate::Negotiate()
@@ -449,7 +484,7 @@ Negotiate::Negotiate(Deck* new_deck)
 bool Negotiate::validate(Player* player, Player* target_player) {
 	bool is_valid;
 	//MUST CHECK IF PLAYER HAS CARD-----------------------------------------------------
-	if (player != target_player) {
+	if (player != target_player && player->hasCard("diplomacy")) {
 		is_valid = true;
 	}
 	else {
@@ -472,6 +507,10 @@ void Negotiate::execute(Player* player, Player* target_player) {
 	}
 }
 
+Negotiate::Negotiate(const Negotiate& n)
+{
+}
+
 OrdersList::~OrdersList() //Loop through the vector of pointers and delete each pointer to remove memory leaks
 {
 	while (ListOfOrders.empty() != true) {
@@ -487,7 +526,6 @@ void OrdersList::remove(int position) //Delete the pointer at the index given in
 
 void OrdersList::move(int currentPosition, int desiredPosition) // Create a copy of the pointer in the current position, delete the pointer at the current position, insert the copy at the desired position
 {
-	//MAKE SURE IT IS COMPLETED _________________----------------------------------------------------
 	if (ListOfOrders[currentPosition]->Type == "deploy") {
 		Deploy* temp = (Deploy*)(ListOfOrders[currentPosition]);
 		remove(currentPosition);

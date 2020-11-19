@@ -9,7 +9,6 @@
 //using namespace std;
 
 
-
 using std::string;
 using std::ostream;
 using std::vector;
@@ -40,7 +39,6 @@ public:
 
 private:
 	bool hasBeenExecuted = false;
-	//Test with virtual ---------------------------------------------------------------------
 	friend ostream& operator<<(ostream&, const Order&);
 };
 
@@ -52,7 +50,7 @@ public:
 	Deploy(Deck* new_deck);
 	bool validate(Player* player, Territory* ter);
 	void execute(Player* player, Territory* ter, int reinforcement);
-	//Copy constructor
+	Deploy(const Deploy& d);//Copy constructor
 };
 
 
@@ -62,7 +60,7 @@ public:
 	Bomb(Deck* new_deck);
 	bool validate(Player* player, Territory* target);
 	void execute(Player* player, Territory* target);
-	//Copy constructor
+	Bomb(const Bomb& b);//Copy constructor
 
 };
 
@@ -73,7 +71,7 @@ public:
 	Advance(Deck* new_deck);
 	bool validate(Player* player, Territory* source, Territory* target);
 	void execute(Player* player, Territory* source, Territory* target, int armyunits);
-	//Copy constructor
+	Advance(const Advance& d);//Copy constructor
 };
 
 
@@ -81,9 +79,12 @@ class Blockade : public Order {
 public:
 	Blockade();
 	Blockade(Deck* new_deck);
+	Blockade(Deck* new_deck,Player* neutral);
 	bool validate(Player* player, Territory* target);
 	void execute(Player* player, Territory* target);
-	//Copy constructor
+	Blockade(const Blockade& bl);//Copy constructor
+private:
+	Player* neutral_player;
 };
 
 
@@ -93,7 +94,7 @@ public:
 	Airlift(Deck* new_deck);
 	bool validate(Player* player, Territory* source, Territory* target);
 	void execute(Player* player, Territory* source, Territory* target, int armyunits);
-	//Copy constructor
+	Airlift(const Airlift& a);//Copy constructor
 };
 
 
@@ -103,7 +104,7 @@ public:
 	Negotiate(Deck* new_deck);
 	bool validate(Player* player, Player* target_player);
 	void execute(Player* player, Player* target_player);
-	//Copy constructor
+	Negotiate(const Negotiate& n);//Copy constructor
 };
 
 
