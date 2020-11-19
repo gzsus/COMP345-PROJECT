@@ -427,12 +427,18 @@ bool Airlift::validate(Player* player, Territory* source, Territory* target) {
 	Player* owner_target = target->get_owner();
 
 	bool is_valid;
-	//MUST CHECK IF PLAYER HAS CARD-----------------------------------------------------
-	if ((player != owner_source && player != owner_target) && (player->hasCard("airlift") == false)) {
+//MUST CHECK IF PLAYER HAS CARD-----------------------------------------------------
+	if ((player != owner_source && player != owner_target)) {
 		is_valid = false;
 	}
 	else {
-		is_valid = true;
+		if ((player->hasCard("airlift") == true)) {
+			is_valid = true;
+		}
+		else {
+			is_valid = false;
+			cout << "Order is invalid" << endl;
+		}
 	}
 
 	return is_valid;
@@ -468,6 +474,8 @@ void Airlift::execute(Player* player, Territory* source, Territory* target, int 
 
 Airlift::Airlift(const Airlift& a)
 {
+	Type = a.Type;
+	deck = a.deck;
 }
 
 
@@ -512,6 +520,8 @@ void Negotiate::execute(Player* player, Player* target_player) {
 
 Negotiate::Negotiate(const Negotiate& n)
 {
+	Type = n.Type;
+	deck = n.deck;
 }
 
 OrdersList::~OrdersList() //Loop through the vector of pointers and delete each pointer to remove memory leaks
