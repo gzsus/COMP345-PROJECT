@@ -99,7 +99,7 @@ int main() {
 		//std::cout << "source:" <<can->get_armies() << std::endl;
 		//std::cout << "target:" <<usa->get_armies() << std::endl;
 
-		//Advance* advance = new Advance();
+		//Advance* advance = new Advance(deck);
 		//advance->execute(allPlayers[0],can,usa,2);
 
 		//std::cout << "source:" << can->get_armies() << std::endl;
