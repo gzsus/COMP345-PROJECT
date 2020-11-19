@@ -225,7 +225,7 @@ int main()
 
 	cout << "\n===Commencing Startup Phase===\n\n";
 
-	/*game.startupPhase(loaded_map, &players);*/
+	game.startupPhase(loaded_map, &players);
 
 	cout << "\n===End of Startup Phase===\n\n";
 
