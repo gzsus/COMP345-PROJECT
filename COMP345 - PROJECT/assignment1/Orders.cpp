@@ -135,7 +135,10 @@ void Deploy::execute(Player* player, Territory* ter, int reinforcement) {
 	bool is_order_valid = validate(player, ter);
 	if (is_order_valid) {
 		//get units from reinforcment pool and add the amount to the territory----------------------------------------------------------------
+		int pool = player->getReinforcementPool();
+		pool -= reinforcement;
 		ter->increment_armies(reinforcement);
+		player->setReinforcementPool(pool);
 		cout << "Troops have been deployed" << endl;
 		setHasBeenExecuted(true);
 	}
