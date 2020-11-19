@@ -13,14 +13,13 @@
 using std::vector;
 using std::cin;
 using std::cout;
-using std::endl; 
+using std::endl;
 using std::numeric_limits;
 using std::streamsize;
 
 #define MAX_PLAYERS 5
 # define MIN_REINFORCEMENT 3
 
-<<<<<<< Updated upstream
 class MainGameLoop {
 private:
 	bool phase;
@@ -30,7 +29,7 @@ public:
 	int get_player_id(Player* p, vector <Player*> v);
 	int* reinforcementPhase(vector<Player*> allPlayers, int num_players, Map* map);
 	int issueOrderPhase(vector<Player*> allPlayers, int num_players, Map* map, int* reinforcements);
-	int executeOrdersPhase(vector<Player*> allPlayers); 
+	int executeOrdersPhase(vector<Player*> allPlayers);
 	void setPhaseObserver(bool phaseMode);
 	bool getPhaseObserver();
 	void setStatisticsObserver(bool statisticsMode);
@@ -38,16 +37,6 @@ public:
 
 	Player* mainGameLoop(vector<Player*> allPlayers, Map* map, bool phaseMode, bool statisticsMode);
 };
-=======
-static int get_player_id(Player* p, vector <Player*> v);
-
-static Player* mainGameLoop(vector<Player*> allPlayers, Map* map);
-int* reinforcementPhase(vector<Player*> allPlayers, int num_players, Map* map);
-int issueOrderPhase(vector<Player*> allPlayers, int num_players, Map* map, int* reinforcements);
-int executeOrdersPhase();
-
-
->>>>>>> Stashed changes
 
 //	Read an integer from the user only
 static int get_integer_option() {

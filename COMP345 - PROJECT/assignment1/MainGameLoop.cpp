@@ -61,25 +61,21 @@ int* MainGameLoop::reinforcementPhase(vector<Player*> allPlayers, int num_player
 			GameObservers* go = new GameObservers();
 			go->statisticsView(territories_owned[i], total_territories, (i + 1));
 			delete go;
-			go = NULL; 
+			go = NULL;
 		}
 	}
 
 	for (int i = 0; i < num_players; i++) {	// Reinforcement per player calculation
 		reinforcements[i] = (territories_owned[i] / 3) + MIN_REINFORCEMENT;
-<<<<<<< Updated upstream
 
 		if (getPhaseObserver()) {
 			cout << "\nPlayer " << (i + 1) << ": Reinforcement Phase" << endl;
-			GameObservers* go = new GameObservers(); 
+			GameObservers* go = new GameObservers();
 			go->reinforcementPhaseView();
 			delete go;
-			go = NULL; 
+			go = NULL;
 		}
 		cout << "Reinforcements: " << reinforcements[i] << endl;
-=======
-		cout << "Player" << i << " reinforcements: " << reinforcements[i] << endl;
->>>>>>> Stashed changes
 	}
 
 	/**************************** Add each player continent's bonus ****************************/
@@ -103,11 +99,7 @@ int MainGameLoop::issueOrderPhase(vector<Player*> allPlayers, int num_players, M
 
 	for (Player* p : allPlayers) {
 		int id = get_player_id(p, allPlayers);
-<<<<<<< Updated upstream
 		p->issueOrder(id, map, *(reinforcements + id), getPhaseObserver());
-=======
-		p->issueOrder(id, map, *(reinforcements + id));
->>>>>>> Stashed changes
 		cout << "\n";
 
 
@@ -150,16 +142,13 @@ Player* MainGameLoop::mainGameLoop(vector<Player*> allPlayers, Map* map, bool ph
 
 	int* reinforcements = reinforcementPhase(allPlayers, num_players, map);
 
-<<<<<<< Updated upstream
 
 	/*cout << "Reinforcement Pool: " << *(reinforcements);
 	for (int i = 1; i < num_players; i++) {
 		cout << ", " << *(reinforcements + i);
 	}*/
 
-=======
 	cout << "\n\n\tOrder Issuing Phase\n\n";
->>>>>>> Stashed changes
 	issueOrderPhase(allPlayers, num_players, map, reinforcements);
 
 	executeOrdersPhase(allPlayers);
@@ -242,7 +231,7 @@ int main() {
 
 	// Temporary for the demo
 	bool phaseMode = false;
-	bool statisticsMode = false; 
+	bool statisticsMode = false;
 
 	loop->mainGameLoop(allPlayers, america, phaseMode, statisticsMode);
 
