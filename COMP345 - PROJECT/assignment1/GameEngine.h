@@ -35,11 +35,11 @@ public:
 
 	/////////////////////////////////// Loop Phase ///////////////////////////////////
 
-	int get_player_id(Player* p, vector <Player*> v);
+	int get_player_id(Player* p, std::vector <Player*> v);
 
-	Player* mainGameLoop(vector<Player*> allPlayers, Map* map);
-	int* reinforcementPhase(vector<Player*> allPlayers, int num_players, Map* map);
-	int issueOrderPhase(vector<Player*> allPlayers, int num_players, Map* map, int* reinforcements);
+	Player* mainGameLoop(std::vector<Player*> allPlayers, Map* map, bool phaseMode);
+	int* reinforcementPhase(std::vector<Player*> allPlayers, int num_players, Map* map);
+	int issueOrderPhase(std::vector<Player*> allPlayers, int num_players, Map* map, int* reinforcements, bool phaseMode);
 	int executeOrdersPhase();
 
 
