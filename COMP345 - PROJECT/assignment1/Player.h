@@ -39,6 +39,7 @@ class Player {
     public:
         //constructor prototype
         Player(int players);
+        Player();
         //copy constructor prototype
         Player(const Player& other);
         //overloaded assignment operator prototype
