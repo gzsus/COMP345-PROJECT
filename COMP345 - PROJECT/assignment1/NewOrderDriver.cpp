@@ -25,7 +25,7 @@ int main() {
 	srand(time(0));
 	Deck* deck = new Deck();
 
-
+	Player* neutral_player = new Player();
 
 	//FILLER CODE FROM MAINGAMELOOP
 	int numberOfPlayers = 2;
@@ -75,22 +75,26 @@ int main() {
 	america->add_continent(na);
 	america->add_continent(ca);
 
-	//std::cout << typeid(*allPlayers[0]).name() << std::endl;
+	//UNCOMMENT EACH BLOCK TO VIEW ITS EFFECTS
 
 //-------------------------------------------------------------------------
-	//DEPLOY WORKS FOR DUMMY VALUE
+	//DEPLOY
+	//allPlayers[0]->setReinforcementPool(20);
 
-	//std::cout << can->get_armies() << std::endl;
+
+	//std::cout << allPlayers[0]->getReinforcementPool() << std::endl;
+	//std::cout << sal->get_armies() << std::endl;
 
 	//Deploy* deploy = new Deploy();
 
-	//deploy->execute(allPlayers[0], usa, 2);
+	//deploy->execute(allPlayers[0], sal, 2);
 
-	//std::cout << can->get_armies() << std::endl;
+	//std::cout << allPlayers[0]->getReinforcementPool() << std::endl;
+	//std::cout << sal->get_armies() << std::endl;
 
 	//-------------------------------------------------------------------------
 
-		//ADVANCE MISSING CARD METHOD
+		//ADVANCE
 
 		//std::cout << "source:" <<can->get_armies() << std::endl;
 		//std::cout << "target:" <<usa->get_armies() << std::endl;
@@ -104,15 +108,15 @@ int main() {
 	//-------------------------------------------------------------------------
 
 
-		//AIRLIFT NOT MAKING SENSE
+		//AIRLIFT
 
+	//allPlayers[0]->getHand()->add("airlift");
 	//cout << "source:" << can->get_armies() << endl;
-	//cout << "target:" << hon->get_armies() << endl;
+	//cout << "target:" << usa->get_armies() << endl;
 
-	//Airlift* airlift = new Airlift();
-	//airlift->execute(allPlayers[0], can, hon, 2);
-	
-	//airlift(allPlayers[0],can,hon,2);
+	//Airlift* airlift = new Airlift(deck);
+	//airlift->execute(allPlayers[0], can, usa, 2);
+	//
 
 	//cout << "source:" << can->get_armies() << endl;
 	//cout << "target:" << hon->get_armies() << endl;
@@ -120,6 +124,7 @@ int main() {
 	//-------------------------------------------------------------------------
 
 		//BOMB MUST HAVE CARD FROM PLAYER
+		//allPlayers[0]->getHand()->add("bomb");
 		//std::cout << "target:" << usa->get_armies() << std::endl;
 
 		//Bomb* bomb = new Bomb();
@@ -130,15 +135,19 @@ int main() {
 	//-------------------------------------------------------------------------
 
 
-		//BLOCKADE NEEDS TO CALL THE CARD AND NEUTRAL TERRITORY
-		std::cout << "target:" << usa->get_armies() << std::endl;
+		//BLOCKADE 
+	//	std::cout << "target:" << usa->get_armies() << std::endl;
 
-		//NEUTRAL PLAYER MUST BE IMPLEMENTED HERE
-		allPlayers[1]->getHand()->add("blockade");
-		Blockade* blockade = new Blockade(deck);
-		blockade->execute(allPlayers[1], usa);
+	//	//NEUTRAL PLAYER MUST BE IMPLEMENTED HERE
+	//	allPlayers[1]->getHand()->add("blockade");
+	//	Blockade* blockade = new Blockade(deck,neutral_player);
+	//	blockade->execute(allPlayers[1], usa);
 
-		std::cout << "target:" << usa->get_armies() << std::endl;
+	//if (usa->get_owner() == neutral_player) {
+	//	std::cout << "Neutral owns the territory"<< std::endl;
+	//}
+
+	//	std::cout << "target:" << usa->get_armies() << std::endl;
 
 
 	//-------------------------------------------------------------------------
