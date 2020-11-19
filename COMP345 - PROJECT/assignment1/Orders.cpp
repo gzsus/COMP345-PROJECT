@@ -454,7 +454,7 @@ void Airlift::execute(Player* player, Territory* source, Territory* target, int 
 		}
 		else if (player == owner_source && player != owner_target) {
 			//EXECUTE ADVANCE ORDER -----------------------------------------------------------------------------------
-			Advance* advance = new Advance();
+			Advance* advance = new Advance(deck);
 			advance->execute(player, source, target, armyunits);
 			
 			//Removing memory leaks
