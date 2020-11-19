@@ -30,5 +30,20 @@ public:
 	
 	/////////////////////////////////// Startup Phase ///////////////////////////////////
 	void startupPhase(Map* mapfile, std::vector<Player*>* players);
+
+
+
+	/////////////////////////////////// Loop Phase ///////////////////////////////////
+
+	int get_player_id(Player* p, vector <Player*> v);
+
+	Player* mainGameLoop(vector<Player*> allPlayers, Map* map);
+	int* reinforcementPhase(vector<Player*> allPlayers, int num_players, Map* map);
+	int issueOrderPhase(vector<Player*> allPlayers, int num_players, Map* map, int* reinforcements);
+	int executeOrdersPhase();
+
+
 };
+
+
 

@@ -174,6 +174,132 @@ void GameEngine::startupPhase(Map* mapfile, std::vector<Player*>* players) {
 	}
 }
 
+
+
+
+
+int GameEngine::get_player_id(Player* p, vector<Player*> v)
+{
+	auto it = find(v.begin(), v.end(), p);
+	if (it != v.end()) {
+		int index = it - v.begin();
+		return index;
+	}
+	else {
+		std::cout << "-1" << std::endl;
+	}
+}
+
+Player* GameEngine::mainGameLoop(vector<Player*> allPlayers, Map* map)
+{
+	//	Amount of players
+	int num_players = allPlayers.size();
+	//	Array of vectors containing terrritories owned by each player
+	vector<Territory*> territories_owned[MAX_PLAYERS];
+
+	//	Main loop of game
+	while ( allPlayers.size() > 1 ) {
+
+		std::cout << "\n\n\tReinforcement Phase\n\n";
+		int* reinforcements = reinforcementPhase(allPlayers, num_players, map);
+
+
+		std::cout << "\n\n\tOrder Issuing Phase\n\n";
+		issueOrderPhase(allPlayers, num_players, map, reinforcements);
+
+		std::cout << "\n\n\tOrder Execution Phase\n\n";
+		executeOrdersPhase();
+
+
+		for (Player* p : allPlayers) {
+			if (map->get_territories(p).size() == 0) {
+
+				int deleting_index = get_player_id(p, allPlayers);
+
+				cout << "\nPlayer" << deleting_index << " lost\n\n" ;
+
+				// erase player from vector
+				delete allPlayers[deleting_index];
+				allPlayers.erase(allPlayers.begin(), allPlayers.begin() + deleting_index);
+			}
+		}
+
+	}
+
+	return allPlayers[0];
+}
+
+int* GameEngine::reinforcementPhase(vector<Player*> allPlayers, int num_players, Map* map)
+{
+
+	static int reinforcements[MAX_PLAYERS];	//	5 players is the max
+	int territories_owned[MAX_PLAYERS] = { 0,0,0,0,0 };
+
+	bool firstFlag = false;
+
+	for (Player* p : allPlayers)
+		if (p->getReinforcementPool() != 0){
+			firstFlag = true;
+			reinforcements[get_player_id(p, allPlayers)] = p->getReinforcementPool();
+			p->setReinforcementPool(0);
+			std::cout << "Player" << get_player_id(p, allPlayers) << " reinforcements: " << reinforcements[get_player_id(p, allPlayers)] << std::endl;
+		}
+
+	if (firstFlag) {
+		return reinforcements;
+	}
+	/**************************** Count each player's territories ****************************/
+
+
+	for (Territory* territory : map->get_territories()) {
+		Player* owner = territory->get_owner();
+		if (owner == NULL)
+			continue;
+
+		int owner_id = get_player_id(owner, allPlayers);
+		if (owner_id > -1)
+			territories_owned[owner_id] += 1;
+
+	}
+
+	for (int i = 0; i < num_players; i++) {	// Reinforcement per player calculation
+		reinforcements[i] = (territories_owned[i] / 3) + MIN_REINFORCEMENT;
+		std::cout << "Player" << i << " reinforcements: " << reinforcements[i] << std::endl;
+	}
+
+	/**************************** Add each player continent's bonus ****************************/
+	/*for (Continent* continent : map->get_continents()) {
+		if (continent->get_owner() == NULL)
+			continue;
+
+		for (int i = 0; i < num_players; i++) {
+			if (continent->get_owner() == allPlayers[i])
+				territories_owned[i] += continent->get_bonus();
+		}
+	}*/
+
+	return reinforcements;
+}
+
+int GameEngine::issueOrderPhase(vector<Player*> allPlayers, int num_players, Map* map, int* reinforcements)
+{
+	for (Player* p : allPlayers) {
+		int id = get_player_id(p, allPlayers);
+		p->issueOrder(id, map, *(reinforcements + id));
+		std::cout << "\n";
+	}
+	return 0;
+}
+
+int GameEngine::executeOrdersPhase()
+{
+	return 0;
+}
+
+
+
+
+
 int main()
 {
 	std::cout << "-----Welcom To Risk!-----\n\n";
@@ -240,6 +366,11 @@ int main()
 	}
 
 	////////////////////////////////////////////////Donovan Driver End////////////////////////////////////////////////
+
+
+	////////////////////////////////////////////////  Adrian Driver  ////////////////////////////////////////////////
+	game.mainGameLoop(players, loaded_map);
+	////////////////////////////////////////////////Adrian Driver End////////////////////////////////////////////////
 
 	//taking care of memory leak
 	delete loaded_map;

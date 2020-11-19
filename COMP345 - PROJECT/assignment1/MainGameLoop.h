@@ -20,6 +20,7 @@ using std::streamsize;
 #define MAX_PLAYERS 5
 # define MIN_REINFORCEMENT 3
 
+<<<<<<< Updated upstream
 class MainGameLoop {
 private:
 	bool phase;
@@ -37,6 +38,16 @@ public:
 
 	Player* mainGameLoop(vector<Player*> allPlayers, Map* map, bool phaseMode, bool statisticsMode);
 };
+=======
+static int get_player_id(Player* p, vector <Player*> v);
+
+static Player* mainGameLoop(vector<Player*> allPlayers, Map* map);
+int* reinforcementPhase(vector<Player*> allPlayers, int num_players, Map* map);
+int issueOrderPhase(vector<Player*> allPlayers, int num_players, Map* map, int* reinforcements);
+int executeOrdersPhase();
+
+
+>>>>>>> Stashed changes
 
 //	Read an integer from the user only
 static int get_integer_option() {
