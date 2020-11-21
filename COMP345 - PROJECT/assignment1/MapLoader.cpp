@@ -157,7 +157,7 @@ void MapLoader::FileReader(std::string mapfile)
 			auto maximum = std::max_element(number_of_countries.begin(), number_of_countries.end());
 			if (continent_list.size() == (*maximum))
 			{
-				std::cout << "contninent number has been confirmed with countries at:" << continent_list.size() << " continents" << "\n";
+				std::cout << "continent number has been confirmed with countries at:" << continent_list.size() << " continents" << "\n";
 			}
 			else
 			{
@@ -325,6 +325,15 @@ ConquestFileReader::ConquestFileReader(std::string mapfile)
 void ConquestFileReader::FileReader(std::string mapfile)
 {
 	////////////////////////////////-ACTUALLY IMPLEMENT THE FILE READER-/////////////////////////////////////////////
+	file = mapfile;
+	//std::cout << mapfile;
+	std::ifstream input(mapfile);
+	std::string line;
+	while (!input.eof())
+	{
+		getline(input, line, '\n');
+		std::cout << line;
+	}
 }
 
 Map ConquestFileReader::LoadMap(std::vector<std::vector<std::string>> continents, std::vector<std::vector<std::string>> territories, std::vector<std::vector<std::string>> borders)
@@ -344,4 +353,12 @@ ConquestFileReader::~ConquestFileReader()
 	std::cout << "Deleting Conquest Maploader \n";
 	delete created_map;
 	created_map = NULL;
+}
+
+int main()
+{
+	
+	ConquestFileReader *a = new ConquestFileReader("conquest_map_dir/3D.map");
+
+	return 0;
 }

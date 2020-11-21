@@ -2,8 +2,9 @@
   "ExpandedNodes": [
     "",
     "\\COMP345 - PROJECT",
-    "\\COMP345 - PROJECT\\assignment1"
+    "\\COMP345 - PROJECT\\assignment1",
+    "\\COMP345 - PROJECT\\assignment1\\conquest_map_dir"
   ],
-  "SelectedNode": "\\COMP345 - PROJECT\\assignment1\\MapLoader.cpp",
+  "SelectedNode": "\\COMP345 - PROJECT\\assignment1\\conquest_map_dir",
   "PreviewInSolutionExplorer": false
 }
