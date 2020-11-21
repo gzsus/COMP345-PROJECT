@@ -31,6 +31,19 @@ MapLoader::MapLoader(const MapLoader& a) {file = a.file;}
 //constructor that takes in a file string and creates a map right away
 MapLoader::MapLoader(std::string mapfile)
 {
+	FileReader(mapfile);
+}
+
+MapLoader::~MapLoader()
+{
+	std::cout << "Deleting MapLoader \n";
+	delete created_map;
+	created_map = NULL;
+}
+
+//instead of directly reding the file in the constructor now this method does the filereading
+void MapLoader::FileReader(std::string mapfile)
+{
 	bool error = false; //if there is an error at one point this is set to true and the program breaks
 	file = mapfile;
 	//std::cout << mapfile;
@@ -113,7 +126,7 @@ MapLoader::MapLoader(std::string mapfile)
 					country_list.erase(country_list.begin() + (country_list.size() - 1)); //gets rid of extra country added
 					break;
 				} //we are done so break out of this too
-				std::cout << "VECTOR country #" << (counter / 5) - 1 << " :" << country_list[(counter / 5) - 1][0] <<" "<< country_list[(counter / 5) - 1][1] << " " << country_list[(counter / 5) - 1][2] << " " << country_list[(counter / 5) - 1][3] << " " << country_list[(counter / 5) - 1][4] << "\n";
+				std::cout << "VECTOR country #" << (counter / 5) - 1 << " :" << country_list[(counter / 5) - 1][0] << " " << country_list[(counter / 5) - 1][1] << " " << country_list[(counter / 5) - 1][2] << " " << country_list[(counter / 5) - 1][3] << " " << country_list[(counter / 5) - 1][4] << "\n";
 			}
 
 		}
@@ -161,7 +174,7 @@ MapLoader::MapLoader(std::string mapfile)
 			for (int j = 0; j < (country_list.size()); j++) //go through the "j" number of countries and document border info
 			{
 				getline(input, temp, '\n');
-				if (temp.rfind(" ") >= temp.size() - 1) { temp=temp.substr(0, temp.size() - 1); }
+				if (temp.rfind(" ") >= temp.size() - 1) { temp = temp.substr(0, temp.size() - 1); }
 				if (temp.empty() == true) //not enough borders given
 				{
 					std::cout << "Not enough borders given!";
@@ -213,16 +226,7 @@ MapLoader::MapLoader(std::string mapfile)
 		country_list.clear();
 		border_list.clear();
 	}
-
 }
-
-MapLoader::~MapLoader()
-{
-	std::cout << "Deleting MapLoader \n";
-	delete created_map;
-	created_map = NULL;
-}
-
 // this will load the map from the stored vectors 
  Map MapLoader::LoadMap(std::vector<std::vector<std::string>>continents, std::vector<std::vector<std::string>> territories, std::vector<std::vector<std::string>>borders)
 {
@@ -303,14 +307,24 @@ std::ostream& operator<<(std::ostream &ostrm, const MapLoader &maploader)
 //implement a file reader instead of an all in one constructor for both the maploader and for the conquest file reader
 ConquestFileReader::ConquestFileReader()
 {
+	file = "";
+	created_map = new Map();
 }
 
 ConquestFileReader::ConquestFileReader(const ConquestFileReader& a)
 {
+	file = a.file;
+	created_map = a.created_map;
 }
 
 ConquestFileReader::ConquestFileReader(std::string mapfile)
 {
+	FileReader(mapfile);
+}
+
+void ConquestFileReader::FileReader(std::string mapfile)
+{
+	////////////////////////////////-ACTUALLY IMPLEMENT THE FILE READER-/////////////////////////////////////////////
 }
 
 Map ConquestFileReader::LoadMap(std::vector<std::vector<std::string>> continents, std::vector<std::vector<std::string>> territories, std::vector<std::vector<std::string>> borders)
@@ -320,11 +334,14 @@ Map ConquestFileReader::LoadMap(std::vector<std::vector<std::string>> continents
 
 ConquestFileReader& ConquestFileReader::operator=(const ConquestFileReader& oldloader)
 {
-	// TODO: insert return statement here
-	ConquestFileReader *temp = new ConquestFileReader();
-	return  *temp;
+	file = oldloader.file;
+	created_map = oldloader.created_map;
+	return  *this;
 }
 
 ConquestFileReader::~ConquestFileReader()
 {
+	std::cout << "Deleting Conquest Maploader \n";
+	delete created_map;
+	created_map = NULL;
 }

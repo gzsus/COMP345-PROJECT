@@ -21,6 +21,8 @@ class MapLoader
 		void setmap(Map* new_map){this->created_map = new_map;}
 		Map* getmap() { return this->created_map; }
 		std::string getfile();
+
+		void FileReader(std::string mapfile);
 		Map LoadMap(std::vector<std::vector<std::string>>continents, std::vector<std::vector<std::string>> territories, std::vector<std::vector<std::string>>borders);
 		~MapLoader();
 
@@ -49,6 +51,7 @@ public:
 	Map* getmap() { return this->created_map; }
 	std::string getfile() { return file; };
 
+	void FileReader(std::string mapfile);
 	Map LoadMap(std::vector<std::vector<std::string>>continents, std::vector<std::vector<std::string>> territories, std::vector<std::vector<std::string>>borders);
 
 	ConquestFileReader& operator=(const ConquestFileReader& oldloader);// assignment operator
