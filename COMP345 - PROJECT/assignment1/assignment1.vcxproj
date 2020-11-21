@@ -21,6 +21,7 @@
   <ItemGroup>
     <ClCompile Include="Cards.cpp" />
     <ClCompile Include="GameEngine.cpp" />
+    <ClCompile Include="GameObservers.cpp" />
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="MapLoader.cpp" />
     <ClCompile Include="Orders.cpp" />
@@ -29,7 +30,6 @@
   <ItemGroup>
     <ClInclude Include="Cards.h" />
     <ClInclude Include="GameEngine.h" />
-    <ClInclude Include="MainGameLoop.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="MapLoader.h" />
     <ClInclude Include="Orders.h" />

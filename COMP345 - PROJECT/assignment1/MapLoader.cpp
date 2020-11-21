@@ -16,6 +16,9 @@
 #include <iostream>
 #include <algorithm>
 
+
+
+////////////////////////////////-MAPLOADER PART-/////////////////////////////////////////////
 std::string file;
 //empty constructor
 MapLoader::MapLoader()
@@ -220,7 +223,7 @@ MapLoader::~MapLoader()
 	created_map = NULL;
 }
 
-// this will load the map from the store vectors 
+// this will load the map from the stored vectors 
  Map MapLoader::LoadMap(std::vector<std::vector<std::string>>continents, std::vector<std::vector<std::string>> territories, std::vector<std::vector<std::string>>borders)
 {
 	 //create a new *territory list for each index in the territories vector and store the name
@@ -296,4 +299,32 @@ std::string MapLoader::getfile(){return file;}
 std::ostream& operator<<(std::ostream &ostrm, const MapLoader &maploader)
 {	return ostrm << "Maploader Loading: (" << maploader.file << ")"; }
 
+////////////////////////////////-CONQUEST FILE READER PART-/////////////////////////////////////////////
+//implement a file reader instead of an all in one constructor for both the maploader and for the conquest file reader
+ConquestFileReader::ConquestFileReader()
+{
+}
 
+ConquestFileReader::ConquestFileReader(const ConquestFileReader& a)
+{
+}
+
+ConquestFileReader::ConquestFileReader(std::string mapfile)
+{
+}
+
+Map ConquestFileReader::LoadMap(std::vector<std::vector<std::string>> continents, std::vector<std::vector<std::string>> territories, std::vector<std::vector<std::string>> borders)
+{
+	return Map();
+}
+
+ConquestFileReader& ConquestFileReader::operator=(const ConquestFileReader& oldloader)
+{
+	// TODO: insert return statement here
+	ConquestFileReader *temp = new ConquestFileReader();
+	return  *temp;
+}
+
+ConquestFileReader::~ConquestFileReader()
+{
+}
