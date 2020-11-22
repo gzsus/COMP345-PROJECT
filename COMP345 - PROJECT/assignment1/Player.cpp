@@ -15,6 +15,7 @@ Player::Player(int players) {
 	pHand = new Hand();
 	pOrderList = new OrdersList();
 	reinforcementPool = 0;
+	//strategy = new NeutralPlayerStrategy();
 }
 
 //Constructor
@@ -23,6 +24,7 @@ Player::Player() {
     pHand = new Hand();
     pOrderList = new OrdersList();
 	reinforcementPool = 0;
+	//strategy = new NeutralPlayerStrategy();
 }
 
 //Copy constructor
@@ -33,6 +35,8 @@ Player::Player(const Player& other) {
 		negotiating->push_back(other.negotiating->at(i));
 	pHand = new Hand(*other.pHand);
 	pOrderList = new OrdersList(*other.pOrderList);
+	strategy = strategy->clone();
+	strategy->setPlayer(this);
 }
 
 //Overloaded assignment operator
@@ -44,19 +48,17 @@ Player& Player::operator=(const Player& other) {
 		pHand = other.pHand;
 		delete pOrderList;
 		pOrderList = other.pOrderList;
+		delete strategy;
+		strategy = other.strategy;
 	}
 	return *this;
 }
 
 //Destructor
 Player::~Player() {
-	//prevents memory leaks from arrays
-	/*delete[] allOrders;
-	delete[] territoriesToDefend;
-	delete[] territoriesToAttack;*/
-
 	//prevents memory leaks from pointers
 	delete pHand;
+	pHand = NULL;
 	delete pOrderList;
 	pOrderList = NULL;
 
@@ -64,12 +66,16 @@ Player::~Player() {
 	for (size_t i = 0; i < orders.size(); i++) {
 		delete orders[i];
 	}
+	orders.clear();
 	for (size_t i = 0; i < negotiating->size(); i++) {
 		delete negotiating->at(i);
 	}
 	delete negotiating;
+	negotiating->clear();
+	negotiating = NULL;
 
-	orders.clear();
+	delete strategy;
+	strategy = NULL;
 }
 
 void Player::setReinforcementPool(int reinforcements)
@@ -93,6 +99,17 @@ vector<Player*>* Player::getNegotiating()
 	return negotiating;
 }
 
+PlayerStrategy* Player::getStrategy()
+{
+	return strategy;
+}
+
+void Player::setStrategy(PlayerStrategy &strategy)
+{
+	delete this->strategy;
+	this->strategy = &strategy;
+}
+
 vector<Order*>* Player::getOrders() {
 	return &orders;
 }
@@ -103,98 +120,98 @@ vector<Order*>* Player::getOrders() {
 // choose the territories to defend
 list<Territory*> Player::toDefend(Map* map) {
 
-	vector<Territory*> territories_owned = map->get_territories(this);
+	//vector<Territory*> territories_owned = map->get_territories(this);
 
-	list<Territory*> defending_list;
+	//list<Territory*> defending_list;
 
-	if (territories_owned.size() > 0) {
-		//	Show possible territories to defend defend
-		cout << " Territories to defend-armies:";
-		for (size_t i = 0; i < territories_owned.size(); i++)
-			cout << "  (" << i << ")" + territories_owned[i]->get_name() + "-" << territories_owned[i]->get_armies();
-		cout << endl;
-	}
-	else {
-		cout << " You own 0 territories" << endl;
-		return defending_list;
-	}
+	//if (territories_owned.size() > 0) {
+	//	//	Show possible territories to defend defend
+	//	cout << " Territories to defend-armies:";
+	//	for (size_t i = 0; i < territories_owned.size(); i++)
+	//		cout << "  (" << i << ")" + territories_owned[i]->get_name() + "-" << territories_owned[i]->get_armies();
+	//	cout << endl;
+	//}
+	//else {
+	//	cout << " You own 0 territories" << endl;
+	//	return defending_list;
+	//}
 
-	cout << "\tChoose the territory number to defend or any other number to finish: ";
+	//cout << "\tChoose the territory number to defend or any other number to finish: ";
 
-	int option = get_integer_option();
-	while (true) {
-		//	Show chosen option
-		if (option > -1 && option < territories_owned.size()) {
+	//int option = get_integer_option();
+	//while (true) {
+	//	//	Show chosen option
+	//	if (option > -1 && option < territories_owned.size()) {
 
-			// Check if element is already chosen
-			list<Territory*>::iterator it;
-			it = find(defending_list.begin(), defending_list.end(), territories_owned[option]);
+	//		// Check if element is already chosen
+	//		list<Territory*>::iterator it;
+	//		it = find(defending_list.begin(), defending_list.end(), territories_owned[option]);
 
-			if (it != defending_list.end())
-				cout << "(already chosen)";
-			else {
-				cout << territories_owned[option]->get_name();
-				defending_list.push_back(territories_owned[option]);
-			}
-		}
-		else {
-			if (defending_list.size() < 1) {
-				cout << "You need to choose at least 1 territory ";
-				option = get_integer_option();
-				continue;
-			}
-			cout << "none\n";
-			break;
-		}
-		cout << "\n Which other? ";
-		option = get_integer_option();
-	}
-	cout << endl;
-	return defending_list;
+	//		if (it != defending_list.end())
+	//			cout << "(already chosen)";
+	//		else {
+	//			cout << territories_owned[option]->get_name();
+	//			defending_list.push_back(territories_owned[option]);
+	//		}
+	//	}
+	//	else {
+	//		if (defending_list.size() < 1) {
+	//			cout << "You need to choose at least 1 territory ";
+	//			option = get_integer_option();
+	//			continue;
+	//		}
+	//		cout << "none\n";
+	//		break;
+	//	}
+	//	cout << "\n Which other? ";
+	//	option = get_integer_option();
+	//}
+	//cout << endl;
+	return strategy->toDefend(map);
 }
 
 // choose the territories to attack
 list<Territory*> Player::toAttack(Map* map) {
 	//set the territories to attack vector in the given map
-	vector<Territory*> territories_toAttack = map->get_neighbour_territories(this);
+	//vector<Territory*> territories_toAttack = map->get_neighbour_territories(this);
 
-	list<Territory*> attack_list;
+	//list<Territory*> attack_list;
 
-	if (territories_toAttack.size() > 0) {
-		//	Show possible attack
-		cout << " Territories to attack:";
-		for (size_t i = 0; i < territories_toAttack.size(); i++)
-			cout << "  (" << i << ")" + territories_toAttack[i]->get_name() + "-" << territories_toAttack[i]->get_armies();
-		cout << endl;
+	//if (territories_toAttack.size() > 0) {
+	//	//	Show possible attack
+	//	cout << " Territories to attack:";
+	//	for (size_t i = 0; i < territories_toAttack.size(); i++)
+	//		cout << "  (" << i << ")" + territories_toAttack[i]->get_name() + "-" << territories_toAttack[i]->get_armies();
+	//	cout << endl;
 
-		cout << "Choose the territory to attack or any other number to finish: ";
+	//	cout << "Choose the territory to attack or any other number to finish: ";
 
-		int option = get_integer_option();
-		while (true) {
-			//	Show chosen option
-			if (option > -1 && option < territories_toAttack.size()) {
+	//	int option = get_integer_option();
+	//	while (true) {
+	//		//	Show chosen option
+	//		if (option > -1 && option < territories_toAttack.size()) {
 
-				// Check if element is already chosen
-				list<Territory*>::iterator it;
-				it = find(attack_list.begin(), attack_list.end(), territories_toAttack[option]);
+	//			// Check if element is already chosen
+	//			list<Territory*>::iterator it;
+	//			it = find(attack_list.begin(), attack_list.end(), territories_toAttack[option]);
 
-				if (it != attack_list.end())
-					cout << "(already chosen)";
-				else {
-					cout << territories_toAttack[option]->get_name();
-					attack_list.push_back(territories_toAttack[option]);
-				}
-			}
-			else {
-				cout << "none\n";
-				break;
-			}
-			cout << "\n Which other? ";
-			option = get_integer_option();
-		}
-	}
-	cout << endl;
-	return attack_list;
+	//			if (it != attack_list.end())
+	//				cout << "(already chosen)";
+	//			else {
+	//				cout << territories_toAttack[option]->get_name();
+	//				attack_list.push_back(territories_toAttack[option]);
+	//			}
+	//		}
+	//		else {
+	//			cout << "none\n";
+	//			break;
+	//		}
+	//		cout << "\n Which other? ";
+	//		option = get_integer_option();
+	//	}
+	//}
+	//cout << endl;
+	return strategy->toAttack(map);
 }
 
 // Player sets his orders to be executed in order
@@ -211,192 +228,194 @@ int Player::issueOrder(int player_id, Map* map, int reinforcements, bool phaseMo
 	territoriesToAttack = this->toAttack(map);
 	territoriesToDefend = this->toDefend(map);
 
-	int territories_toAttack_number = territoriesToAttack.size();
-	int territories_toDefend_number = territoriesToDefend.size();
+	strategy->issueOrder(map);
 
-	int deployments_available = reinforcements;
+	//int territories_toAttack_number = territoriesToAttack.size();
+	//int territories_toDefend_number = territoriesToDefend.size();
 
-	//	Deployment Orders
-	while (deployments_available > 0) {
-		if (territories_toDefend_number > 0) {
+	//int deployments_available = reinforcements;
 
-			cout << " Deployment Orders: ";
-			for (auto t : territoriesToDefend) {
+	////	Deployment Orders
+	//while (deployments_available > 0) {
+	//	if (territories_toDefend_number > 0) {
 
-				if (deployments_available > 0) {
-					cout << "\n   " << *t;
-					cout << "You have " << deployments_available << " available. How many armies would you like to deploy in " << t->get_name() << "? ";
+	//		cout << " Deployment Orders: ";
+	//		for (auto t : territoriesToDefend) {
 
-					//	Choose the amount of armies to deploy in that 
-					int armies = get_integer_option();
-					if (armies < 0 || armies > deployments_available) {
-						while (true) {
-							cout << "Please choose a valid option... ";
-							armies = get_integer_option();
-							if (armies > 0 && armies <= deployments_available)
-								break;
-						}
-					}
+	//			if (deployments_available > 0) {
+	//				cout << "\n   " << *t;
+	//				cout << "You have " << deployments_available << " available. How many armies would you like to deploy in " << t->get_name() << "? ";
 
-					//	execute specific deploy order
-					Deploy* deploy = new Deploy();
-					this->orders.push_back(deploy);
-					if (deploy->validate(this, t)) {
-						cout << "\tOrder specifics:\n";
-						deployments_available -= armies;
-						cout << "\tDeploying: " << armies << ((armies > 1) ? " armies in " : " army in ") << t->get_name() << endl;
-						//cout << *deploy; 
-						cout << "\n Deploy Order created!";
-					}
-					else {
-						cout << "\n Invalid Order";
-						continue;
-					}
+	//				//	Choose the amount of armies to deploy in that 
+	//				int armies = get_integer_option();
+	//				if (armies < 0 || armies > deployments_available) {
+	//					while (true) {
+	//						cout << "Please choose a valid option... ";
+	//						armies = get_integer_option();
+	//						if (armies > 0 && armies <= deployments_available)
+	//							break;
+	//					}
+	//				}
 
-
-					if (deployments_available <= 0) {
-						cout << "\tNo more armies available to deploy";
-						break;
-					}
-					else continue;
-				}
-				else {
-					cout << "You have 0 armies available to deploy";
-					break;
-				}
-			}
-		}
-		if (deployments_available > 0)
-			cout << "\nYou must deploy all your reiforcements before proceeding\n\n";
-	}
+	//				//	execute specific deploy order
+	//				Deploy* deploy = new Deploy();
+	//				this->orders.push_back(deploy);
+	//				if (deploy->validate(this, t)) {
+	//					cout << "\tOrder specifics:\n";
+	//					deployments_available -= armies;
+	//					cout << "\tDeploying: " << armies << ((armies > 1) ? " armies in " : " army in ") << t->get_name() << endl;
+	//					//cout << *deploy; 
+	//					cout << "\n Deploy Order created!";
+	//				}
+	//				else {
+	//					cout << "\n Invalid Order";
+	//					continue;
+	//				}
 
 
+	//				if (deployments_available <= 0) {
+	//					cout << "\tNo more armies available to deploy";
+	//					break;
+	//				}
+	//				else continue;
+	//			}
+	//			else {
+	//				cout << "You have 0 armies available to deploy";
+	//				break;
+	//			}
+	//		}
+	//	}
+	//	if (deployments_available > 0)
+	//		cout << "\nYou must deploy all your reiforcements before proceeding\n\n";
+	//}
 
 
-	while (true) {
-
-		int count = 0;
-
-		// Advance orders
-		cout << "\n\n Advance orders:";
-
-		vector<Territory*>territories_owned = map->get_territories(this);
-
-		if ((territories_owned.size() >= 1)) {
-			// Show origin territory options
-			cout << "\nChoose where to move armies from:\n";
-			for (auto t : territories_owned) {
-				cout << "  (" << count << ")  " << *t;
-				count++;
-			}
-
-			// Get user chosen origin
-			int origin = get_integer_option();
-			if (origin < 0 || origin > territories_owned.size()) {
-				while (true) {
-					cout << "Please choose a valid number... ";
-					origin = get_integer_option();
-					if (origin >= 0 && origin <= territories_owned.size()) {
-						break;
-					}
-				}
-			}
 
 
-			//	Get destination territory options
-			cout << "\nChoose where to move armies to:\n";
-			//	Print neighbours included in todefend or toattack lists
-			vector<Territory*> origin_neighbours = territories_owned[origin]->get_neighbours();
+	//while (true) {
 
-			count = 0;
-			for (auto t : origin_neighbours) {
-				if (defending_contains(t))
-					cout << "  (" << count << ")  toDefend  " << *t;
-				else if (attacking_contains(t))
-					cout << "  (" << count << ")  toAttack  " << *t;
-				else {
-					if (t->get_owner() == this)
-						cout << "  (" << count << ")  defend  " << *t;
-					else
-						cout << "  (" << count << ")  attack  " << *t;
-				}
-				count++;
-				continue;
-			}
+	//	int count = 0;
 
+	//	// Advance orders
+	//	cout << "\n\n Advance orders:";
 
-			//	Get user chosen destination
-			int destination = get_integer_option();
-			if (destination < 0 || destination > origin_neighbours.size() - 1) {
-				while (true) {
-					cout << "Please choose a valid number... ";
-					destination = get_integer_option();
-					if (destination >= 0 && destination <= origin_neighbours.size() - 1) {
-						break;
-					}
-				}
-			}
-			//	Get user chosen amount of armies to move
-			cout << "Choose how many armies to move, " << territories_owned[origin]->get_armies() << " available... ";
-			int amount = get_integer_option();
-			if (amount < 0 || amount > territories_owned[origin]->get_armies()) {
-				while (true) {
-					cout << "Please choose a valid number... ";
-					amount = get_integer_option();
-					if (amount > 0 && amount <= territories_owned[origin]->get_armies()) {
-						break;
-					}
-				}
-			}
+	//	vector<Territory*>territories_owned = map->get_territories(this);
 
-			cout << endl;
-			// Advance order should be created here
-			if (origin_neighbours[destination]->get_owner() == this)
-				cout << "Defending:\n";
-			else
-				cout << "Attacking:\n";
+	//	if ((territories_owned.size() >= 1)) {
+	//		// Show origin territory options
+	//		cout << "\nChoose where to move armies from:\n";
+	//		for (auto t : territories_owned) {
+	//			cout << "  (" << count << ")  " << *t;
+	//			count++;
+	//		}
+
+	//		// Get user chosen origin
+	//		int origin = get_integer_option();
+	//		if (origin < 0 || origin > territories_owned.size()) {
+	//			while (true) {
+	//				cout << "Please choose a valid number... ";
+	//				origin = get_integer_option();
+	//				if (origin >= 0 && origin <= territories_owned.size()) {
+	//					break;
+	//				}
+	//			}
+	//		}
 
 
-			//	execute specific deploy order
-			Advance* advance = new Advance();
-			this->orders.push_back(advance);
-			if (advance->validate(this, territories_owned[origin], origin_neighbours[destination])) {
-				cout << "\tOrder specifics:\n";
-				cout << "\t\tAdvance " << amount << ((amount > 1) ? " armies from " : " army from ") << territories_owned[origin]->get_name() + " to " << origin_neighbours[destination]->get_name();
-				//cout << *advance; 
-				cout << "\n\tDeploy Order created!";
-			}
-			else {
-				cout << "\n Invalid Order";
-			}
+	//		//	Get destination territory options
+	//		cout << "\nChoose where to move armies to:\n";
+	//		//	Print neighbours included in todefend or toattack lists
+	//		vector<Territory*> origin_neighbours = territories_owned[origin]->get_neighbours();
+
+	//		count = 0;
+	//		for (auto t : origin_neighbours) {
+	//			if (defending_contains(t))
+	//				cout << "  (" << count << ")  toDefend  " << *t;
+	//			else if (attacking_contains(t))
+	//				cout << "  (" << count << ")  toAttack  " << *t;
+	//			else {
+	//				if (t->get_owner() == this)
+	//					cout << "  (" << count << ")  defend  " << *t;
+	//				else
+	//					cout << "  (" << count << ")  attack  " << *t;
+	//			}
+	//			count++;
+	//			continue;
+	//		}
 
 
-			cout << "\n\nAnother order? 1 for yes, 0 for no ... ";
-			int continuing = get_integer_option();
-			if (continuing < 0 || continuing > 1) {
-				while (true) {
-					cout << "Please choose 0 or 1  ";
-					continuing = get_integer_option();
-					if (continuing >= 0 && continuing <= 1) {
-						break;
-					}
-				}
-			}
+	//		//	Get user chosen destination
+	//		int destination = get_integer_option();
+	//		if (destination < 0 || destination > origin_neighbours.size() - 1) {
+	//			while (true) {
+	//				cout << "Please choose a valid number... ";
+	//				destination = get_integer_option();
+	//				if (destination >= 0 && destination <= origin_neighbours.size() - 1) {
+	//					break;
+	//				}
+	//			}
+	//		}
+	//		//	Get user chosen amount of armies to move
+	//		cout << "Choose how many armies to move, " << territories_owned[origin]->get_armies() << " available... ";
+	//		int amount = get_integer_option();
+	//		if (amount < 0 || amount > territories_owned[origin]->get_armies()) {
+	//			while (true) {
+	//				cout << "Please choose a valid number... ";
+	//				amount = get_integer_option();
+	//				if (amount > 0 && amount <= territories_owned[origin]->get_armies()) {
+	//					break;
+	//				}
+	//			}
+	//		}
 
-			if (continuing == 0)
-				break;
-		}
-		else
-			cout << " You have no territories in your possession\n";
-	}
+	//		cout << endl;
+	//		// Advance order should be created here
+	//		if (origin_neighbours[destination]->get_owner() == this)
+	//			cout << "Defending:\n";
+	//		else
+	//			cout << "Attacking:\n";
 
-	cout << " You must now choose a card from your hand to use:\n";
 
-	vector<Card>* actual_hand = this->getHand()->getHand();
+	//		//	execute specific deploy order
+	//		Advance* advance = new Advance();
+	//		this->orders.push_back(advance);
+	//		if (advance->validate(this, territories_owned[origin], origin_neighbours[destination])) {
+	//			cout << "\tOrder specifics:\n";
+	//			cout << "\t\tAdvance " << amount << ((amount > 1) ? " armies from " : " army from ") << territories_owned[origin]->get_name() + " to " << origin_neighbours[destination]->get_name();
+	//			//cout << *advance; 
+	//			cout << "\n\tDeploy Order created!";
+	//		}
+	//		else {
+	//			cout << "\n Invalid Order";
+	//		}
 
-	for (auto c : *actual_hand) {
-		cout << "   " << c;
-	}
+
+	//		cout << "\n\nAnother order? 1 for yes, 0 for no ... ";
+	//		int continuing = get_integer_option();
+	//		if (continuing < 0 || continuing > 1) {
+	//			while (true) {
+	//				cout << "Please choose 0 or 1  ";
+	//				continuing = get_integer_option();
+	//				if (continuing >= 0 && continuing <= 1) {
+	//					break;
+	//				}
+	//			}
+	//		}
+
+	//		if (continuing == 0)
+	//			break;
+	//	}
+	//	else
+	//		cout << " You have no territories in your possession\n";
+	//}
+
+	//cout << " You must now choose a card from your hand to use:\n";
+
+	//vector<Card>* actual_hand = this->getHand()->getHand();
+
+	//for (auto c : *actual_hand) {
+	//	cout << "   " << c;
+	//}
 
 
 	return 0;
@@ -459,5 +478,5 @@ ostream& operator<<(ostream& output, Player& player) {
 	for (size_t i = 0; i < player.getOrders()->size(); i++)
 		temp += player.getOrders()->at(i)->Type + ", ";
 	temp += "\n";
-	return output << temp << *player.getHand();
+	return output << temp << *player.getHand() << "\nCurrent Strategy: " << player.strategy;
 }
