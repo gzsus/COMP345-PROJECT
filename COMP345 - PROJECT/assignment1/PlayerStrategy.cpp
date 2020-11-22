@@ -16,7 +16,7 @@ PlayerStrategy& PlayerStrategy::operator=(const PlayerStrategy& otherStrategy)
 //After copying a playerStrategy, the player it's linked to will have to be set by whatever calls the constructor.
 PlayerStrategy::PlayerStrategy(PlayerStrategy& otherStrategy)
 {
-    player = otherStrategy.player;
+    player = NULL;
 }
 
 PlayerStrategy* PlayerStrategy::clone()
