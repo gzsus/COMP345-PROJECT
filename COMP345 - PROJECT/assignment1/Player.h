@@ -3,6 +3,7 @@
 #include "Cards.h"
 #include "Orders.h"
 #include "MainGameLoop.h"
+#include "PlayerStrategy.h"
 
 #include <iostream>
 #include <string>
@@ -16,6 +17,7 @@ using std::list;
 
 class Order;
 class OrdersList;
+class PlayerStrategy;
 
 class Player {
 private:
@@ -33,6 +35,7 @@ private:
     //string territoriesToAttack[8];
     list<Territory*> territoriesToDefend;
     list<Territory*> territoriesToAttack;
+    PlayerStrategy* strategy;
 
 
     public:
@@ -47,10 +50,13 @@ private:
         ~Player();
         //function prototypes
         vector<Order*>* getOrders();
+        //Getters and Setters
         void setReinforcementPool(int reinforcements);
         int getReinforcementPool();
         Hand* getHand();
         vector<Player*>* getNegotiating();
+        PlayerStrategy* getStrategy();
+        void setStrategy(PlayerStrategy &strategy);
 
     /********** Order Issuing Phase **********/
     list<Territory*> toDefend(Map* map);
