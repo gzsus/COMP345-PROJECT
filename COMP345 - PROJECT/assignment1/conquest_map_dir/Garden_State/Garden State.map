@@ -1,0 +1,170 @@
+[Map]
+image=Garden State.bmp
+wrap=no
+scroll=vertical
+author=Jack Hogan
+warn=yes
+
+[Continents]
+Cape May=4
+Salem/Cumberland=8
+Gloucester=6
+Camden=6
+Atlantic=7
+Burlington=12
+Ocean=7
+Monmouth=6
+Mercer=5
+Union/Middlesex=8
+Somerset=7
+Warren/Hunterdon=10
+Sussex=6
+Passaic/Bergen=6
+Morris/Essex=11
+Hudson=3
+
+[Territories]
+Cape May_, 156,676, Cape May, Villas, Wildwood
+Villas, 159,651, Cape May, Cape May_, Wildwood, Sea Isle City
+Wildwood, 174,658, Cape May, Cape May_, Villas, Sea Isle City
+Sea Isle City, 183,633, Cape May, Villas, Wildwood, Woodbine
+Woodbine, 172,606, Cape May, Sea Isle City, Port Norris, Peaslee, Belleplain, Ocean City
+Belleplain, 183,590, Cape May, Woodbine, Peaslee, Estell Manor, Ocean City
+Ocean City, 208,601, Cape May, Woodbine, Belleplain, Estell Manor, Egg Harbor
+
+Port Norris, 133,596, Salem/Cumberland, Downe, Peaslee, Woodbine
+Downe, 104,586, Salem/Cumberland, Cumberland, Peaslee, Port Norris
+Cumberland, 91,552, Salem/Cumberland, Salem, Alloway, Vineland, Peaslee, Downe
+Alloway, 59,538, Salem/Cumberland, Cumberland, Salem, Woodstown, Pittsgrove, Vineland, Pennsville
+Salem, 41,530, Salem/Cumberland, Alloway, Cumberland, Pennsville, Woodstown
+Pennsville, 42,507, Salem/Cumberland, Woodstown, Alloway, Salem, Oldmans
+Oldmans, 54,474, Salem/Cumberland, Pittsgrove, Woodstown, Pennsville, Logan, Greenwich
+Woodstown, 67,505, Salem/Cumberland, Pittsgrove, Alloway, Salem, Pennsville, Oldmans
+Pittsgrove, 98,500, Salem/Cumberland, Vineland, Alloway, Woodstown, Oldmans, Greenwich, Glassboro, Franklin
+Vineland, 123,525, Salem/Cumberland, Peaslee, Cumberland, Alloway, Pittsgrove, Franklin, Buena
+Peaslee, 150,572, Salem/Cumberland, Estell Manor, Belleplain, Woodbine, Port Norris, Downe, Cumberland, Vineland, Buena
+
+Egg Harbor, 240,564, Atlantic, Atlantic City, Ocean City, Estell Manor, Hamilton, Galloway
+Estell Manor, 193,564, Atlantic, Egg Harbor, Ocean City, Belleplain, Peaslee, Buena, Hamilton
+Buena, 164,526, Atlantic, Hamilton, Estell Manor, Peaslee, Vineland, Franklin, Monroe, Mullica
+Mullica, 183,492, Atlantic, Galloway, Hamilton, Buena, Monroe, Winslow, Medford, Washington
+Hamilton, 203,522, Atlantic, Galloway, Egg Harbor, Estell Manor, Buena, Mullica
+Galloway, 231,513, Atlantic, Atlantic City, Egg Harbor, Hamilton, Mullica, Washington, Bass River
+Atlantic City, 263,538, Atlantic, Beach Haven, Egg Harbor, Galloway, Bass River
+
+Monroe, 149,486, Gloucester, Winslow, Mullica, Buena, Franklin, Glassboro
+Franklin, 131,499, Gloucester, Buena, Vineland, Pittsgrove, Glassboro, Monroe
+Glassboro, 113,475, Gloucester, Monroe, Franklin, Pittsgrove, Greenwich, Woodbury, Laurel Springs, Winslow
+Greenwich, 91,455, Gloucester, Glassboro, Pittsgrove, Oldmans, Logan, Woodbury
+Logan, 69,466, Gloucester, Greenwich, Oldmans
+Woodbury, 109,441, Gloucester, Laurel Springs, Glassboro, Greenwich, Camden_
+
+Winslow, 163,468, Camden, Medford, Mullica, Monroe, Glassboro, Laurel Springs, Voorhees
+Laurel Springs, 129,439, Camden, Voorhees, Winslow, Glassboro, Woodbury, Camden_
+Camden_, 119,418, Camden, Voorhees, Laurel Springs, Woodbury, Cherry Hill
+Cherry Hill, 130,404, Camden, Marlton, Voorhees, Camden_, Moorestown
+Voorhees, 146,428, Camden, Marlton, Medford, Winslow, Laurel Springs, Camden_, Cherry Hill
+
+Bass River, 257,472, Burlington, Surf City, Beach Haven, Atlantic City, Galloway, Washington, Medford, Woodland
+Washington, 227,483, Burlington, Bass River, Galloway, Mullica, Medford
+Medford, 189,446, Burlington, Woodland, Bass River, Washington, Winslow, Voorhees, Marlton, Southampton, Mullica
+Marlton, 163,409, Burlington, Southampton, Medford, Voorhees, Cherry Hill, Moorestown, Willingboro, Pemberton
+Moorestown, 148,387, Burlington, Willingboro, Marlton, Cherry Hill
+Willingboro, 178,381, Burlington, Burlington_, Pemberton, Marlton, Moorestown
+Burlington_, 199,368, Burlington, Bordentown, Pemberton, Willingboro
+Bordentown, 216,353, Burlington, Allentown, Plumsted, Woodland, Pemberton, Burlington_, Trenton, Windsor
+Pemberton, 200,389, Burlington, Woodland, Southampton, Marlton, Willingboro, Burlington_, Bordentown
+Southampton, 201,418, Burlington, Woodland, Medford, Marlton, Pemberton
+Woodland, 239,413, Burlington, Plumsted, Manchester, Surf City, Bass River, Medford, Southampton, Pemberton, Bordentown
+
+Beach Haven, 282,503, Ocean, Surf City, Atlantic City, Bass River
+Surf City, 287,461, Ocean, Barnegat, Beach Haven, Bass River, Woodland, Manchester
+Barnegat, 300,430, Ocean, Seaside Heights, Surf City, Manchester
+Manchester, 265,401, Ocean, Seaside Heights, Barnegat, Surf City, Woodland, Plumsted, Jackson
+Plumsted, 258,370, Ocean, Jackson, Manchester, Woodland, Bordentown, Allentown, Freehold
+Jackson, 285,371, Ocean, Farmingdale, Bay Head, Seaside Heights, Manchester, Plumsted, Freehold
+Bay Head, 321,377, Ocean, Asbury Park, Seaside Heights, Jackson, Farmingdale
+Seaside Heights, 306,402, Ocean, Bay Head, Barnegat, Manchester, Jackson
+
+Asbury Park, 344,342, Monmouth, Rumson, Bay Head, Farmingdale, Shrewsbury
+Farmingdale, 314,349, Monmouth, Asbury Park, Bay Head, Jackson, Freehold, Shrewsbury
+Freehold, 274,329, Monmouth, Shrewsbury, Farmingdale, Jackson, Plumsted, Allentown, Windsor, Jamesburg
+Allentown, 244,346, Monmouth, Freehold, Plumsted, Bordentown, Windsor
+Shrewsbury, 314,323, Monmouth, Rumson, Asbury Park, Farmingdale, Freehold, Jamesburg, Hazlet
+Hazlet, 310,297, Monmouth, Rumson, Shrewsbury, Jamesburg, Perth Amboy
+Rumson, 345,298, Monmouth, Asbury Park, Shrewsbury, Hazlet
+
+Windsor, 228,327, Mercer, Jamesburg, Freehold, Allentown, Bordentown, Trenton, The Brunswicks
+Trenton, 206,317, Mercer, The Brunswicks, Windsor, Bordentown, Lawrence, Princeton
+Lawrence, 177, 299, Mercer, Princeton, Trenton, Lambertville, Flemington
+Princeton, 198,289, Mercer, Montgomery, The Brunswicks, Trenton, Lawrence, Flemington, Hillsborough
+
+Jamesburg, 265,302, Union/Middlesex, Hazlet, Shrewsbury, Freehold, Windsor, The Brunswicks, Perth Amboy
+The Brunswicks, 239,294, Union/Middlesex, Perth Amboy, Jamesburg, Windsor, Trenton, Princeton, Montgomery
+Perth Amboy, 271,272, Union/Middlesex, Elizabeth, Hazlet, Jamesburg, The Brunswicks, Montgomery, Bridgewater, Plainfield
+Plainfield, 264,241, Union/Middlesex, Elizabeth, Perth Amboy, Bridgewater, Bernards, Roselle
+Elizabeth, 293,236, Union/Middlesex, Roselle, Perth Amboy, Plainfield
+Roselle, 285,217, Union/Middlesex, Union_, Elizabeth, Plainfield, Bernards
+Union_, 286,198, Union/Middlesex, Jersey City, Roselle, Bernards, Chatham, The Oranges, Newark
+
+Montgomery, 215,273, Somerset, Bridgewater, Perth Amboy, The Brunswicks, Princeton, Flemington, Hillsborough
+Hillsborough, 206,255, Somerset, Bridgewater, Montgomery, Princeton, Flemington, Raritan
+Bridgewater, 230,235, Somerset, Bernards, Plainfield, Perth Amboy, Montgomery, Hillsborough, Raritan, Readington, Tewksbury
+Bernards, 232,200, Somerset, Chatham, Union_, Roselle, Plainfield, Bridgewater, Readington, Tewksbury, Mendham
+
+Flemington, 177,262, Warren/Hunterdon, Hillsborough, Montgomery, Princeton, Lawrence, Lambertville, Raritan
+Lambertville, 150,268, Warren/Hunterdon, Flemington, Lawrence, Raritan
+Raritan, 154,231, Warren/Hunterdon, Readington, Bridgewater, Hillsborough, Flemington, Lambertville, Millford, Clinton
+Millford, 121,213, Warren/Hunterdon, Clinton, Raritan, Harmony
+Harmony, 128,185, Warren/Hunterdon, Hackettstown, Clinton, Millford
+Hackettstown, 163,148, Warren/Hunterdon, Hopatcong, Netcong, Mount Olive, Tewksbury, Clinton, Harmony, Knowlton, Hardwick
+Knowlton, 139,125, Warren/Hunterdon, Hardwick, Hackettstown
+Hardwick, 158,112, Warren/Hunterdon, Branchville, Stillwater, Hopatcong, Hackettstown, Knowlton
+Tewksbury, 177,189, Warren/Hunterdon, Mount Olive, Mendham, Bernards, Bridgewater, Readington, Clinton, Hackettstown
+Readington, 186,214, Warren/Hunterdon, Bernards, Bridgewater, Raritan, Clinton, Tewksbury
+Clinton, 154,195, Warren/Hunterdon, Tewksbury, Readington, Raritan, Millford, Harmony, Hackettstown
+
+Newark, 319,191, Morris/Essex, Kearny, Hoboken, Jersey City, Union_, The Oranges
+The Oranges, 297,175, Morris/Essex, Clifton, Kearny, Newark, Union_, Chatham, Morris Plains, The Caldwells
+Chatham, 259,189, Morris/Essex, The Oranges, Union_, Bernards, Mendham, Morris Plains
+Mendham, 224,173, Morris/Essex, Morris Plains, Chatham, Bernards, Tewksbury, Mount Olive, Netcong
+Mount Olive, 190,173, Morris/Essex, Netcong, Mendham, Tewksbury, Hackettstown
+Netcong, 206,151, Morris/Essex, Rockaway, Morris Plains, Mendham, Mount Olive, Hackettstown, Hopatcong
+Morris Plains, 249,155, Morris/Essex, Butler, The Caldwells, The Oranges, Chatham, Mendham, Netcong, Rockaway
+Rockaway, 246,133, Morris/Essex, Butler, Morris Plains, Netcong, Hopatcong, Jefferson
+Jefferson, 246,109, Morris/Essex, West Milford, Butler, Rockaway, Hopatcong, Sparta
+Butler, 281,129, Morris/Essex, West Milford, Wayne, The Caldwells, Morris Plains, Rockaway, Jefferson
+The Caldwells, 298,152, Morris/Essex, Clifton, The Oranges, Morris Plains, Butler, Wayne
+
+Jersey City, 331,209, Hudson, Hoboken, Union_, Newark
+Hoboken, 348,189, Hudson, Teaneck, Jersey City, Newark, Kearny
+Kearny, 333,183, Hudson, Teaneck, Hoboken, Newark, The Oranges, Clifton
+
+Hopatcong, 205,118, Sussex, Sparta, Jefferson, Rockaway, Netcong, Hackettstown, Hardwick, Stillwater
+Stillwater, 181,102, Sussex, Sussex_, Sparta, Hopatcong, Hardwick, Branchville
+Branchville, 179,76, Sussex, Sandyston, Sussex_, Stillwater, Hardwick
+Sandyston, 195,50, Sussex, Montague, Sussex_, Branchville
+Montague, 215,30, Sussex, Wantage, Sussex_, Sandyston
+Wantage, 245,51, Sussex, Vernon, Sparta, Sussex_, Montague
+Vernon, 261,66, Sussex, West Milford, Sparta, Wantage
+Sparta, 232,94, Sussex, Wantage, Vernon, West Milford, Jefferson, Hopatcong, Stillwater, Sussex_
+Sussex_, 216,75, Sussex, Sparta, Stillwater, Branchville, Sandyston, Montague, Wantage
+
+Teaneck, 352,153, Passaic/Bergen, Tenafly, Hoboken, Kearny, Clifton
+Clifton, 323,146, Passaic/Bergen, Tenafly, Teaneck, Kearny, The Oranges, Wayne, The Caldwells
+Wayne, 311,119, Passaic/Bergen, Mahwah, Tenafly, Clifton, The Caldwells, Butler, West Milford
+West Milford, 286,83, Passaic/Bergen, Mahwah, Wayne, Butler, Jefferson, Sparta, Vernon
+Mahwah, 324,95, Passaic/Bergen, Hillsdale, Tenafly, Wayne, West Milford
+Hillsdale, 352,113, Passaic/Bergen, Tenafly, Mahwah
+Tenafly, 356,135, Passaic/Bergen, Hillsdale, Teaneck, Clifton, Wayne, Mahwah 
+
+
+
+
+
+
+
+
+
+
+

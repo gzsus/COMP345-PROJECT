@@ -70,6 +70,5 @@
     <None Include="map_dir\sudamerica\sudamerica.map" />
     <None Include="map_dir\sw_baltic\sw_baltic.map" />
     <None Include="map_dir\swiss\swiss.map" />
-    <None Include="conquest_map_dir\3D.map" />
   </ItemGroup>
 </Project>

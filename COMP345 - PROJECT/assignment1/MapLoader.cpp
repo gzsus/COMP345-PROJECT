@@ -233,19 +233,15 @@ void MapLoader::FileReader(std::string mapfile)
 	 //create a new *territory list for each index in the territories vector and store the name
 	 std::vector<Territory*> territory_list;
 	 std::vector<Continent*> cont_list;
-	 for (int i = 0; i < territories.size();i++)
-	 {
-		 territory_list.push_back(new Territory(territories[i][1], 0));
-	 }
+	 for (int i = 0; i < territories.size();i++) 
+		{ territory_list.push_back(new Territory(territories[i][1], 0));}
+
 	 //need to connect all the territories now using the border list
 	 for (int i = 0; i < territories.size(); i++)
 	 {
 		 //need to loop through all border indices to get all neighbours, annoyingly the first index is just that of the same country so reduce accordingly
 		 for (int j = 1; j < borders[i].size(); j++)
-		 {
-			territory_list[i]->connet_to(territory_list[stoi(borders[i][j])-1]);
-			//std::cout << "connected:" << *territory_list[i] << " , TO: " << *territory_list[stoi(borders[i][j]) - 1] << "\n";
-		 }
+			{territory_list[i]->connet_to(territory_list[stoi(borders[i][j])-1]);}
 	 }
 
 	 //now that all the territories are created and linked create continents and link them to countries
@@ -254,6 +250,7 @@ void MapLoader::FileReader(std::string mapfile)
 		 //this should also implement bonus but for now it doesnt cause the class is not available
 		 cont_list.push_back(new Continent(continents[i][0]));
 	 }
+
 	 //go through continents
 	 //int j=0; // once we complete a series of countries counted by j we dont want j=0 again it should just keep going from where it was before
 	 for (int i = 0; i < cont_list.size(); i++)
@@ -261,27 +258,19 @@ void MapLoader::FileReader(std::string mapfile)
 		 for (int j = 0; j < territories.size(); j++)
 		 {
 			 if (i + 1 == stoi(territories[j][2]))
-			 {
-				 cont_list[i]->add_territory(territory_list[j]);
-			 }
+			 { cont_list[i]->add_territory(territory_list[j]);}
 		 }
 	 }
 
 	 //Finally create a new map and add the continents to it
 	 Map* created_map = new Map("created_map");
 	 for (int i = 0; i < cont_list.size(); i++)
-	 {
-		  created_map->add_continent(cont_list[i]);
-	 }
+	 { created_map->add_continent(cont_list[i]);}
 
 	 if (false == created_map->validate())
-	{
-		 std::cout << "validation of the map has failed! \n";
-	}
+	 { std::cout << "validation of the map has failed! \n";}
 	 else
-	 {
-		 std::cout << "map validation succesful! \n";
-	 }
+	 { std::cout << "map validation succesful! \n";}
 
 
 	 return *created_map;
@@ -329,16 +318,167 @@ void ConquestFileReader::FileReader(std::string mapfile)
 	//std::cout << mapfile;
 	std::ifstream input(mapfile);
 	std::string line;
+	int counter=0;
 	while (!input.eof())
 	{
 		getline(input, line, '\n');
-		std::cout << line;
+		///////////////////-CONTINENTS-/////////////////
+		if (line.compare("[Continents]")==0)
+		{
+			while (!input.eof())
+			{
+				getline(input, line, '\n');
+				if (line.compare("[Territories]")==0) { break; }
+				if (line.empty()) { continue; }
+
+				continent_list.push_back(std::vector<std::string>());
+				continent_list[counter].push_back(line.substr(0,line.find('=')));	//store the continent name
+				continent_list[counter].push_back(line.substr(line.find('=')+1)); //add 1 to not include the equals sign when storing associated points
+				std::cout <<"Continent:" <<continent_list[counter][0]<<"\t Number:"<< continent_list[counter][1] <<"\n";
+				counter++;
+			}
+		}
+		counter = 0;
+		///////////////////-TERRITORIES/COUNTRIES & BORDERS-/////////////////
+		///////////////////In order for the loadmap function to be compatible with this new format some re-formatting will be done/////////////////
+		/////////////////notably the first 4 comma delimited .map file strings are the only info in the territories vector ///////////////////
+		/////////////////of these the last one should be in the first second index position after the name which itself is after the country count number ///////////////////
+		/////////////////finally the border substring will be processsed according to the old format ///////////////////
+		if (line.compare("[Territories]") == 0)
+		{
+			while (!input.eof())
+			{
+				getline(input, line, '\n');
+				if (line.empty()) { continue; }
+
+				country_list.push_back(std::vector<std::string>());
+				country_list[counter].push_back(std::to_string(counter));
+				for (int i = 0; i < 4; i++)
+				{
+					country_list[counter].push_back(line.substr(0, line.find(',')));
+					line.erase(0, line.find(',') + 1);	//+1 also deletes the comma
+				}
+				std::swap(country_list[counter][2], country_list[counter][4]);
+				std::swap(country_list[counter][3], country_list[counter][4]);
+				std::cout <<"Country: "<< country_list[counter][0] << " " << country_list[counter][1] << " " << country_list[counter][2] << " " << country_list[counter][3] <<" "<< country_list[counter][4] << "\n";
+				
+				
+				///////////////////-BORDERS-/////////////////
+				border_list.push_back(std::vector<std::string>());
+				while (line.empty() == false)
+				{
+					if (line.find(',') == -1) { break; }
+					border_list[counter].push_back(line.substr(0, line.find(',')));
+					line.erase(0, line.find(',') + 1);	//+1 also deletes the comma
+				}
+				std::cout << "Borders: ";
+				for (int i = 0; i < border_list[counter].size(); i++) { std::cout << border_list[counter][i]<<"\t"; }
+				counter++;
+				std::cout << "\n";
+			}
+		}
 	}
+
+
+	///////////////////-CONTINENT REFERNCING BY NAME CHANGED TO REFERENCE BY INDEX-/////////////////
+	for (int i = 0; i < country_list.size(); i++)
+	{
+		for (int j = 0; j < continent_list.size(); j++)
+		{
+			if (country_list[i][2].compare(continent_list[j][0])==0)
+			{
+				country_list[i][2] = std::to_string(j);
+			}
+		}
+	}
+
+	///////////////////-BORDER REFERENCE BY NAME CHANGED TO BY INDEX-/////////////////
+	for (int i = 0; i < border_list.size(); i++)
+	{
+		for (int j = 0; j < border_list[i].size(); j++)
+		{
+			for (int k = 0; k < country_list.size(); k++)
+			{
+				if (border_list[i][j].compare(country_list[k][1])==0)
+				{
+					border_list[i][j] = country_list[k][0];
+					break;
+				}	
+			}
+		}
+	}
+
+	std::cout << "\n";
+	std::cout << "Border in number format\n";
+	for (int i = 0; i < border_list.size(); i++)
+	{
+		std::cout << "Borders: ";
+		for (int j = 0; j < border_list[i].size(); j++)
+		{
+			 std::cout << border_list[i][j] << "\t"; 
+		}
+		std::cout << "\n";
+	}
+
+	created_map = new Map(LoadMap(continent_list, country_list, border_list));
+
+
+	//adressing memory leak
+	continent_list.clear();
+	country_list.clear();
+	border_list.clear();
+	return;
 }
 
 Map ConquestFileReader::LoadMap(std::vector<std::vector<std::string>> continents, std::vector<std::vector<std::string>> territories, std::vector<std::vector<std::string>> borders)
 {
-	return Map();
+	//create a new *territory list for each index in the territories vector and store the name
+	std::vector<Territory*> territory_list;
+	std::vector<Continent*> cont_list;
+
+	for (int i = 0; i < territories.size(); i++)
+	{territory_list.push_back(new Territory(territories[i][1], 0));}
+
+	//need to connect all the territories now using the border list
+	for (int i = 0; i < territories.size(); i++)
+	{
+		//need to loop through all border indices to get all neighbours, annoyingly the first index is just that of the same country so reduce accordingly
+		for (int j = 0; j < borders[i].size(); j++)
+		{
+			territory_list[i]->connet_to(territory_list[stoi(borders[i][j])]);
+		}
+	}
+
+	//now that all the territories are created and linked create continents and link them to countries
+	for (int i = 0; i < continents.size(); i++)
+	{
+		//this should also implement bonus but for now it doesnt cause the class is not available
+		cont_list.push_back(new Continent(continents[i][0]));
+	}
+
+	//go through continents
+	//int j=0; // once we complete a series of countries counted by j we dont want j=0 again it should just keep going from where it was before
+	for (int i = 0; i < cont_list.size(); i++)
+	{
+		for (int j = 0; j < territories.size(); j++)
+		{
+			if (i == stoi(territories[j][2]))
+			{cont_list[i]->add_territory(territory_list[j]);}
+		}
+	}
+
+	//Finally create a new map and add the continents to it
+	Map* created_map = new Map("created_map");
+	for (int i = 0; i < cont_list.size(); i++)
+	{created_map->add_continent(cont_list[i]);}
+
+	if (false == created_map->validate())
+	{std::cout << "validation of the map has failed! \n";}
+
+	else
+	{std::cout << "map validation succesful! \n";}
+
+	return *created_map;
 }
 
 ConquestFileReader& ConquestFileReader::operator=(const ConquestFileReader& oldloader)
@@ -358,7 +498,7 @@ ConquestFileReader::~ConquestFileReader()
 int main()
 {
 	
-	ConquestFileReader *a = new ConquestFileReader("conquest_map_dir/3D.map");
-
+	ConquestFileReader *a = new ConquestFileReader("conquest_map_dir/3D/3D.map");
+	delete a;
 	return 0;
 }
