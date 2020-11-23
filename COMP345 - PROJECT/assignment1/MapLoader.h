@@ -22,7 +22,7 @@ class MapLoader
 		Map* getmap() { return this->created_map; }
 		std::string getfile();
 
-		void FileReader(std::string mapfile);
+		virtual void FileReader(std::string mapfile);
 		Map LoadMap(std::vector<std::vector<std::string>>continents, std::vector<std::vector<std::string>> territories, std::vector<std::vector<std::string>>borders);
 		~MapLoader();
 
@@ -70,7 +70,13 @@ private:
 
 };
 
-class ConqeustFileReaderAdapter : MapLoader
+class ConquestFileReaderAdapter : MapLoader
 {
+private:
+	ConquestFileReader *conquest_map;
+public:
+	ConquestFileReaderAdapter(ConquestFileReader conquest_file_reader);
+	void FileReader(std::string mapfile);
+
 
 };

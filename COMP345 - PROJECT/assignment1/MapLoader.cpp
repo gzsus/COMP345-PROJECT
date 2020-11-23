@@ -495,10 +495,25 @@ ConquestFileReader::~ConquestFileReader()
 	created_map = NULL;
 }
 
+
+ConquestFileReaderAdapter::ConquestFileReaderAdapter(ConquestFileReader conquest_file_reader)
+{
+	conquest_map = new ConquestFileReader();
+	*conquest_map = conquest_file_reader;
+}
+
+void ConquestFileReaderAdapter::FileReader(std::string mapfile)
+{
+	std::cout << "--Using the adapter to create a Conquest map!-- \n";
+	conquest_map->FileReader(mapfile);
+}
+
+
 int main()
 {
-	
-	ConquestFileReader *a = new ConquestFileReader("conquest_map_dir/3D/3D.map");
-	delete a;
+	ConquestFileReader* a = new ConquestFileReader("conquest_map_dir/3D/3D.map");
+	ConquestFileReaderAdapter *adapter = new ConquestFileReaderAdapter(*a);
+	adapter->FileReader("conquest_map_dir/3D/3D.map");
+	delete adapter;
 	return 0;
 }
