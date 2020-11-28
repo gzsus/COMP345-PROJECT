@@ -510,12 +510,3 @@ void ConquestFileReaderAdapter::FileReader(std::string mapfile)
 	conquest_map->FileReader(mapfile);
 }
 
-
-/*int main()
-{
-	ConquestFileReaderAdapter *adapter = new ConquestFileReaderAdapter(*(new ConquestFileReader()));
-	adapter->FileReader("conquest_map_dir/3D/3D.map");
-	std::cout << adapter->getmap();
-	delete adapter;
-	return 0;
-}*/
