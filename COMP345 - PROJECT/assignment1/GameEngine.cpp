@@ -35,23 +35,34 @@ GameEngine::GameEngine(const GameEngine& old_copy)
 std::string GameEngine::getmap()
 {
 	std::vector<std::string> maps;
+	std::vector<std::string> conquest_maps;
 	std::cout << "Let's Pick a map!\n\n";
-	try {
+	try 
+	{
 		for (auto& p : std::filesystem::directory_iterator("map_dir"))
 			maps.push_back(p.path().string());
+
+		for (auto& p : std::filesystem::directory_iterator("conquest_map_dir"))
+			conquest_maps.push_back(p.path().string());
 	}
 	catch (int e) {std::cout << "I/O error";}
 
 	//need to remove the first 8 characters to show only map and not path when asking for choice
 	for (int i = 0; i < maps.size(); i++)
-	{
-		std::cout << "Map #"<<i<<" -> "<<maps[i].substr(8)<<"\n";
-	}
+	{std::cout << "Map #"<<i<<" -> "<<maps[i].substr(8)<<"\n";}
+	for (int i = 0; i < conquest_maps.size(); i++)
+	{std::cout << "Conquest Map #" << i+maps.size() << " -> " << conquest_maps[i].substr(17) << "\n";}
+
 	std::cout << "Please Enter the number of the map which you would like to select: ";
 	int map_number;
 	std::cin>> map_number;
-	std::string selected_map = maps[map_number];
+	std:string selected_map;
+	if (map_number <= maps.size()-1)
+	{selected_map = maps[map_number];}
+	else
+	{selected_map = conquest_maps[map_number-maps.size()];}
 
+	
 	//empty vectors to avoid memory leak
 	maps.clear();
 
@@ -59,25 +70,54 @@ std::string GameEngine::getmap()
 }
 Map* GameEngine::loadmap(std::string map)
 {
-	std::string map_name = map.substr(8);
-	map.append("\\");
-	map.append(map_name);
-	map.append(".map");
-	std::cout << map;
+	int map_type = 0;
+	//normal maps
+	if (map.find("conquest_map") == -1)
+	{
+		std::string map_name = map.substr(8);
+		map.append("\\");
+		map.append(map_name);
+		map.append(".map");
+		std::cout << map;
+	}
+	//conquest maps
+	else
+	{
+		map_type = 1;
+		std::string map_name = map.substr(17);
+		map.append("\\");
+		map.append(map_name);
+		map.append(".map");
+		std::cout << map;
+	}
+	
 	try
 	{
-		MapLoader* loader = new MapLoader(map);
-		//for efficiency drop the loader and keep only a pointer to the map
-		Map *loaded_map = new Map(*(loader->getmap()));
-		//then dereference the map for the loader since it is now kept by the pointer above
-		loader->setmap(NULL);
-		//now we delete the loader without deleting the map
-		delete loader;
-		return loaded_map;
+		Map* loaded_map= NULL;
+		if (map_type == 1)
+		{
+			ConquestFileReaderAdapter* adapter = new ConquestFileReaderAdapter(*(new ConquestFileReader()));
+			adapter->FileReader(map);
+			Map* loaded_map = new Map(*(adapter->getmap()));
+			//then dereference the map for the loader since it is now kept by the pointer above
+			adapter->setmap(NULL);
+			delete adapter;
+			return loaded_map;
+		}
+		else 
+		{
+			MapLoader* loader = new MapLoader(map);
+			//for efficiency drop the loader and keep only a pointer to the map
+			Map* loaded_map = new Map(*(loader->getmap()));
+			//then dereference the map for the loader since it is now kept by the pointer above
+			loader->setmap(NULL);
+			delete loader;
+			return loaded_map;
+		}
+
+		
 	}
 	catch (int e) { std::cout << "error"; }
-
-	
 }
 
 GameEngine& GameEngine::operator=(const GameEngine& oldengine)

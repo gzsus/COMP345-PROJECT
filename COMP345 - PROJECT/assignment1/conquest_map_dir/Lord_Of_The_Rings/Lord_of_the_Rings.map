@@ -1,0 +1,62 @@
+[Map]
+author=Zworg2
+warn=yes
+image=Lord of the Rings.bmp
+wrap=no
+scroll=horizontal
+
+[Continents]
+North West=4
+North East=4
+South East=4
+South=4
+Central=6
+
+[Territories]
+North Island,153,14,North West,West Hobbiton,Hobbiton
+West Hobbiton,102,63,North West,North Island,North Forlindon,Hobbiton
+North Forlindon,90,108,North West,West Hobbiton,Hobbiton,The Shire,Forlindon
+Hobbiton,204,73,North West,North Island,West Hobbiton,North Forlindon,The Shire,Midge Water,Bree,Barrow
+Forlindon,108,157,North West,North Forlindon,The Shire,Minhiriath
+The Shire,181,122,North West,North Forlindon,Hobbiton,Barrow,Brandywine,Minhiriath,Forlindon
+Minhiriath,181,181,North West,Forlindon,The Shire,Brandywine,Enedwaith,Isen
+Brandywine,256,138,North West,The Shire,Minhiriath,Barrow,Isengard,Enedwaith
+Barrow,300,107,North West,Hobbiton,The Shire,Brandywine,Isengard,Moria,Bree
+Bree,308,73,North West,Hobbiton,Barrow,Midge Water,Rhu,Moria
+Midge Water,328,34,North West,Hobbiton,Bree,Rhu
+
+Rhu,387,65,North East,Midge Water,Bree,Moria,Dimrill Dale,Rivendell
+Dimrill Dale,431,98,North East,Rhu,Moria,Lorien,Dol Guldur,Old Forest,Rivendell
+Rivendell,471,50,North East,Rhu,Dimrill Dale,Old Forest
+Old Forest,559,56,North East,Rivendell,Dimrill Dale,Dol Guldur,Mirkwood
+Dol Guldur,496,117,North East,Dimrill Dale,Old Forest,Mirkwood,Field of Celebrant,Lorien
+Mirkwood,585,106,North East,Old Forest,Dol Guldur,Field of Celebrant
+The Brown Lands,596,157,North East,Field of Celebrant,Undun,Mt. Doom
+Field of Celebrant,512,164,North East,Dol Guldur,Mirkwood,The Brown Lands,Undun,Minas Morgul,Rauros,Fangom,Lorien
+
+Minas Morgul,537,238,South East,Undun,Mt. Doom,Gorgoroth,Osgiliath,Minas Tirith,Rauros,Field of Celebrant
+Undun,570,190,South East,The Brown Lands,Mt. Doom,Minas Morgul,Field of Celebrant
+Mt. Doom,627,224,South East,The Brown Lands,Undun,Minas Morgul,Gorgoroth
+Gorgoroth,612,291,South East,Mt. Doom,Minas Morgul,Osgiliath,East Harad
+Osgiliath,495,308,South East,East Harad,West Harad,Anduin,Lebennin,Minas Tirith,Minas Morgul,Gorgoroth
+West Harad,495,365,South East,Anduin,Osgiliath,East Harad
+East Harad,605,363,South East,Gorgoroth,Osgiliath,West Harad
+Anduin,417,337,South East,South Island,Lebennin,Osgiliath,West Harad
+
+Lebennin,400,290,South,South Island,Belfalas,Anorien,Minas Tirith,Osgiliath,Anduin
+Anorien,396,243,South,Belfalas,Gelin,Helms Deep,Fangom,Rauros,Minas Tirith,Lebennin
+Minas Tirith,477,258,South,Anorien,Rauros,Minas Morgul,Osgiliath,Lebennin
+Gelin,297,258,South,Helms Deep,Anorien,Belfalas,Lefnum,Ered
+Lefnum,230,295,South,Ered,Gelin,Belfalas
+Ered,233,257,South,Isen,Helms Deep,Gelin,Lefnum
+South Island,358,335,South,Belfalas,Lebennin,Anduin
+Belfalas,339,287,South,Lefnum,Gelin,Anorien,Lebennin,South Island
+
+Isen,217,223,Central,Minhiriath,Enedwaith,Helms Deep,Ered
+Enedwaith,277,184,Central,Brandywine,Isengard,Helms Deep,Isen,Minhiriath
+Helms Deep,306,222,Central,Enedwaith,Isengard,Fangom,Anorien,Gelin,Ered,Isen
+Isengard,348,167,Central,Moria,Lorien,Fangom,Helms Deep,Enedwaith,Brandywine,Barrow
+Moria,374,124,Central,Rhu,Dimrill Dale,Lorien,Isengard,Barrow,Bree
+Lorien,425,153,Central,Dimrill Dale,Dol Guldur,Field of Celebrant,Fangom,Isengard,Moria
+Fangom,428,198,Central,Lorien,Field of Celebrant,Rauros,Anorien,Helms Deep,Isengard
+Rauros,487,216,Central,Fangom,Field of Celebrant,Minas Morgul,Minas Tirith,Anorien

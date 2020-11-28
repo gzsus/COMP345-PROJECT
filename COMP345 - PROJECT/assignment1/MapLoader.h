@@ -70,13 +70,14 @@ private:
 
 };
 
-class ConquestFileReaderAdapter : MapLoader
+class ConquestFileReaderAdapter :public MapLoader
 {
 private:
 	ConquestFileReader *conquest_map;
 public:
 	ConquestFileReaderAdapter(ConquestFileReader conquest_file_reader);
 	void FileReader(std::string mapfile);
+	Map* getmap() { return this->conquest_map->getmap(); }
 
 
 };
