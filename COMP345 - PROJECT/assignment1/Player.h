@@ -19,6 +19,15 @@ class Order;
 class OrdersList;
 class PlayerStrategy;
 
+struct orderData {
+    Player* player;
+    Player* target_player;
+    Territory* source;
+    Territory* target;
+    int armyunits;
+    int reinforcement;
+};
+
 class Player {
 private:
     int reinforcementPool;
@@ -36,6 +45,7 @@ private:
     list<Territory*> territoriesToDefend;
     list<Territory*> territoriesToAttack;
     PlayerStrategy* strategy;
+    vector <orderData*> orderDataVector;
 
 
     public:
@@ -56,7 +66,10 @@ private:
         Hand* getHand();
         vector<Player*>* getNegotiating();
         PlayerStrategy* getStrategy();
+        vector <orderData*> getOrderDataVector();
         void setStrategy(PlayerStrategy &strategy);
+        
+
 
     /********** Order Issuing Phase **********/
     list<Territory*> toDefend(Map* map);
@@ -76,3 +89,5 @@ private:
     //stream insertion operator
     friend ostream& operator<<(ostream& ostream, Player& player);
 };
+
+
