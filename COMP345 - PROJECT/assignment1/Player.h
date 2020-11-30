@@ -48,32 +48,33 @@ private:
     vector <orderData*> orderDataVector;
 
 
-    public:
-        //constructor prototype
-        Player(int players);
-        Player();
-        //copy constructor prototype
-        Player(const Player& other);
-        //overloaded assignment operator prototype
-        Player& operator=(const Player &other);
-        //destructor prototype
-        ~Player();
-        //function prototypes
-        vector<Order*>* getOrders();
-        //Getters and Setters
-        void setReinforcementPool(int reinforcements);
-        int getReinforcementPool();
-        Hand* getHand();
-        vector<Player*>* getNegotiating();
-        PlayerStrategy* getStrategy();
-        vector <orderData*> getOrderDataVector();
-        void setStrategy(PlayerStrategy &strategy);
+public:
+    //constructor prototype
+    Player(int players);
+    Player();
+    //copy constructor prototype
+    Player(const Player& other);
+    //overloaded assignment operator prototype
+    Player& operator=(const Player &other);
+    //destructor prototype
+    ~Player();
+    //function prototypes
+    vector<Order*>* getOrders();
+    //Getters and Setters
+    void setReinforcementPool(int reinforcements);
+    int getReinforcementPool();
+    Hand* getHand();
+    vector<Player*>* getNegotiating();
+    PlayerStrategy* getStrategy();
+    vector<orderData*> getOrderDataVector();
+    void setStrategy(PlayerStrategy &strategy);
         
 
 
     /********** Order Issuing Phase **********/
     list<Territory*> toDefend(Map* map);
     list<Territory*> toAttack(Map* map);
+    int get_armies_deployed(Map* map);
     int issueOrder(int player_id, Map* map, int reinforcements, bool phaseMode);
     list<Territory*> get_defending();
     list<Territory*> get_attacking();

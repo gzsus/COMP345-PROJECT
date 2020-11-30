@@ -40,7 +40,7 @@ public:
 	Player* mainGameLoop(std::vector<Player*> allPlayers, Map* map, bool phaseMode);
 	int* reinforcementPhase(std::vector<Player*> allPlayers, int num_players, Map* map);
 	int issueOrderPhase(std::vector<Player*> allPlayers, int num_players, Map* map, int* reinforcements, bool phaseMode);
-	int executeOrdersPhase();
+	int executeOrdersPhase(std::vector<Player*> allPlayers, int num_players, Map* map);
 
 
 };

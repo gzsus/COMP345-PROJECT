@@ -247,8 +247,9 @@ Player* GameEngine::mainGameLoop(vector<Player*> allPlayers, Map* map, bool phas
 		std::cout << "\n\n\tOrder Issuing Phase\n\n";
 		issueOrderPhase(allPlayers, num_players, map, reinforcements, phaseMode);
 
+
 		std::cout << "\n\n\tOrder Execution Phase\n\n";
-		executeOrdersPhase();
+		executeOrdersPhase(allPlayers, num_players, map);
 
 
 		for (Player* p : allPlayers) {
@@ -331,8 +332,11 @@ int GameEngine::issueOrderPhase(vector<Player*> allPlayers, int num_players, Map
 	return 0;
 }
 
-int GameEngine::executeOrdersPhase()
+int GameEngine::executeOrdersPhase(vector<Player*> allPlayers, int num_players, Map* map)
 {
+	for (Player* p : allPlayers) {
+		cout << "  " << p;
+	}
 	return 0;
 }
 
