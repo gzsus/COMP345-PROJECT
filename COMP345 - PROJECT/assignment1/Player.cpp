@@ -33,6 +33,8 @@ Player::Player(const Player& other) {
 	negotiating = new vector<Player*>();
 	for (size_t i = 0; i < other.negotiating->size(); i++)
 		negotiating->push_back(other.negotiating->at(i));
+	for (size_t i = 0; i < other.orderDataVector.size(); i++)
+		orderDataVector.push_back(other.orderDataVector.at(i));
 	pHand = new Hand(*other.pHand);
 	pOrderList = new OrdersList(*other.pOrderList);
 	strategy = strategy->clone();
@@ -50,6 +52,7 @@ Player& Player::operator=(const Player& other) {
 		pOrderList = other.pOrderList;
 		delete strategy;
 		strategy = other.strategy;
+		orderDataVector = other.orderDataVector;
 	}
 	return *this;
 }
@@ -70,6 +73,9 @@ Player::~Player() {
 	for (size_t i = 0; i < negotiating->size(); i++) {
 		delete negotiating->at(i);
 	}
+	for (size_t i = 0; i < orderDataVector.size(); i++)
+		delete orderDataVector.at(i);
+	orderDataVector.clear();
 	delete negotiating;
 	negotiating->clear();
 	negotiating = NULL;
@@ -102,6 +108,11 @@ vector<Player*>* Player::getNegotiating()
 PlayerStrategy* Player::getStrategy()
 {
 	return strategy;
+}
+
+vector<orderData*> Player::getOrderDataVector()
+{
+	return orderDataVector;
 }
 
 void Player::setStrategy(PlayerStrategy &strategy)
