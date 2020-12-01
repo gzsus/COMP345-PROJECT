@@ -3,6 +3,7 @@
 #include "MapLoader.h"
 #include "Player.h"
 #include "GameObservers.h"
+#include "PlayerStrategy.h"
 #include <fstream>
 #include<iostream>
 #include<filesystem>
@@ -247,9 +248,8 @@ Player* GameEngine::mainGameLoop(vector<Player*> allPlayers, Map* map, bool phas
 		std::cout << "\n\n\tOrder Issuing Phase\n\n";
 		issueOrderPhase(allPlayers, num_players, map, reinforcements, phaseMode);
 
-
 		std::cout << "\n\n\tOrder Execution Phase\n\n";
-		executeOrdersPhase(allPlayers, num_players, map);
+		executeOrdersPhase();
 
 
 		for (Player* p : allPlayers) {
@@ -332,11 +332,8 @@ int GameEngine::issueOrderPhase(vector<Player*> allPlayers, int num_players, Map
 	return 0;
 }
 
-int GameEngine::executeOrdersPhase(vector<Player*> allPlayers, int num_players, Map* map)
+int GameEngine::executeOrdersPhase()
 {
-	for (Player* p : allPlayers) {
-		cout << "  " << p;
-	}
 	return 0;
 }
 
@@ -397,6 +394,10 @@ int main()
 	//Showing the state of the players before the startup phase
 	for (Player* p : players) {
 		cout << *p<<"\n";
+		HumanPlayerStrategy human;
+		PlayerStrategy* strategy = &human;
+		strategy->setPlayer(p);
+		p->setStrategy(*strategy);
 	}
 
 	cout << "\n===Running Startup Phase===\n\n";

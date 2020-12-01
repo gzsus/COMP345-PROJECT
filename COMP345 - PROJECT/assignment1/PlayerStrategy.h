@@ -6,6 +6,7 @@
 using std::list;
 
 class Player;
+class Order;
 
 class PlayerStrategy {
 public:
@@ -29,8 +30,21 @@ public:
 	//Must issue deploy orders before any other order, followed by airlift orders if applicable, blockade if applicable, and any other orders they can in whatever priority. 
 	//Must issue advance orders into enemy territories chosen by toAttack() and advance orders into friendly territory chosen by toDefend()
 	//Use the hasCard(string type) to check if the player has the card for the order you'd like to execute.
-	virtual void issueOrder(Map* map) {};
+	virtual void issueOrder(Map* map, int reinforcements, vector<Order*> orders) {};
 
 protected:
 	Player *player;
+};
+
+class HumanPlayerStrategy : public PlayerStrategy {
+	list<Territory*> toDefend(Map* map);
+	list<Territory*> toAttack(Map* map);
+	void issueOrder(Map* map, int reinforcements, vector<Order*> orders);
+
+};
+
+class NeutralPlayerStrategy : public PlayerStrategy {
+	list<Territory*> toDefend(Map* map);
+	list<Territory*> toAttack(Map* map);
+	void issueOrder(Map* map,int reinforcements,Player* player);
 };
