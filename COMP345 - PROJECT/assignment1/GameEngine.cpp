@@ -249,16 +249,11 @@ Player* GameEngine::mainGameLoop(vector<Player*> allPlayers, Map* map, bool phas
 	//	Main loop of game
 	while (allPlayers.size() > 1) {
 
-		std::cout << "\n\n\tReinforcement Phase\n\n";
 		int* reinforcements = reinforcementPhase(allPlayers, num_players, map);
 
-
-		std::cout << "\n\n\tOrder Issuing Phase\n\n";
 		issueOrderPhase(allPlayers, num_players, map, reinforcements, phaseMode);
 
-		std::cout << "\n\n\tOrder Execution Phase\n\n";
-		executeOrdersPhase(allPlayers, num_players, map);
-
+		executeOrdersPhase(allPlayers, num_players, map, phaseMode);
 
 		for (Player* p : allPlayers) {
 			if (map->get_territories(p).size() == 0) {
@@ -290,7 +285,7 @@ int* GameEngine::reinforcementPhase(vector<Player*> allPlayers, int num_players,
 			firstFlag = true;
 			reinforcements[get_player_id(p, allPlayers)] = p->getReinforcementPool();
 			p->setReinforcementPool(0);
-			std::cout << "Player" << get_player_id(p, allPlayers) << " reinforcements: " << reinforcements[get_player_id(p, allPlayers)] << std::endl;
+			std::cout << "Player" << get_player_id(p, allPlayers) + 1 << " reinforcements: " << reinforcements[get_player_id(p, allPlayers)] << std::endl;
 		}
 
 	if (firstFlag) {
@@ -339,12 +334,11 @@ int GameEngine::issueOrderPhase(vector<Player*> allPlayers, int num_players, Map
 	return 0;
 }
 
-int GameEngine::executeOrdersPhase(std::vector<Player*> allPlayers, int num_players, Map* map)
+int GameEngine::executeOrdersPhase(std::vector<Player*> allPlayers, int num_players, Map* map, bool phaseMode)
 {
 	for (Player* p : allPlayers) {
 		int id = get_player_id(p, allPlayers);
-		cout << "Player " << id << ":" << endl;
-		p->executeOrders();
+		p->executeOrders(id, phaseMode);
 		std::cout << "\n";
 	}
 	return 0;
@@ -438,7 +432,7 @@ int main()
 			cin >> choice;
 			if (choice == 1) {
 				AggressivePlayerStrategy* aggressive = new AggressivePlayerStrategy();
-				cout << aggressive << endl; 
+				cout << aggressive << endl;
 				allStrategies[index] = aggressive;
 				p->setStrategy(*allStrategies[index]);
 				break;

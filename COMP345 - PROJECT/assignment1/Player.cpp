@@ -432,21 +432,29 @@ int Player::issueOrder(int player_id, Map* map, int reinforcements, bool phaseMo
 	return 0;
 }
 
-void Player::executeOrders() {
+void Player::executeOrders(int player_id, bool phaseMode) {
 
-	//for (orderData* this_order : orderDataVector) {
-	//	cout << (this_order->order)->Type << endl;
-	//	if ((this_order->order)->Type == "deploy") {
-	//		//execute deploy orders
-	//		Deploy *deploy = (Deploy*)(this_order->order); 
-	//		deploy->execute(this, this_order->source, this_order->reinforcement);
-	//	}
-	//	else if ((this_order->order)->Type == "advance") {
-	//		//execute advance orders
-	//		Advance* advance = (Advance*)(this_order->order);
-	//		advance->execute(this, this_order->source, this_order->target, this_order->armyunit);
-	//	}
-	//}
+	if (phaseMode) {
+		cout << "\nPlayer " << (player_id + 1) << ": Execute Orders Phase" << endl;
+		GameObservers* go = new GameObservers();
+		go->issueOrderPhaseView();
+		delete go;
+		go = NULL;
+	}
+
+	for (orderData* this_order : orderDataVector) {
+		if ((this_order->order)->Type == "deploy") {
+			//execute deploy orders
+			Deploy *deploy = (Deploy*)(this_order->order); 
+			deploy->execute(this, this_order->source, this_order->reinforcement);
+		}
+		//else if ((this_order->order)->Type == "advance") {
+		//	//execute advance orders
+		//	Advance* advance = (Advance*)(this_order->order);
+		//	advance->execute(this, this_order->source, this_order->target, this_order->armyunit);
+		//}
+	}
+	orderDataVector.clear(); 
 
 	char reply;
 	cout << "Do you wish to continue? (y/n)";

@@ -77,7 +77,7 @@ public:
     list<Territory*> get_attacking();
     bool defending_contains(Territory* t);
     bool attacking_contains(Territory* t);
-    void executeOrders();
+    void executeOrders(int player_id, bool phaseMode);
 
     bool hasCard(std::string type);
     void issueOrder(Order* chosenOrder);
