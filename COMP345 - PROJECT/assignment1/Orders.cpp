@@ -319,8 +319,8 @@ void Advance::execute(Player* player, Territory* source, Territory* target, int 
 					target->set_armies(attacking_army);
 					//PLAYER GETS A NEW CARD-----------------------------------------------------------------
 	
-					player->getHand()->add(deck->draw());
-					cout << "Card has been added to player's hand" << endl;
+					//player->getHand()->add(deck->draw());
+					//cout << "Card has been added to player's hand" << endl;
 
 				}
 				else {

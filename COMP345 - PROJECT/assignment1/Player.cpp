@@ -448,11 +448,11 @@ void Player::executeOrders(int player_id, bool phaseMode) {
 			Deploy *deploy = (Deploy*)(this_order->order); 
 			deploy->execute(this, this_order->source, this_order->reinforcement);
 		}
-		//else if ((this_order->order)->Type == "advance") {
-		//	//execute advance orders
-		//	Advance* advance = (Advance*)(this_order->order);
-		//	advance->execute(this, this_order->source, this_order->target, this_order->armyunit);
-		//}
+		else if ((this_order->order)->Type == "advance") {
+			//execute advance orders
+			Advance* advance = (Advance*)(this_order->order);
+			advance->execute(this, this_order->source, this_order->target, this_order->armyunit);
+		}
 	}
 	orderDataVector.clear(); 
 
