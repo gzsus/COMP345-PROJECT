@@ -18,6 +18,7 @@ public:
 	PlayerStrategy(PlayerStrategy& otherStrategy);
 	virtual PlayerStrategy* clone();
 	PlayerStrategy();
+	~PlayerStrategy(); 
 	friend std::ostream& operator<<(std::ostream& ostream, const PlayerStrategy& strategy);
 
 	//setter & getter
@@ -40,24 +41,56 @@ protected:
 };
 
 class AggressivePlayerStrategy : public PlayerStrategy {
+public: 
+	AggressivePlayerStrategy& operator=(const AggressivePlayerStrategy& otherStrategy);
+	AggressivePlayerStrategy(AggressivePlayerStrategy& otherStrategy);
+	AggressivePlayerStrategy* clone();
+	AggressivePlayerStrategy();
+	~AggressivePlayerStrategy();
+	friend std::ostream& operator<<(std::ostream& ostream, const AggressivePlayerStrategy& strategy);
+
 	list<Territory*> toDefend(Map* map);
 	list<Territory*> toAttack(Map* map);
 	void issueOrder(Map* map, int reinforcements, vector<orderData*>* ordersToExecute);
 };
 
 class BenevolentPlayerStrategy : public PlayerStrategy {
+public: 
+	BenevolentPlayerStrategy& operator=(const BenevolentPlayerStrategy& otherStrategy);
+	BenevolentPlayerStrategy(BenevolentPlayerStrategy& otherStrategy);
+	BenevolentPlayerStrategy* clone();
+	BenevolentPlayerStrategy();
+	~BenevolentPlayerStrategy();
+	friend std::ostream& operator<<(std::ostream& ostream, const BenevolentPlayerStrategy& strategy);
+
 	list<Territory*> toDefend(Map* map);
 	list<Territory*> toAttack(Map* map);
 	void issueOrder(Map* map, int reinforcements, vector<orderData*>* ordersToExecute);
 };
 
 class HumanPlayerStrategy : public PlayerStrategy {
+public:
+	HumanPlayerStrategy& operator=(const HumanPlayerStrategy& otherStrategy);
+	HumanPlayerStrategy(HumanPlayerStrategy& otherStrategy);
+	HumanPlayerStrategy* clone();
+	HumanPlayerStrategy();
+	~HumanPlayerStrategy();
+	friend std::ostream& operator<<(std::ostream& ostream, const HumanPlayerStrategy& strategy);
+
 	list<Territory*> toDefend(Map* map);
 	list<Territory*> toAttack(Map* map);
 	void issueOrder(Map* map, int reinforcements, vector<orderData*>* ordersToExecute);
 };
 
 class NeutralPlayerStrategy : public PlayerStrategy {
+public:
+	NeutralPlayerStrategy& operator=(const NeutralPlayerStrategy& otherStrategy);
+	NeutralPlayerStrategy(NeutralPlayerStrategy& otherStrategy);
+	NeutralPlayerStrategy* clone();
+	NeutralPlayerStrategy();
+	~NeutralPlayerStrategy();
+	friend std::ostream& operator<<(std::ostream& ostream, const NeutralPlayerStrategy& strategy);
+
 	list<Territory*> toDefend(Map* map);
 	list<Territory*> toAttack(Map* map);
 	void issueOrder(Map* map, int reinforcements, vector<orderData*>* ordersToExecute);

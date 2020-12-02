@@ -24,10 +24,15 @@ PlayerStrategy* PlayerStrategy::clone()
 	return new PlayerStrategy(*this);
 }
 
-
 PlayerStrategy::PlayerStrategy()
 {
 	player = NULL;
+}
+
+PlayerStrategy::~PlayerStrategy()
+{
+	delete player;
+	player = NULL; 
 }
 
 void PlayerStrategy::setPlayer(Player* player)
@@ -57,6 +62,39 @@ list<Territory*> PlayerStrategy::toAttack(Map* map)
 }
 
 //--------------------------------Aggressive Player Strategy--------------------------------//
+std::ostream& operator<<(std::ostream& ostream, const AggressivePlayerStrategy& strategy)
+{
+	ostream << "Player Strategy: Currently linked to this player: " << strategy.player << "\n";
+	return ostream;
+}
+
+AggressivePlayerStrategy& AggressivePlayerStrategy::operator=(const AggressivePlayerStrategy& otherStrategy)
+{
+	player = otherStrategy.player;
+	return *this;
+}
+
+AggressivePlayerStrategy::AggressivePlayerStrategy(AggressivePlayerStrategy& otherStrategy)
+{
+	player = NULL;
+}
+
+AggressivePlayerStrategy* AggressivePlayerStrategy::clone()
+{
+	return new AggressivePlayerStrategy(*this);
+}
+
+AggressivePlayerStrategy::AggressivePlayerStrategy()
+{
+	player = NULL;
+}
+
+AggressivePlayerStrategy::~AggressivePlayerStrategy()
+{
+	delete player;
+	player = NULL;
+}
+
 list<Territory*> AggressivePlayerStrategy::toDefend(Map* map)
 {
 	list<Territory*> toDefend;
@@ -170,6 +208,39 @@ void AggressivePlayerStrategy::issueOrder(Map* map, int reinforcements, vector<o
 }
 
 //--------------------------------Benevolent Player Strategy--------------------------------//
+std::ostream& operator<<(std::ostream& ostream, const BenevolentPlayerStrategy& strategy)
+{
+	ostream << "Player Strategy: Currently linked to this player: " << strategy.player << "\n";
+	return ostream;
+}
+
+BenevolentPlayerStrategy& BenevolentPlayerStrategy::operator=(const BenevolentPlayerStrategy& otherStrategy)
+{
+	player = otherStrategy.player;
+	return *this;
+}
+
+BenevolentPlayerStrategy::BenevolentPlayerStrategy(BenevolentPlayerStrategy& otherStrategy)
+{
+	player = NULL;
+}
+
+BenevolentPlayerStrategy* BenevolentPlayerStrategy::clone()
+{
+	return new BenevolentPlayerStrategy(*this);
+}
+
+BenevolentPlayerStrategy::BenevolentPlayerStrategy()
+{
+	player = NULL;
+}
+
+BenevolentPlayerStrategy::~BenevolentPlayerStrategy()
+{
+	delete player;
+	player = NULL;
+}
+
 list<Territory*> BenevolentPlayerStrategy::toDefend(Map* map)
 {
 	list<Territory*> toDefend;
@@ -239,6 +310,39 @@ void BenevolentPlayerStrategy::issueOrder(Map* map, int reinforcements, vector<o
 }
 
 //--------------------------------Human Player Strategy--------------------------------//
+std::ostream& operator<<(std::ostream& ostream, const HumanPlayerStrategy& strategy)
+{
+	ostream << "Player Strategy: Currently linked to this player: " << strategy.player << "\n";
+	return ostream;
+}
+
+HumanPlayerStrategy& HumanPlayerStrategy::operator=(const HumanPlayerStrategy& otherStrategy)
+{
+	player = otherStrategy.player;
+	return *this;
+}
+
+HumanPlayerStrategy::HumanPlayerStrategy(HumanPlayerStrategy& otherStrategy)
+{
+	player = NULL;
+}
+
+HumanPlayerStrategy* HumanPlayerStrategy::clone()
+{
+	return new HumanPlayerStrategy(*this);
+}
+
+HumanPlayerStrategy::HumanPlayerStrategy()
+{
+	player = NULL;
+}
+
+HumanPlayerStrategy::~HumanPlayerStrategy()
+{
+	delete player;
+	player = NULL;
+}
+
 list<Territory*> HumanPlayerStrategy::toDefend(Map* map)
 {
 	vector<Territory*> territories_owned = map->get_territories(player);
@@ -386,7 +490,8 @@ void HumanPlayerStrategy::issueOrder(Map* map, int reinforcements, vector<orderD
 						cout << "\tDeploying: " << armies << ((armies > 1) ? " armies in " : " army in ") << t->get_name() << endl;
 						//cout << *deploy; 
 						//Push order data to vector
-						player->getOrderDataVector().push_back(dataDeploy);
+						//player->getOrderDataVector().push_back(dataDeploy);
+						ordersToExecute->push_back(dataDeploy);
 						cout << "\n Deploy Order created!";
 					}
 					else {
@@ -517,7 +622,8 @@ void HumanPlayerStrategy::issueOrder(Map* map, int reinforcements, vector<orderD
 				cout << "\tOrder specifics:\n";
 				cout << "\t\tAdvance " << amount << ((amount > 1) ? " armies from " : " army from ") << territories_owned[origin]->get_name() + " to " << origin_neighbours[destination]->get_name();
 				//cout << *advance; 
-				player->getOrderDataVector().push_back(dataAdvance);
+				//player->getOrderDataVector().push_back(dataAdvance);
+				ordersToExecute->push_back(dataAdvance); 
 				cout << "\n\tDeploy Order created!";
 			}
 			else {
@@ -556,7 +662,40 @@ void HumanPlayerStrategy::issueOrder(Map* map, int reinforcements, vector<orderD
 
 }
 
-//--------------------------------Benevolent Player Strategy--------------------------------//
+//--------------------------------Neutral Player Strategy--------------------------------//
+std::ostream& operator<<(std::ostream& ostream, const NeutralPlayerStrategy& strategy)
+{
+	ostream << "Player Strategy: Currently linked to this player: " << strategy.player << "\n";
+	return ostream;
+}
+
+NeutralPlayerStrategy& NeutralPlayerStrategy::operator=(const NeutralPlayerStrategy& otherStrategy)
+{
+	player = otherStrategy.player;
+	return *this;
+}
+
+NeutralPlayerStrategy::NeutralPlayerStrategy(NeutralPlayerStrategy& otherStrategy)
+{
+	player = NULL;
+}
+
+NeutralPlayerStrategy* NeutralPlayerStrategy::clone()
+{
+	return new NeutralPlayerStrategy(*this);
+}
+
+NeutralPlayerStrategy::NeutralPlayerStrategy()
+{
+	player = NULL;
+}
+
+NeutralPlayerStrategy::~NeutralPlayerStrategy()
+{
+	delete player;
+	player = NULL;
+}
+
 list<Territory*> NeutralPlayerStrategy::toDefend(Map* map)
 {
 	//Returns nothing
