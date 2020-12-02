@@ -20,11 +20,12 @@ class OrdersList;
 class PlayerStrategy;
 
 struct orderData {
-    Player* player;
+    Player* this_player;
     Player* target_player;
     Territory* source;
     Territory* target;
-    int armyunits;
+    Order* order;
+    int armyunit;
     int reinforcement;
 };
 
@@ -47,7 +48,6 @@ private:
     PlayerStrategy* strategy;
     vector <orderData*> orderDataVector;
 
-
 public:
     //constructor prototype
     Player(int players);
@@ -69,8 +69,6 @@ public:
     vector <orderData*> getOrderDataVector();
     void setStrategy(PlayerStrategy& strategy);
 
-
-
     /********** Order Issuing Phase **********/
     list<Territory*> toDefend(Map* map);
     list<Territory*> toAttack(Map* map);
@@ -79,6 +77,7 @@ public:
     list<Territory*> get_attacking();
     bool defending_contains(Territory* t);
     bool attacking_contains(Territory* t);
+    void executeOrders();
 
     bool hasCard(std::string type);
     void issueOrder(Order* chosenOrder);

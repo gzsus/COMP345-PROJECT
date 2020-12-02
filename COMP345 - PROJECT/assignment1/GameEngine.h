@@ -10,9 +10,9 @@ class GameEngine
 
 private:
 	//needs to be a pointer
-	Map *game_map;
-	Player *neutralPlayer;
-	Deck *deck;
+	Map* game_map;
+	Player* neutralPlayer;
+	Deck* deck;
 
 
 public:
@@ -27,7 +27,7 @@ public:
 	GameEngine& operator =(const GameEngine& oldengine);// assignment operator
 
 	friend std::ostream& operator<<(std::ostream&, const GameEngine&); //stream insertion operator
-	
+
 	/////////////////////////////////// Startup Phase ///////////////////////////////////
 	void startupPhase(Map* mapfile, std::vector<Player*>* players);
 
@@ -40,7 +40,7 @@ public:
 	Player* mainGameLoop(std::vector<Player*> allPlayers, Map* map, bool phaseMode);
 	int* reinforcementPhase(std::vector<Player*> allPlayers, int num_players, Map* map);
 	int issueOrderPhase(std::vector<Player*> allPlayers, int num_players, Map* map, int* reinforcements, bool phaseMode);
-	int executeOrdersPhase();
+	int executeOrdersPhase(std::vector<Player*> allPlayers, int num_players, Map* map);
 
 
 };

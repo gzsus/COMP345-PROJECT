@@ -2,60 +2,243 @@
 
 std::ostream& operator<<(std::ostream& ostream, const PlayerStrategy& strategy)
 {
-    ostream << "Player Strategy: Currently linked to this player: "<<strategy.player<<"\n";
-    return ostream;
+	ostream << "Player Strategy: Currently linked to this player: " << strategy.player << "\n";
+	return ostream;
 }
 
 PlayerStrategy& PlayerStrategy::operator=(const PlayerStrategy& otherStrategy)
 {
-    player = otherStrategy.player;
-    return *this;
+	player = otherStrategy.player;
+	return *this;
 }
 
 //Constructor doesn't create a new player because we don't want a new player that is only accessible through the playerStrategy object.
 //After copying a playerStrategy, the player it's linked to will have to be set by whatever calls the constructor.
 PlayerStrategy::PlayerStrategy(PlayerStrategy& otherStrategy)
 {
-    player = NULL;
+	player = NULL;
 }
 
 PlayerStrategy* PlayerStrategy::clone()
 {
-    return new PlayerStrategy(*this);
+	return new PlayerStrategy(*this);
 }
 
 
 PlayerStrategy::PlayerStrategy()
 {
-    player = NULL;
+	player = NULL;
 }
 
 void PlayerStrategy::setPlayer(Player* player)
 {
-    this->player = player;
+	this->player = player;
 }
 
 Player* PlayerStrategy::getPlayer()
 {
-    return player;
+	return player;
 }
 
 list<Territory*> PlayerStrategy::toDefend(Map* map)
 {
-    list<Territory*> toDefend;
-    for (Territory* t : (map->get_territories(player)))
-        toDefend.push_back(t);
-    return toDefend;
+	list<Territory*> toDefend;
+	for (Territory* t : (map->get_territories(player)))
+		toDefend.push_back(t);
+	return toDefend;
 }
 
 list<Territory*> PlayerStrategy::toAttack(Map* map)
 {
-    list<Territory*> toAttack;
-    for (Territory* t : (map->get_neighbour_territories(player)))
-        toAttack.push_back(t);
-    return toAttack;
+	list<Territory*> toAttack;
+	for (Territory* t : (map->get_neighbour_territories(player)))
+		toAttack.push_back(t);
+	return toAttack;
 }
 
+//--------------------------------Aggressive Player Strategy--------------------------------//
+list<Territory*> AggressivePlayerStrategy::toDefend(Map* map)
+{
+	list<Territory*> toDefend;
+	for (Territory* t : (map->get_territories(player)))
+		toDefend.push_back(t);
+	return toDefend;
+}
+
+list<Territory*> AggressivePlayerStrategy::toAttack(Map* map)
+{
+	list<Territory*> toAttack;
+	for (Territory* t : (map->get_neighbour_territories(player)))
+		toAttack.push_back(t);
+	return toAttack;
+}
+
+void AggressivePlayerStrategy::issueOrder(Map* map, int reinforcements, vector<orderData*>* ordersToExecute)
+{
+	int sizeToDefend = player->get_defending().size();
+	int sizeToAttack = player->get_attacking().size();
+
+	int maximumArmies = -1;
+
+	Territory* strongestTerritory = NULL;
+
+	//finds the player's strongest territories (i.e. the territories with the most armies)
+	//if all territories have the same number of armies, the first territory in the toDefend list is chosen
+	for (auto territory : player->get_defending()) {
+		if (territory->get_armies() > maximumArmies) {
+			maximumArmies = territory->get_armies();
+			strongestTerritory = territory;
+		}
+	}
+
+	//creates deploy order for the strongest territory 
+	Deploy* deploy = new Deploy();
+	orderData* defendOrders = new orderData;
+	defendOrders->this_player = player;
+	defendOrders->target_player = NULL;
+	defendOrders->source = strongestTerritory;
+	defendOrders->target = NULL;
+	defendOrders->order = deploy;
+	defendOrders->reinforcement = reinforcements;
+	defendOrders->armyunit = reinforcements;
+	ordersToExecute->push_back(defendOrders);
+
+	int armyUnits;
+	int updatedReinforcements = reinforcements;
+	int neighbourhoodSize = (strongestTerritory->get_neighbours()).size();
+
+	//advances all the armies from the strongest territory 
+	for (auto neighbour : strongestTerritory->get_neighbours()) {
+		if (updatedReinforcements > 0) {
+			//sends the same amount of armies to each territory that it can attack
+			//if there is a remainder after calculating "armies", they remain in the current territory
+			if (neighbourhoodSize < reinforcements) {
+				armyUnits = reinforcements / neighbourhoodSize;
+			}
+			//sends one armies to every territory that it can send to
+			else {
+				armyUnits = 1;
+				updatedReinforcements--;
+			}
+			//creates attack order
+			Advance* advance = new Advance();
+			orderData* attackOrders = new orderData;
+			attackOrders->this_player = player;
+			attackOrders->target_player = neighbour->get_owner();
+			attackOrders->source = strongestTerritory;
+			attackOrders->target = neighbour;
+			attackOrders->order = advance;
+			attackOrders->reinforcement = reinforcements;
+			attackOrders->armyunit = armyUnits;
+			ordersToExecute->push_back(attackOrders);
+		}
+	}
+
+	//finds the new strongest territory 
+	Territory* strongestNeighbour = NULL;
+	maximumArmies = -1;
+	for (auto neighbour : strongestTerritory->get_neighbours()) {
+		if (neighbour->get_armies() > maximumArmies) {
+			maximumArmies = neighbour->get_armies();
+			strongestNeighbour = neighbour;
+		}
+	}
+
+	//determine how much armies to send to the strongest territory
+	armyUnits = 0;
+	for (auto neighbour : strongestNeighbour->get_neighbours()) {
+		if (neighbour->get_owner() == player) {
+			armyUnits = armyUnits + neighbour->get_armies();
+			neighbour->set_armies(0);
+		}
+	}
+
+	//fortifies strongest territory
+	Deploy* fortify = new Deploy();
+	orderData* fortifyOrders = new orderData;
+	fortifyOrders->this_player = player;
+	fortifyOrders->target_player = NULL;
+	fortifyOrders->source = strongestTerritory;
+	fortifyOrders->target = NULL;
+	fortifyOrders->order = fortify;
+	fortifyOrders->reinforcement = reinforcements;
+	fortifyOrders->armyunit = reinforcements;
+	ordersToExecute->push_back(fortifyOrders);
+
+
+	return;
+}
+
+//--------------------------------Benevolent Player Strategy--------------------------------//
+list<Territory*> BenevolentPlayerStrategy::toDefend(Map* map)
+{
+	list<Territory*> toDefend;
+	for (Territory* t : (map->get_territories(player)))
+		toDefend.push_back(t);
+	return toDefend;
+}
+
+list<Territory*> BenevolentPlayerStrategy::toAttack(Map* map)
+{
+	list<Territory*> toAttack;
+	for (Territory* t : (map->get_neighbour_territories(player)))
+		toAttack.push_back(t);
+	return toAttack;
+}
+
+void BenevolentPlayerStrategy::issueOrder(Map* map, int reinforcements, vector<orderData*>* ordersToExecute)
+{
+	int sizeToDefend = player->get_defending().size();
+	int sizeToAttack = player->get_attacking().size();
+
+	int minimumArmies = 10000;
+
+	Territory* weakestTerritory = NULL;
+
+	//finds the player's weakest territories (i.e. the territories with the least armies)
+	//if all territories have the same number of armies, the first territory in the toDefend list is chosen
+	for (auto territory : player->get_defending()) {
+		if (territory->get_armies() < minimumArmies) {
+			minimumArmies = territory->get_armies();
+			weakestTerritory = territory;
+		}
+	}
+
+	//creates deploy order for the weakest territory 
+	Deploy* deploy = new Deploy();
+	orderData* defendOrders = new orderData;
+	defendOrders->this_player = player;
+	defendOrders->target_player = NULL;
+	defendOrders->source = weakestTerritory;
+	defendOrders->target = NULL;
+	defendOrders->order = deploy;
+	defendOrders->reinforcement = reinforcements;
+	defendOrders->armyunit = reinforcements;
+	ordersToExecute->push_back(defendOrders);
+
+	//finds the neighbours of the weakest country
+	int armyUnits = 0;
+	for (auto neighbour : weakestTerritory->get_neighbours()) {
+		if (neighbour->get_owner() == player) {
+			armyUnits = armyUnits + neighbour->get_armies();
+			neighbour->set_armies(0);
+		}
+	}
+
+	//fortifies strongest territory
+	Deploy* fortify = new Deploy();
+	orderData* fortifyOrders = new orderData;
+	fortifyOrders->this_player = player;
+	fortifyOrders->target_player = NULL;
+	fortifyOrders->source = weakestTerritory;
+	fortifyOrders->target = NULL;
+	fortifyOrders->order = fortify;
+	fortifyOrders->reinforcement = reinforcements;
+	fortifyOrders->armyunit = reinforcements;
+	ordersToExecute->push_back(fortifyOrders);
+}
+
+//--------------------------------Human Player Strategy--------------------------------//
 list<Territory*> HumanPlayerStrategy::toDefend(Map* map)
 {
 	vector<Territory*> territories_owned = map->get_territories(player);
@@ -111,8 +294,6 @@ list<Territory*> HumanPlayerStrategy::toDefend(Map* map)
 
 list<Territory*> HumanPlayerStrategy::toAttack(Map* map)
 {
-
-
 	//set the territories to attack vector in the given map
 	vector<Territory*> territories_toAttack = map->get_neighbour_territories(player);
 
@@ -156,9 +337,8 @@ list<Territory*> HumanPlayerStrategy::toAttack(Map* map)
 	return attack_list;
 }
 
-void HumanPlayerStrategy::issueOrder(Map* map, int reinforcements,vector<Order*> orders)
+void HumanPlayerStrategy::issueOrder(Map* map, int reinforcements, vector<orderData*>* ordersToExecute)
 {
-
 	int territories_toAttack_number = player->get_attacking().size();
 	int territories_toDefend_number = player->get_defending().size();
 
@@ -188,14 +368,15 @@ void HumanPlayerStrategy::issueOrder(Map* map, int reinforcements,vector<Order*>
 
 					//	execute specific deploy order
 					Deploy* deploy = new Deploy();
-					orders.push_back(deploy);
-					
+					//orders.push_back(deploy);
+
 					orderData* dataDeploy = new orderData();
 
-					dataDeploy->player = player;
+					dataDeploy->this_player = player;
 					dataDeploy->reinforcement = reinforcements;
 					dataDeploy->source = t;
-					dataDeploy->armyunits = armies;
+					dataDeploy->armyunit = armies;
+					dataDeploy->order = deploy;
 
 
 
@@ -234,10 +415,7 @@ void HumanPlayerStrategy::issueOrder(Map* map, int reinforcements,vector<Order*>
 	}
 
 
-
-
 	while (true) {
-
 		int count = 0;
 
 		// Advance orders
@@ -322,15 +500,16 @@ void HumanPlayerStrategy::issueOrder(Map* map, int reinforcements,vector<Order*>
 
 			//	execute specific deploy order
 			Advance* advance = new Advance();
-			orders.push_back(advance);
+			//orders.push_back(advance);
 			//OrderData is implemented here
 			orderData* dataAdvance = new orderData();
 			//Order data is filled out
-			dataAdvance->player = player;
+			dataAdvance->this_player = player;
 			dataAdvance->reinforcement = reinforcements;
 			dataAdvance->target = origin_neighbours[destination];
 			dataAdvance->source = territories_owned[origin];
-			dataAdvance->armyunits = amount;
+			dataAdvance->armyunit = amount;
+			dataAdvance->order = advance;
 
 
 
@@ -377,23 +556,20 @@ void HumanPlayerStrategy::issueOrder(Map* map, int reinforcements,vector<Order*>
 
 }
 
-
-
-
+//--------------------------------Benevolent Player Strategy--------------------------------//
 list<Territory*> NeutralPlayerStrategy::toDefend(Map* map)
 {
 	//Returns nothing
-
-    return list<Territory*>();
+	return list<Territory*>();
 }
 
 list<Territory*> NeutralPlayerStrategy::toAttack(Map* map)
 {
 	//Returns nothing
-    return list<Territory*>();
+	return list<Territory*>();
 }
 
-void NeutralPlayerStrategy::issueOrder(Map* map, int reinforcement, Player* player)
+void NeutralPlayerStrategy::issueOrder(Map* map, int reinforcements, vector<orderData*>* ordersToExecute)
 {
 	//Does nothing
 }

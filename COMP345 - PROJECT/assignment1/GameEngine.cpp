@@ -5,8 +5,8 @@
 #include "GameObservers.h"
 #include "PlayerStrategy.h"
 #include <fstream>
-#include<iostream>
-#include<filesystem>
+#include <iostream>
+#include <filesystem>
 
 
 
@@ -38,7 +38,7 @@ std::string GameEngine::getmap()
 	std::vector<std::string> maps;
 	std::vector<std::string> conquest_maps;
 	std::cout << "Let's Pick a map!\n\n";
-	try 
+	try
 	{
 		for (auto& p : std::filesystem::directory_iterator("map_dir"))
 			maps.push_back(p.path().string());
@@ -46,24 +46,32 @@ std::string GameEngine::getmap()
 		for (auto& p : std::filesystem::directory_iterator("conquest_map_dir"))
 			conquest_maps.push_back(p.path().string());
 	}
-	catch (int e) {std::cout << "I/O error";}
+	catch (int e) { std::cout << "I/O error"; }
 
 	//need to remove the first 8 characters to show only map and not path when asking for choice
 	for (int i = 0; i < maps.size(); i++)
-	{std::cout << "Map #"<<i<<" -> "<<maps[i].substr(8)<<"\n";}
+	{
+		std::cout << "Map #" << i << " -> " << maps[i].substr(8) << "\n";
+	}
 	for (int i = 0; i < conquest_maps.size(); i++)
-	{std::cout << "Conquest Map #" << i+maps.size() << " -> " << conquest_maps[i].substr(17) << "\n";}
+	{
+		std::cout << "Conquest Map #" << i + maps.size() << " -> " << conquest_maps[i].substr(17) << "\n";
+	}
 
 	std::cout << "Please Enter the number of the map which you would like to select: ";
 	int map_number;
-	std::cin>> map_number;
-	std:string selected_map;
-	if (map_number <= maps.size()-1)
-	{selected_map = maps[map_number];}
+	std::cin >> map_number;
+std:string selected_map;
+	if (map_number <= maps.size() - 1)
+	{
+		selected_map = maps[map_number];
+	}
 	else
-	{selected_map = conquest_maps[map_number-maps.size()];}
+	{
+		selected_map = conquest_maps[map_number - maps.size()];
+	}
 
-	
+
 	//empty vectors to avoid memory leak
 	maps.clear();
 
@@ -91,10 +99,10 @@ Map* GameEngine::loadmap(std::string map)
 		map.append(".map");
 		std::cout << map;
 	}
-	
+
 	try
 	{
-		Map* loaded_map= NULL;
+		Map* loaded_map = NULL;
 		if (map_type == 1)
 		{
 			ConquestFileReaderAdapter* adapter = new ConquestFileReaderAdapter(*(new ConquestFileReader()));
@@ -105,7 +113,7 @@ Map* GameEngine::loadmap(std::string map)
 			delete adapter;
 			return loaded_map;
 		}
-		else 
+		else
 		{
 			MapLoader* loader = new MapLoader(map);
 			//for efficiency drop the loader and keep only a pointer to the map
@@ -116,7 +124,7 @@ Map* GameEngine::loadmap(std::string map)
 			return loaded_map;
 		}
 
-		
+
 	}
 	catch (int e) { std::cout << "error"; }
 }
@@ -180,8 +188,8 @@ void GameEngine::startupPhase(Map* mapfile, std::vector<Player*>* players) {
 
 	//Assigning territories to each player in round robin fashion
 	for (int i = 0, j = 0; i < mapfile->get_territories().size(); i++) {
-			mapfile->get_territories().at(nums[i])->set_owner((*players)[j]);
-			j = ++j % players->size();
+		mapfile->get_territories().at(nums[i])->set_owner((*players)[j]);
+		j = ++j % players->size();
 	}
 
 	//Setting reinforcement pools for all players
@@ -239,7 +247,7 @@ Player* GameEngine::mainGameLoop(vector<Player*> allPlayers, Map* map, bool phas
 	vector<Territory*> territories_owned[MAX_PLAYERS];
 
 	//	Main loop of game
-	while ( allPlayers.size() > 1 ) {
+	while (allPlayers.size() > 1) {
 
 		std::cout << "\n\n\tReinforcement Phase\n\n";
 		int* reinforcements = reinforcementPhase(allPlayers, num_players, map);
@@ -249,7 +257,7 @@ Player* GameEngine::mainGameLoop(vector<Player*> allPlayers, Map* map, bool phas
 		issueOrderPhase(allPlayers, num_players, map, reinforcements, phaseMode);
 
 		std::cout << "\n\n\tOrder Execution Phase\n\n";
-		executeOrdersPhase();
+		executeOrdersPhase(allPlayers, num_players, map);
 
 
 		for (Player* p : allPlayers) {
@@ -257,14 +265,13 @@ Player* GameEngine::mainGameLoop(vector<Player*> allPlayers, Map* map, bool phas
 
 				int deleting_index = get_player_id(p, allPlayers);
 
-				cout << "\nPlayer" << deleting_index << " lost\n\n" ;
+				cout << "\nPlayer" << deleting_index << " lost\n\n";
 
 				// erase player from vector
 				delete allPlayers[deleting_index];
 				allPlayers.erase(allPlayers.begin(), allPlayers.begin() + deleting_index);
 			}
 		}
-
 	}
 
 	return allPlayers[0];
@@ -279,7 +286,7 @@ int* GameEngine::reinforcementPhase(vector<Player*> allPlayers, int num_players,
 	bool firstFlag = false;
 
 	for (Player* p : allPlayers)
-		if (p->getReinforcementPool() != 0){
+		if (p->getReinforcementPool() != 0) {
 			firstFlag = true;
 			reinforcements[get_player_id(p, allPlayers)] = p->getReinforcementPool();
 			p->setReinforcementPool(0);
@@ -332,8 +339,14 @@ int GameEngine::issueOrderPhase(vector<Player*> allPlayers, int num_players, Map
 	return 0;
 }
 
-int GameEngine::executeOrdersPhase()
+int GameEngine::executeOrdersPhase(std::vector<Player*> allPlayers, int num_players, Map* map)
 {
+	for (Player* p : allPlayers) {
+		int id = get_player_id(p, allPlayers);
+		cout << "Player " << id << ":" << endl;
+		p->executeOrders();
+		std::cout << "\n";
+	}
 	return 0;
 }
 
@@ -359,7 +372,7 @@ int main()
 	} while (num_players < 2 || num_players > 5);
 	//create the appropriate number of players.
 	std::vector<Player*>players;
-	for (int i = 0; i < num_players; i++) { players.push_back(new Player(0)); } 
+	for (int i = 0; i < num_players; i++) { players.push_back(new Player(0)); }
 	std::cout << "\ncreated " << num_players << " players\n";
 
 
@@ -370,14 +383,18 @@ int main()
 		std::cout << "-----PHASE OBSERVER ON?----- [y/n]: ";
 		std::cin >> P_obs;
 		if (P_obs == 'y')
-		{	std::cout << "PHASE OBSERVER is ON\n";}
+		{
+			std::cout << "PHASE OBSERVER is ON\n";
+		}
 		else { std::cout << "PHASE OBSERVER is OFF\n"; }
 		std::cout << "-----GAME STATISTICS OBSERVER ON?----- [y/n]: ";
 		std::cin >> S_obs;
 		if (S_obs == 'y')
-		{std::cout << "GAME STATISTICS OBSERVER is ON\n";}
+		{
+			std::cout << "GAME STATISTICS OBSERVER is ON\n";
+		}
 		else { std::cout << "GAME STATISTICS OBSERVER is OFF\n"; }
-	} while ((P_obs!='y' && P_obs!='n' ) || (S_obs != 'y' && S_obs != 'n'));
+	} while ((P_obs != 'y' && P_obs != 'n') || (S_obs != 'y' && S_obs != 'n'));
 	if (P_obs == 'y')
 		phaseMode = true;
 	if (S_obs == 'y')
@@ -385,7 +402,7 @@ int main()
 
 
 	////////////////////////////////////////////////Donovan Driver Start////////////////////////////////////////////////
-	
+
 	//Showing all territories are unowned before the startup phase
 	for (Territory* t : loaded_map->get_territories()) {
 		cout << t->get_name() << " is owned by:" << t->get_owner() << "\n";
@@ -393,11 +410,7 @@ int main()
 
 	//Showing the state of the players before the startup phase
 	for (Player* p : players) {
-		cout << *p<<"\n";
-		HumanPlayerStrategy human;
-		PlayerStrategy* strategy = &human;
-		strategy->setPlayer(p);
-		p->setStrategy(*strategy);
+		cout << *p << "\n";
 	}
 
 	cout << "\n===Running Startup Phase===\n\n";
@@ -411,8 +424,49 @@ int main()
 	}
 
 	//Showing the state of the players after the startup phase
+	int counter = 1;
+	int index = 0;
+	int choice = 0;
+
+	vector<PlayerStrategy*> allStrategies(5);
 	for (Player* p : players) {
-		cout << *p<<"\n";
+		cout << "\n\nPlayer " << counter << ": Please pick your strategy between the following " << endl;
+		cout << "1: Aggressive Strategy\n2: Benevolent Strategy\n3: Human Strategy\n4: Neutral Strategy\n";
+		counter++;
+		while (true) {
+			cout << "Enter your choice: ";
+			cin >> choice;
+			if (choice == 1) {
+				AggressivePlayerStrategy aggressive;
+				allStrategies[index] = &aggressive;
+				p->setStrategy(*allStrategies[index]);
+				break;
+			}
+			else if (choice == 2) {
+				BenevolentPlayerStrategy benevolent;
+				allStrategies[index] = &benevolent;
+				p->setStrategy(*allStrategies[index]);
+				break;
+			}
+			else if (choice == 3) {
+				HumanPlayerStrategy human;
+				allStrategies[index] = &human;
+				p->setStrategy(*allStrategies[index]);
+				break;
+			}
+			else if (choice == 4) {
+				NeutralPlayerStrategy neutral;
+				allStrategies[index] = &neutral;
+				p->setStrategy(*allStrategies[index]);
+				break;
+			}
+			else {
+				cout << "Invalid input. Please try again" << endl;
+				continue;
+			}
+		}
+		cout << *p << "\n";
+		index++;
 	}
 
 	////////////////////////////////////////////////Donovan Driver End////////////////////////////////////////////////
@@ -423,9 +477,16 @@ int main()
 	////////////////////////////////////////////////Adrian Driver End////////////////////////////////////////////////
 
 	//taking care of memory leak
+
+	for (auto strategy : allStrategies) {
+		delete strategy;
+		strategy = NULL;
+	}
+	allStrategies.clear();
+
 	delete loaded_map;
 	loaded_map = NULL;
-	
+
 	for (int i = 0; i < num_players; i++) { delete players[i]; }
 	for (int i = 0; i < num_players; i++) { players[i] = NULL; }
 
