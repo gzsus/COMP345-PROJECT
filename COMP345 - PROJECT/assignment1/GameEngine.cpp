@@ -282,10 +282,11 @@ int* GameEngine::reinforcementPhase(vector<Player*> allPlayers, int num_players,
 
 	for (Player* p : allPlayers)
 		if (p->getReinforcementPool() != 0) {
+			int id = get_player_id(p, allPlayers);
 			firstFlag = true;
 			reinforcements[get_player_id(p, allPlayers)] = p->getReinforcementPool();
 			p->setReinforcementPool(0);
-			std::cout << "Player" << get_player_id(p, allPlayers) + 1 << " reinforcements: " << reinforcements[get_player_id(p, allPlayers)] << std::endl;
+			std::cout << "Player " << id + 1 << " reinforcements: " << reinforcements[get_player_id(p, allPlayers)] << std::endl;
 		}
 
 	if (firstFlag) {

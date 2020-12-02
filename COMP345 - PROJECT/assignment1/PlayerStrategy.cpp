@@ -32,7 +32,7 @@ PlayerStrategy::PlayerStrategy()
 PlayerStrategy::~PlayerStrategy()
 {
 	delete player;
-	player = NULL; 
+	player = NULL;
 }
 
 void PlayerStrategy::setPlayer(Player* player)
@@ -147,28 +147,30 @@ void AggressivePlayerStrategy::issueOrder(Map* map, int reinforcements, vector<o
 
 	//advances all the armies from the strongest territory 
 	for (auto neighbour : strongestTerritory->get_neighbours()) {
-		if (updatedReinforcements > 0) {
-			//sends the same amount of armies to each territory that it can attack
-			//if there is a remainder after calculating "armies", they remain in the current territory
-			if (neighbourhoodSize < reinforcements) {
-				armyUnits = reinforcements / neighbourhoodSize;
+		if (neighbour->get_owner() != player) {
+			if (updatedReinforcements > 0) {
+				//sends the same amount of armies to each territory that it can attack
+				//if there is a remainder after calculating "armies", they remain in the current territory
+				if (neighbourhoodSize < reinforcements) {
+					armyUnits = reinforcements / neighbourhoodSize;
+				}
+				//sends one armies to every territory that it can send to
+				else {
+					armyUnits = 1;
+					updatedReinforcements--;
+				}
+				//creates attack order
+				Advance* advance = new Advance();
+				orderData* attackOrders = new orderData;
+				attackOrders->this_player = player;
+				attackOrders->target_player = neighbour->get_owner();
+				attackOrders->source = strongestTerritory;
+				attackOrders->target = neighbour;
+				attackOrders->order = advance;
+				attackOrders->reinforcement = reinforcements;
+				attackOrders->armyunit = armyUnits;
+				ordersToExecute->push_back(attackOrders);
 			}
-			//sends one armies to every territory that it can send to
-			else {
-				armyUnits = 1;
-				updatedReinforcements--;
-			}
-			//creates attack order
-			Advance* advance = new Advance();
-			orderData* attackOrders = new orderData;
-			attackOrders->this_player = player;
-			attackOrders->target_player = neighbour->get_owner();
-			attackOrders->source = strongestTerritory;
-			attackOrders->target = neighbour;
-			attackOrders->order = advance;
-			attackOrders->reinforcement = reinforcements;
-			attackOrders->armyunit = armyUnits;
-			ordersToExecute->push_back(attackOrders);
 		}
 	}
 
@@ -623,7 +625,7 @@ void HumanPlayerStrategy::issueOrder(Map* map, int reinforcements, vector<orderD
 				cout << "\t\tAdvance " << amount << ((amount > 1) ? " armies from " : " army from ") << territories_owned[origin]->get_name() + " to " << origin_neighbours[destination]->get_name();
 				//cout << *advance; 
 				//player->getOrderDataVector().push_back(dataAdvance);
-				ordersToExecute->push_back(dataAdvance); 
+				ordersToExecute->push_back(dataAdvance);
 				cout << "\n\tDeploy Order created!";
 			}
 			else {

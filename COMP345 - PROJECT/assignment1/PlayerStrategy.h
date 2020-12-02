@@ -18,7 +18,7 @@ public:
 	PlayerStrategy(PlayerStrategy& otherStrategy);
 	virtual PlayerStrategy* clone();
 	PlayerStrategy();
-	~PlayerStrategy(); 
+	~PlayerStrategy();
 	friend std::ostream& operator<<(std::ostream& ostream, const PlayerStrategy& strategy);
 
 	//setter & getter
@@ -41,7 +41,7 @@ protected:
 };
 
 class AggressivePlayerStrategy : public PlayerStrategy {
-public: 
+public:
 	AggressivePlayerStrategy& operator=(const AggressivePlayerStrategy& otherStrategy);
 	AggressivePlayerStrategy(AggressivePlayerStrategy& otherStrategy);
 	AggressivePlayerStrategy* clone();
@@ -55,7 +55,7 @@ public:
 };
 
 class BenevolentPlayerStrategy : public PlayerStrategy {
-public: 
+public:
 	BenevolentPlayerStrategy& operator=(const BenevolentPlayerStrategy& otherStrategy);
 	BenevolentPlayerStrategy(BenevolentPlayerStrategy& otherStrategy);
 	BenevolentPlayerStrategy* clone();
