@@ -437,26 +437,27 @@ int main()
 			cout << "Enter your choice: ";
 			cin >> choice;
 			if (choice == 1) {
-				AggressivePlayerStrategy aggressive;
-				allStrategies[index] = &aggressive;
+				AggressivePlayerStrategy* aggressive = new AggressivePlayerStrategy();
+				cout << aggressive << endl; 
+				allStrategies[index] = aggressive;
 				p->setStrategy(*allStrategies[index]);
 				break;
 			}
 			else if (choice == 2) {
-				BenevolentPlayerStrategy benevolent;
-				allStrategies[index] = &benevolent;
+				BenevolentPlayerStrategy* benevolent = new BenevolentPlayerStrategy();
+				allStrategies[index] = benevolent;
 				p->setStrategy(*allStrategies[index]);
 				break;
 			}
 			else if (choice == 3) {
-				HumanPlayerStrategy human;
-				allStrategies[index] = &human;
+				HumanPlayerStrategy* human = new HumanPlayerStrategy();
+				allStrategies[index] = human;
 				p->setStrategy(*allStrategies[index]);
 				break;
 			}
 			else if (choice == 4) {
-				NeutralPlayerStrategy neutral;
-				allStrategies[index] = &neutral;
+				NeutralPlayerStrategy* neutral = new NeutralPlayerStrategy();
+				allStrategies[index] = neutral;
 				p->setStrategy(*allStrategies[index]);
 				break;
 			}
