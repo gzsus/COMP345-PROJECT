@@ -245,7 +245,7 @@ bool Advance::validate(Player* player, Territory* source, Territory* target) {
 	bool is_valid;
 
 	if (player == owner_source) {
-		 is_valid = true;
+		is_valid = true;
 	}
 	else {
 		//Order is invalid
@@ -318,9 +318,9 @@ void Advance::execute(Player* player, Territory* source, Territory* target, int 
 					target->set_owner(player);
 					target->set_armies(attacking_army);
 					//PLAYER GETS A NEW CARD-----------------------------------------------------------------
-	
-					player->getHand()->add(deck->draw());
-					cout << "Card has been added to player's hand" << endl;
+
+					//player->getHand()->add(deck->draw());
+					//cout << "Card has been added to player's hand" << endl;
 
 				}
 				else {
@@ -427,7 +427,7 @@ bool Airlift::validate(Player* player, Territory* source, Territory* target) {
 	Player* owner_target = target->get_owner();
 
 	bool is_valid;
-//MUST CHECK IF PLAYER HAS CARD-----------------------------------------------------
+	//MUST CHECK IF PLAYER HAS CARD-----------------------------------------------------
 	if ((player != owner_source && player != owner_target)) {
 		is_valid = false;
 	}
@@ -462,7 +462,7 @@ void Airlift::execute(Player* player, Territory* source, Territory* target, int 
 			//EXECUTE ADVANCE ORDER -----------------------------------------------------------------------------------
 			Advance* advance = new Advance(deck);
 			advance->execute(player, source, target, armyunits);
-			
+
 			//Removing memory leaks
 			delete(advance);
 			advance = NULL;
@@ -509,7 +509,7 @@ bool Negotiate::validate(Player* player, Player* target_player) {
 
 //Negotiate execute method
 void Negotiate::execute(Player* player, Player* target_player) {
-	bool is_order_valid = validate(player,target_player);
+	bool is_order_valid = validate(player, target_player);
 	if (is_order_valid) {
 		player->getNegotiating()->push_back(target_player);
 		target_player->getNegotiating()->push_back(player);

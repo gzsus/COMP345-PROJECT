@@ -118,6 +118,7 @@ void Player::setStrategy(PlayerStrategy& strategy)
 {
 	delete this->strategy;
 	this->strategy = &strategy;
+	strategy.setPlayer(this);
 }
 
 vector<Order*>* Player::getOrders() {
@@ -234,18 +235,18 @@ int Player::issueOrder(int player_id, Map* map, int reinforcements, bool phaseMo
 		delete go;
 		go = NULL;
 	}
-	//Map* map, Player* player
+
 	territoriesToAttack = this->toAttack(map);
 	territoriesToDefend = this->toDefend(map);
-	//(Map* map, int reinforcements, Player* player,vector<Order*> orders)
-	strategy->issueOrder(map,reinforcements,orders);
 
-	//int territories_toAttack_number = territoriesToAttack.size();
-	//int territories_toDefend_number = territoriesToDefend.size();
+	strategy->issueOrder(map, reinforcements, &orderDataVector);
+
+	//int territories_toattack_number = territoriestoattack.size();
+	//int territories_todefend_number = territoriestodefend.size();
 
 	//int deployments_available = reinforcements;
 
-	////	Deployment Orders
+		////	Deployment Orders
 	//while (deployments_available > 0) {
 	//	if (territories_toDefend_number > 0) {
 
@@ -429,6 +430,38 @@ int Player::issueOrder(int player_id, Map* map, int reinforcements, bool phaseMo
 
 
 	return 0;
+}
+
+void Player::executeOrders(int player_id, bool phaseMode) {
+
+	if (phaseMode) {
+		cout << "\nPlayer " << (player_id + 1) << ": Execute Orders Phase" << endl;
+		GameObservers* go = new GameObservers();
+		go->issueOrderPhaseView();
+		delete go;
+		go = NULL;
+	}
+
+	for (orderData* this_order : orderDataVector) {
+		if ((this_order->order)->Type == "deploy") {
+			//execute deploy orders
+			Deploy* deploy = (Deploy*)(this_order->order);
+			deploy->execute(this, this_order->source, this_order->reinforcement);
+		}
+		else if ((this_order->order)->Type == "advance") {
+			//execute advance orders
+			Advance* advance = (Advance*)(this_order->order);
+			advance->execute(this, this_order->source, this_order->target, this_order->armyunit);
+		}
+	}
+	orderDataVector.clear();
+
+	char reply;
+	cout << "Do you wish to continue? (y/n)";
+	cin >> reply;
+	if (reply == 'n') {
+		exit(0);
+	}
 }
 
 // Access the list of territories to attack/defend chosen
