@@ -18,6 +18,7 @@ public:
 	PlayerStrategy(PlayerStrategy& otherStrategy);
 	virtual PlayerStrategy* clone();
 	PlayerStrategy();
+	//destructors won't delete players so players can be changed dynamically during game play
 	~PlayerStrategy();
 	friend std::ostream& operator<<(std::ostream& ostream, const PlayerStrategy& strategy);
 

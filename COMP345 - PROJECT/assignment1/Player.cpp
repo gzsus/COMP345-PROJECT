@@ -118,7 +118,6 @@ void Player::setStrategy(PlayerStrategy& strategy)
 {
 	delete this->strategy;
 	this->strategy = &strategy;
-	strategy.setPlayer(this);
 }
 
 vector<Order*>* Player::getOrders() {
@@ -456,10 +455,58 @@ void Player::executeOrders(int player_id, bool phaseMode) {
 	}
 	orderDataVector.clear();
 
-	char reply;
+	char reply1; 
+	cout << "Do you wish to change player strategy?(y/n) "; 
+	cin >> reply1; 
+	if (reply1 == 'y') {
+		cout << "What do you wish to change your strategy to?" << endl; 
+		int conditionalreply; 
+		cout << "1: Aggressive Strategy\n2: Benevolent Strategy\n3: Human Strategy\n4: Neutral Strategy\n";
+		while (true) {
+			cout << "Enter your choice: ";
+			cin >> conditionalreply;
+			if (conditionalreply == 1) {
+				AggressivePlayerStrategy* aggressive = new AggressivePlayerStrategy();
+				PlayerStrategy* strategy = aggressive; 
+				this->setStrategy(*strategy);
+				strategy->setPlayer(this);
+				cout << "Strategy changed to AGGRESSIVE" << endl;
+				break;
+			}
+			else if (conditionalreply == 2) {
+				BenevolentPlayerStrategy* benevolent = new BenevolentPlayerStrategy();
+				PlayerStrategy* strategy = benevolent;
+				this->setStrategy(*strategy);
+				strategy->setPlayer(this);
+				cout << "Strategy changed to BENEVOLENT" << endl;
+				break;
+			}
+			else if (conditionalreply == 3) {
+				HumanPlayerStrategy* human = new HumanPlayerStrategy();
+				PlayerStrategy* strategy = human;
+				this->setStrategy(*strategy);
+				strategy->setPlayer(this);
+				cout << "Strategy changed to HUMAN" << endl;
+				break;
+			}
+			else if (conditionalreply == 4) {
+				NeutralPlayerStrategy* neutral = new NeutralPlayerStrategy();
+				PlayerStrategy* strategy = neutral;
+				this->setStrategy(*strategy);
+				strategy->setPlayer(this);
+				cout << "Strategy changed to NEUTRAL" << endl;
+				break;
+			}
+			else {
+				cout << "Invalid input. Please try again" << endl;
+				continue;
+			}
+		}
+	}
+	char reply2;
 	cout << "Do you wish to continue? (y/n)";
-	cin >> reply;
-	if (reply == 'n') {
+	cin >> reply2;
+	if (reply2 == 'n') {
 		exit(0);
 	}
 }

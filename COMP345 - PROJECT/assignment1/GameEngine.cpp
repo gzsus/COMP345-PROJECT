@@ -436,24 +436,28 @@ int main()
 				cout << aggressive << endl;
 				allStrategies[index] = aggressive;
 				p->setStrategy(*allStrategies[index]);
+				allStrategies[index]->setPlayer(p);
 				break;
 			}
 			else if (choice == 2) {
 				BenevolentPlayerStrategy* benevolent = new BenevolentPlayerStrategy();
 				allStrategies[index] = benevolent;
 				p->setStrategy(*allStrategies[index]);
+				allStrategies[index]->setPlayer(p);
 				break;
 			}
 			else if (choice == 3) {
 				HumanPlayerStrategy* human = new HumanPlayerStrategy();
 				allStrategies[index] = human;
 				p->setStrategy(*allStrategies[index]);
+				allStrategies[index]->setPlayer(p);
 				break;
 			}
 			else if (choice == 4) {
 				NeutralPlayerStrategy* neutral = new NeutralPlayerStrategy();
 				allStrategies[index] = neutral;
 				p->setStrategy(*allStrategies[index]);
+				allStrategies[index]->setPlayer(p);
 				break;
 			}
 			else {

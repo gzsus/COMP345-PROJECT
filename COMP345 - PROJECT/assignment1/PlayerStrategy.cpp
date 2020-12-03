@@ -31,8 +31,7 @@ PlayerStrategy::PlayerStrategy()
 
 PlayerStrategy::~PlayerStrategy()
 {
-	delete player;
-	player = NULL;
+
 }
 
 void PlayerStrategy::setPlayer(Player* player)
@@ -91,8 +90,7 @@ AggressivePlayerStrategy::AggressivePlayerStrategy()
 
 AggressivePlayerStrategy::~AggressivePlayerStrategy()
 {
-	delete player;
-	player = NULL;
+
 }
 
 list<Territory*> AggressivePlayerStrategy::toDefend(Map* map)
@@ -115,6 +113,8 @@ void AggressivePlayerStrategy::issueOrder(Map* map, int reinforcements, vector<o
 {
 	int sizeToDefend = player->get_defending().size();
 	int sizeToAttack = player->get_attacking().size();
+
+	cout << sizeToDefend << endl; 
 
 	int maximumArmies = -1;
 
@@ -239,8 +239,7 @@ BenevolentPlayerStrategy::BenevolentPlayerStrategy()
 
 BenevolentPlayerStrategy::~BenevolentPlayerStrategy()
 {
-	delete player;
-	player = NULL;
+
 }
 
 list<Territory*> BenevolentPlayerStrategy::toDefend(Map* map)
@@ -341,8 +340,7 @@ HumanPlayerStrategy::HumanPlayerStrategy()
 
 HumanPlayerStrategy::~HumanPlayerStrategy()
 {
-	delete player;
-	player = NULL;
+
 }
 
 list<Territory*> HumanPlayerStrategy::toDefend(Map* map)
@@ -694,8 +692,7 @@ NeutralPlayerStrategy::NeutralPlayerStrategy()
 
 NeutralPlayerStrategy::~NeutralPlayerStrategy()
 {
-	delete player;
-	player = NULL;
+
 }
 
 list<Territory*> NeutralPlayerStrategy::toDefend(Map* map)
